@@ -1,0 +1,17 @@
+G:\Projetos\galeryReact\Persistence\bin\Debug\net6.0\Persistence.deps.json
+G:\Projetos\galeryReact\Persistence\bin\Debug\net6.0\Persistence.runtimeconfig.json
+G:\Projetos\galeryReact\Persistence\bin\Debug\net6.0\Persistence.dll
+G:\Projetos\galeryReact\Persistence\bin\Debug\net6.0\Persistence.pdb
+G:\Projetos\galeryReact\Persistence\bin\Debug\net6.0\Domain.dll
+G:\Projetos\galeryReact\Persistence\bin\Debug\net6.0\Domain.pdb
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.csproj.AssemblyReference.cache
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.GeneratedMSBuildEditorConfig.editorconfig
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.AssemblyInfoInputs.cache
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.AssemblyInfo.cs
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.csproj.CoreCompileInputs.cache
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.csproj.CopyComplete
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.dll
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\refint\Persistence.dll
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.pdb
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\Persistence.genruntimeconfig.cache
+G:\Projetos\galeryReact\Persistence\obj\Debug\net6.0\ref\Persistence.dll
