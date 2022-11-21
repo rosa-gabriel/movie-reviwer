@@ -1,62 +1,72 @@
 import FormTag from "./FormTag";
-import { useState } from "react";
-import { Form } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getTags } from "../../functions/MoviesData";
+import { TagType } from "../../Type/Types";
 
-type teste = {
-  tagId: number;
-  name: string;
+type TagInputProps = {
+  onChange: Function;
 };
 
-const init: teste[] = [
-  {
-    tagId: 10,
-    name: 'sus'
-  }
-];
+const TagInput = (props: TagInputProps) => {
+  const [dataTags, setDataTags] = useState<TagType[]>([]);
+  const [tags, setTags] = useState<TagType[]>([]);
+  const [tagText, setTagText] = useState<string>("");
 
-const TagInput = (props: any) => {
-  const [dataTags, setDataTags] = useState(init);
-  const [tags, setTags] = useState(init);
-  const [tagText, setTagText] = useState("");
-
-  const deleteTag = (item: any) => {
-    setTags((prevTags: any) => {
-      const newTags = prevTags.filter((tag: any) => tag != item);
+  useEffect(() => {
+    (async () => {
+      const data: TagType[] = await getTags();
+      setDataTags([...data]);
+      setTags([]);
+    })();
+  }, []);
+  const deleteTag = (item: TagType): void => {
+    setTags((prevTags: TagType[]) => {
+      const newTags = prevTags.filter((tag: TagType) => tag != item);
       return newTags;
     });
+    setDataTags((prevTags) => [...prevTags, item]);
   };
 
-  const addTag = (event: any) => {
+  const addTag = (event: React.SyntheticEvent) => {
     event.preventDefault();
+    if (tagText == "") return;
 
     setTags((prevTags: any) => {
-      return [...prevTags, { name: tagText, entries: 10 }];
+      const tag = dataTags.find((element) => element.name == tagText);
+      setDataTags((prevDataTags) => [
+        ...prevDataTags.filter((dataTag) => dataTag != tag),
+      ]);
+      return [...prevTags, tag];
     });
   };
 
-  const tagTextChangeHandler = (event: any) => {
+  useEffect(() => {
+    props.onChange(tags);
+  }, [tags]);
+
+  const tagTextChangeHandler = (event: any): void => {
     setTagText(event.target.value);
   };
 
   return (
-    <form
-      style={{ minHeight: "36px" }}
-      className="input-dark input-add tag-box"
-      onSubmit={addTag}
-    >
-      {tags.map((item) => {
-        return <FormTag key={item.name} TagItem={item} onDelete={deleteTag} />;
+    <div style={{ minHeight: "36px" }} className="input-dark input-add tag-box">
+      {tags.map((tag) => {
+        return <FormTag key={tag.name} tag={tag} onDelete={deleteTag} />;
       })}
       <select name="select" onChange={tagTextChangeHandler}>
+        <option value={""}>Choose a tag</option>
         {dataTags.map((item) => {
           return (
-            <option id={item.name} value={item.name}>
+            <option key={item.name} value={item.name}>
               {item.name}
             </option>
           );
         })}
       </select>
-    </form>
+      <button className="add-tag-button button" onClick={addTag}>
+        +
+      </button>
+    </div>
   );
 };
 export default TagInput;

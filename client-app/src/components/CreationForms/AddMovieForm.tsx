@@ -2,15 +2,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addMovie } from "../../functions/MoviesData";
 import LoadingCircle from "../UI/LoadingCircle";
-import { nMovie } from "../../Type/Types";
+import { AllMovieInfoType, MovieType, TagType } from "../../Type/Types";
 import TagInput from "../UI/TagInput";
 
-const AddMovieForm = (props: any) => {
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [date, setDate] = useState(new Date());
+const AddMovieForm = () => {
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
+  const [url, setUrl] = useState<string>("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [tags, setTags] = useState<TagType[]>([]);
+
   const navigate = useNavigate();
 
   const nameChangeHandler = (event: any) => {
@@ -25,22 +27,26 @@ const AddMovieForm = (props: any) => {
     setDate(event.target.value);
   };
 
-  const tagsChangeHandler = (event: any) => {
-    setDate(event.target.value);
+  const tagsChangeHandler = (tags: TagType[]) => {
+    setTags([...tags]);
   };
 
   const submitHandler = async (event: any) => {
-    console.log('sus');
-    const newMovie: nMovie = {
-      name: name,
-      coverUrl: url,
-      ReleaseDate: date,
+    const newMovie: AllMovieInfoType = {
+      movie: {
+        name: name,
+        coverUrl: url,
+        releaseDate: date,
+      },
+      favorites: 0,
+      tags: tags,
+      castMembers: []
     };
 
     try {
       setLoading(true);
       await addMovie(newMovie);
-      setError("");
+      setError(null);
       navigate("/");
     } catch (ex: any) {
       setLoading(false);
@@ -53,7 +59,7 @@ const AddMovieForm = (props: any) => {
     <div>
       <h1 className="title">Add new Movie</h1>
 
-      {error.trim().length > 0 && <p className="error-message">{error}</p>}
+      {error !== null && <p className="error-message">{error}</p>}
 
       <div className="form-pair">
         <label>NAME</label>
@@ -84,16 +90,20 @@ const AddMovieForm = (props: any) => {
 
       <div className="form-pair">
         <label>TAGS</label>
-        <TagInput />
+        <TagInput onChange={tagsChangeHandler}/>
       </div>
 
-      {!loading && <button onClick={submitHandler} type="button" className="add-button button">Add</button>}
-      {loading && (
+      {!loading && (
         <button
-          style={{ display: "flex" }}
-          className="add-button"
-          disabled
+          onClick={submitHandler}
+          type="button"
+          className="add-button button"
         >
+          Add
+        </button>
+      )}
+      {loading && (
+        <button style={{ display: "flex" }} className="add-button" disabled>
           <LoadingCircle />
         </button>
       )}

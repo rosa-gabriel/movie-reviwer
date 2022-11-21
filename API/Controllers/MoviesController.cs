@@ -4,6 +4,7 @@ using Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Application;
+using Newtonsoft.Json.Linq;
 
 namespace API.Controllers
 {
@@ -33,8 +34,35 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("tags")]
+        public async Task<ActionResult<List<TagResponse>>> GetTags()
+        {
+            try
+            {
+                return Ok(await this.movieLogic.GetAllTags());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("tags")]
+        public async Task<ActionResult> PostTags(TagName newTag)
+        {
+            try
+            {
+                await movieLogic.PostTag(newTag);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
         [HttpPost]
-        public async Task<ActionResult> PostMovie(Movie newMovie)
+        public async Task<ActionResult> PostMovie(MovieResponse newMovie)
         {
             try
             {

@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221114205515_InitData")]
-    partial class InitData
+    [Migration("20221118191552_newMigration")]
+    partial class newMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -154,7 +154,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TagName");
+                    b.ToTable("TagNames");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

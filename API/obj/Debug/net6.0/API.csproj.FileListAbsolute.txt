@@ -39,3 +39,4 @@ G:\Projetos\galeryReact\API\obj\Debug\net6.0\API.genruntimeconfig.cache
 G:\Projetos\galeryReact\API\obj\Debug\net6.0\ref\API.dll
 G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Application.dll
 G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Application.pdb
+G:\Projetos\galeryReact\API\bin\Debug\net6.0\Newtonsoft.Json.dll

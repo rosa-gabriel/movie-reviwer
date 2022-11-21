@@ -4,7 +4,6 @@ import Favorites from "./components/Favorites";
 import Error from "./components/Error";
 import MovieList from "./components/MovieList";
 import NavBar from "./components/UI/NavBar";
-import AddMovieForm from "./components/CreationForms/AddMovieForm";
 import CreationOptions from "./components/CreationForms/CreationOptions";
 
 export const uri = "http://localhost:5000";

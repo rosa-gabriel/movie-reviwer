@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class InitData : Migration
+    public partial class newMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,7 +64,7 @@ namespace Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "TagName",
+                name: "TagNames",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -74,7 +74,7 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TagName", x => x.Id);
+                    table.PrimaryKey("PK_TagNames", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -148,9 +148,9 @@ namespace Persistence.Migrations
                         principalTable: "Movies",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_TagEntries_TagName_TagId",
+                        name: "FK_TagEntries_TagNames_TagId",
                         column: x => x.TagId,
-                        principalTable: "TagName",
+                        principalTable: "TagNames",
                         principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -240,7 +240,7 @@ namespace Persistence.Migrations
                 name: "Movies");
 
             migrationBuilder.DropTable(
-                name: "TagName");
+                name: "TagNames");
         }
     }
 }

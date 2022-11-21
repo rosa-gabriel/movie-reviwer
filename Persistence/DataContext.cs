@@ -13,6 +13,7 @@ namespace Persistence
         public DbSet<CastEntry> CastEntries { get; set; }
         public DbSet<CastType> CastTypes { get; set; }
         public DbSet<FavoriteEntry> FavoriteEntries { get; set; }
+        public DbSet<TagName> TagNames { get; set; }
         public DbSet<TagEntry> TagEntries { get; set; }
         public DbSet<User> Users { get; set; }
     }

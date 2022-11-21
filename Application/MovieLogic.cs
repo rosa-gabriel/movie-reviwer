@@ -15,21 +15,43 @@ namespace Application
         {
             _context = context;
         }
-
         //Generates a new unique id
-        private async Task<int> newId()
+        private async Task<int> newTagId()
+        {
+            Random rnd = new Random();
+            int id = 0;
+            TagName? dataTag = null;
+            do
+            {
+                id = rnd.Next(111111, 999999);
+                dataTag = await _context.TagNames.FindAsync(id);
+            } while (dataTag != null);
+            return id;
+        }
+        private async Task<int> newMovieId()
         {
             Random rnd = new Random();
             int id = 0;
             Movie? dataMovie = null;
-            while (dataMovie != null)
+            do
             {
                 id = rnd.Next(111111, 999999);
                 dataMovie = await _context.Movies.FindAsync(id);
-            }
+            } while (dataMovie != null);
             return id;
         }
-
+        private async Task<int> newTagEntryId()
+        {
+            Random rnd = new Random();
+            int id = 0;
+            TagEntry? dataTag = null;
+            do
+            {
+                id = rnd.Next(111111, 999999);
+                dataTag = await _context.TagEntries.FindAsync(id);
+            } while (dataTag != null);
+            return id;
+        }
         //Get all the movies in the database on a list<Movie> format
         public async Task<List<Movie>> GetAllMovies()
         {
@@ -42,15 +64,63 @@ namespace Application
                 throw new Exception();
             }
         }
-
-        //Adds a movie to the database
-        public async Task PostMovie(Movie newMovie)
+        //Get all the tags in the database as a list<TagResponse> format
+        public async Task<List<TagResponse>> GetAllTags()
         {
-            newMovie.Id = await this.newId();
-            if (newMovie.Name.Trim().Length == 0 || newMovie.CoverUrl.Trim().Length == 0) throw new Exception();
             try
             {
-                _context.Movies.Add(newMovie);
+                List<TagName> tags = await this._context.TagNames.ToListAsync();
+                List<TagResponse> response = new List<TagResponse>();
+                foreach (TagName t in tags)
+                {
+                    TagResponse item = new TagResponse()
+                    {
+                        TagId = t.Id,
+                        Name = t.Name,
+                    };
+                    List<TagEntry> entries = await this._context.TagEntries.ToListAsync();
+                    item.Entries = entries.Count();
+                    response.Add(item);
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+        }
+
+        //Adds a movie to the database
+        public async Task PostMovie(MovieResponse newMovie)
+        {
+            if (newMovie.movie.Name.Trim().Length == 0 || newMovie.movie.CoverUrl.Trim().Length == 0) throw new Exception();
+            try
+            {
+                newMovie.movie.Id = await this.newMovieId();
+                _context.Movies.Add(newMovie.movie);
+                foreach (TagResponse tr in newMovie.tags)
+                {
+                    TagEntry newTagEntry = new TagEntry();
+                    newTagEntry.Id = await this.newTagEntryId();
+                    newTagEntry.Tag = await this._context.TagNames.FindAsync(tr.TagId);
+                    newTagEntry.Film = newMovie.movie;
+                    _context.TagEntries.Add(newTagEntry);
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception();
+            }
+        }
+
+        public async Task PostTag(TagName newTag)
+        {
+            if (newTag.Name.Trim().Length == 0 || newTag.Name.Trim().Length == 0) throw new Exception();
+            try
+            {
+                newTag.Id = await this.newTagId();
+                _context.TagNames.Add(newTag);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -94,7 +164,12 @@ namespace Application
             foreach (TagName t in tags)
             {
                 var count = (await _context.TagEntries.Where(te => te.Tag == t).ToListAsync()).Count();
-                tagResponses.Add(new TagResponse(t.Id, t.Name, count));
+                tagResponses.Add(new TagResponse()
+                {
+                    TagId = t.Id,
+                    Name = t.Name,
+                    Entries = count
+                });
             }
             return tagResponses;
         }
@@ -106,7 +181,12 @@ namespace Application
             List<CastResponse> castResponses = new List<CastResponse>();
             foreach (CastEntry c in cast)
             {
-                castResponses.Add(new CastResponse(c.Film.Id, c.Film.Name, c.Role));
+                castResponses.Add(new CastResponse()
+                {
+                    PersonId = c.Film.Id,
+                    Name = c.Film.Name,
+                    Role = c.Role
+                });
             }
             return castResponses;
         }

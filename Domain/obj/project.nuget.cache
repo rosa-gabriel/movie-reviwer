@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "/BDvRSSRHQlsPo31M6cwQBD3vFmxWKjui5lUa+PYRi3XJdmSrJgWYSsFaR0Z03idH3lHHmWR2/8c2ShCh6iB1A==",
+  "dgSpecHash": "1pA9M8m7Twc4vl9ymuu5WihZGG5EIe4zyX7WbW47gIuKFxSECNjnG9hXf90Fl7c1PqHeGnGk11lI0Z2kdqiqEw==",
   "success": true,
   "projectFilePath": "G:\\Projetos\\galeryReact\\Domain\\Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\gabri\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

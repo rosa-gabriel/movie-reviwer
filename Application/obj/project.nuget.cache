@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "H+bBaC1dFI0D0l26Jlh/x3jjbZD1PXpujUpFTuxiwqfLbIg++KOZb6s+AT5Bra+k2267fazOk0VBVg29pYmNAw==",
+  "dgSpecHash": "sF1gWNk9dd1xiA+sEdUkP3pH+dO7iOzIKrl+5bDvPz01Ltml21rlCQZq89B+zKKX5iPEyk/cpAvOogscgMfKmQ==",
   "success": true,
   "projectFilePath": "G:\\Projetos\\galeryReact\\Application\\Application.csproj",
   "expectedPackageFiles": [
@@ -20,6 +20,7 @@
     "C:\\Users\\gabri\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\mysqlconnector\\2.1.2\\mysqlconnector.2.1.2.nupkg.sha512",
+    "C:\\Users\\gabri\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\6.0.2\\pomelo.entityframeworkcore.mysql.6.0.2.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\system.collections.immutable\\6.0.0\\system.collections.immutable.6.0.0.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.0\\system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512",

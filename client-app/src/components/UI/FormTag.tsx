@@ -1,18 +1,23 @@
-import { Link } from "react-router-dom";
-import { isPropertySignature } from "typescript";
+import { TagType } from "../../Type/Types";
 
-const FormTag = (props: any) => {
+type FormTagProps = {
+  tag: TagType;
+  onDelete: Function;
+};
 
-  const deleteTag = () => {
-    props.onDelete(props.TagItem);
-  }
+const FormTag = (props: FormTagProps) => {
+  const deleteTag = (): void => {
+    props.onDelete(props.tag);
+  };
 
   return (
     <div className="form-tag">
       <div>
-        <span>{props.TagItem.name}</span>
+        <span>{props.tag.name}</span>
         <span>
-          <button onClick={deleteTag} type='button'>X</button>
+          <button onClick={deleteTag} type="button">
+            X
+          </button>
         </span>
       </div>
     </div>

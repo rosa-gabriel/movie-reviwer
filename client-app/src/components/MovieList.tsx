@@ -2,46 +2,45 @@ import Movie from "./UI/Movie";
 import LoadingCircle from "./UI/LoadingCircle";
 import { useEffect, useState } from "react";
 import { getMovies } from "../functions/MoviesData";
+import { MovieType } from "../Type/Types";
 
-const MovieList = (props: any): JSX.Element => {
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [seed, setSeed] = useState(1);
+const MovieList = () => {
+  const [movies, setMovies] = useState<MovieType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const reset = () => {
-    setSeed(Math.random());
-  };
-
-  const hasError = error.trim().length > 0;
+  const hasError = error !== null;
 
   useEffect(() => {
     (async () => {
       setIsLoading(true);
       try {
-        const data = await getMovies();
-        setMovies(data);
-        setError('');
+        const data: MovieType[] = await getMovies();
+        setMovies([...data]);
+        setError(null);
       } catch (ex: any) {
         setError(ex);
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [seed]);
+  }, []);
 
   return (
     <>
       <h1 className="title">Latest Movies</h1>
-      {(!isLoading && !hasError) && (
+      {!isLoading && !hasError && movies.length > 0 && (
         <div className="grid-container">
-          {movies.map((item: any) => {
-            return <Movie item={item} key={item.id} />;
+          {movies.map((movie: any) => {
+            return <Movie movie={movie} key={movie.id} />;
           })}
         </div>
       )}
-      {(!isLoading && hasError) && <p className="error-message">{error}</p>}
-      {(isLoading && !hasError) && <LoadingCircle />}
+
+      {!isLoading && !hasError && movies.length === 0 && <p>0 movies registered.</p>}
+
+      {!isLoading && hasError && <p className="error-message">{error}</p>}
+      {isLoading && !hasError && <LoadingCircle />}
     </>
   );
 };

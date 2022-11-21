@@ -4,21 +4,16 @@ import Tag from "./UI/Tag";
 import { getMovie } from "../functions/MoviesData";
 import CastSquare from "./UI/CastSquare";
 import LoadingCircle from "./UI/LoadingCircle";
+import { AllMovieInfoType } from "../Type/Types";
 
 const Details = (props: any) => {
   const params = useParams();
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [movieInfo, setMovieInfo] = useState({
-    movie: { id: -1, name: "", coverUrl: "", releaseDate: new Date() },
-    castMembers: [{ id: -1, name: "", role: "" }],
-    favorites: -1,
-    tags: [{ name: "", entries: -1 }],
-  });
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [movieInfo, setMovieInfo] = useState<AllMovieInfoType | null>(null);
 
   useEffect(() => {
     (async (id: any) => {
-      const data = await getMovie(id);
-      console.log(data);
+      const data: AllMovieInfoType = await getMovie(id);
       setMovieInfo({
         ...data,
         movie: {
@@ -32,9 +27,8 @@ const Details = (props: any) => {
 
   return (
     <>
-      {isLoaded && (
+      {isLoaded && movieInfo != null && (
         <div className="details_container">
-
           <img
             src={movieInfo.movie.coverUrl}
             className="details_cover"
@@ -47,14 +41,14 @@ const Details = (props: any) => {
             <p className="info_container_title">TAGS</p>
             <div className="info_container">
               {movieInfo.tags.map((tag) => (
-                <Tag key={tag.name} TagItem={tag} />
+                <Tag key={tag.name} tagItem={tag} />
               ))}
             </div>
 
             <p className="info_container_title">CAST</p>
             <div className="info_container">
               {movieInfo.castMembers.map((person) => (
-                <CastSquare key={person.name} person={person.name} />
+                <CastSquare key={person.name} person={person} />
               ))}
             </div>
 
@@ -64,7 +58,6 @@ const Details = (props: any) => {
               <i className="fa-regular fa-heart" /> Favorites{" "}
               {movieInfo.favorites}
             </button>
-
           </div>
         </div>
       )}

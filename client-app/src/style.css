@@ -309,3 +309,9 @@ nav {
   padding: 7px;
   border-radius: 5px;
 }
+
+.add-tag-button{
+  width: 30px;
+  font-size: 20px;
+  border-radius: 0;
+}

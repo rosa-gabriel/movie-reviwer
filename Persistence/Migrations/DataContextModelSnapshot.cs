@@ -152,7 +152,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TagName");
+                    b.ToTable("TagNames");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

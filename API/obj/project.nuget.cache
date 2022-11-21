@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "QXYuYhNljB0ECJn+g8bdMyPg+pBst6qaHGgiC819ZkhZzmQyJFASqHK0sYt4gTwpy4BTfoNRu3yEzTiFbuSfzA==",
+  "dgSpecHash": "Xwr1SVqiKPasIzWMQBGnQpExtgY9X2nT4NwcIhNESHxruyzmfqlLE0Ur2eer+uU/DDZdpXSYMPbmcG6ijVqLlA==",
   "success": true,
   "projectFilePath": "G:\\Projetos\\galeryReact\\API\\API.csproj",
   "expectedPackageFiles": [
@@ -22,6 +22,7 @@
     "C:\\Users\\gabri\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\mysqlconnector\\2.1.2\\mysqlconnector.2.1.2.nupkg.sha512",
+    "C:\\Users\\gabri\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\6.0.2\\pomelo.entityframeworkcore.mysql.6.0.2.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\gabri\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
