@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class TagEntry
+    public class TagEntry 
     {
         
         [Key]

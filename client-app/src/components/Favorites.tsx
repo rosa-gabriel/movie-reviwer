@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
+import Container from "./UI/Container";
 
 const Details = () => {
-    const params = useParams();
+  const params = useParams();
 
-    return(
-        <h1>Favorites</h1>
-    );
+  return (
+    <Container>
+      <h1>Favorites</h1>
+    </Container>
+  );
 };
 export default Details;

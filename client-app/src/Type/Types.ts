@@ -11,21 +11,32 @@ export type NewMovieType = {
   releaseDate: string;
 };
 
-export type TagType = {
-  tagId?: number;
+export type TagEntriesType = {
+  tagId: number;
   name: string;
   entries: number;
 };
 
+export type TagType = {
+  id: number;
+  name: string;
+};
+
 export type CastType = {
-  castId?: number;
+  personId?: number;
   name: string;
   role: string;
 };
 
+export type PersonType = {
+  id?: number,
+  name: string,
+  profileImageUrl: string
+}
+
 export type AllMovieInfoType = {
   movie: MovieType;
   favorites: number;
-  tags: TagType[];
+  tags: TagEntriesType[];
   castMembers: CastType[];
 };

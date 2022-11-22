@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class Movie
+    public class Movie 
     {
         [Key]
         public int Id{get; set;}

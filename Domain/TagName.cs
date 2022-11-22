@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class TagName
+    public class TagName 
     {
         [Key]
         public int Id{ get; set; }

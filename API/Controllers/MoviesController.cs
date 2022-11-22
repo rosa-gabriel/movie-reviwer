@@ -26,7 +26,46 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.GetAllMovies());
+                return Ok(await this.movieLogic.ListMovies());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("tag/{id}")]
+        public async Task<ActionResult<TagName>> GetTag(int id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.FindTag(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("person/{id}")]
+        public async Task<ActionResult<Cast>> GetPerson(int id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.FindPerson(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("from/tag/{id}")]
+        public async Task<ActionResult<TagName>> GetMoviesFromTag(int id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListMoviesFromTag(id));
             }
             catch (Exception ex)
             {
@@ -39,7 +78,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.GetAllTags());
+                return Ok(await this.movieLogic.ListTags());
             }
             catch (Exception ex)
             {
@@ -52,7 +91,21 @@ namespace API.Controllers
         {
             try
             {
-                await movieLogic.PostTag(newTag);
+                await movieLogic.AddTag(newTag);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("person")]
+        public async Task<ActionResult> PostPerson(Cast newPerson)
+        {
+            try
+            {
+                await movieLogic.AddPerson(newPerson);
                 return Ok();
             }
             catch (Exception ex)
@@ -66,7 +119,7 @@ namespace API.Controllers
         {
             try
             {
-                await this.movieLogic.PostMovie(newMovie);
+                await this.movieLogic.AddMovie(newMovie);
                 return Ok();
             }
             catch (Exception ex)
@@ -80,7 +133,20 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.getAllMovieInfo(id));
+                return Ok(await this.movieLogic.ListMoviesInfo(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("cast")]
+        public async Task<ActionResult<List<Cast>>> GetCast()
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListCast());
             }
             catch (Exception ex)
             {

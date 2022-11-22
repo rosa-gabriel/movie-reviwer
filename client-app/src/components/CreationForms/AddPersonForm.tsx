@@ -1,24 +1,32 @@
 import React, { useState } from "react";
-import { addTag } from "../../functions/MoviesData";
-import LoadingCircle from "../UI/LoadingCircle";
 import { useNavigate } from "react-router";
+import { addPerson, addTag } from "../../functions/MoviesData";
+import { CastType, PersonType } from "../../Type/Types";
+import LoadingCircle from "../UI/LoadingCircle";
 
-const AddTagForm = () => {
+const AddPersonForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [tagName, setTagName] = useState<string>("");
+  const [name, setName] = useState<string>('');
+  const [url, setUrl] = useState<string>('');
   const navigate = useNavigate();
 
-  const tagNameChangeHandler = (event: any) => {
-    setTagName(event.target.value);
+  const nameChangeHandler = (event: any) => {
+    setName(event.target.value);
+  };
+  const urlChangeHandler = (event: any) => {
+    setUrl(event.target.value);
   };
 
-  const submitHandler = async (event : any) => {
+  const submitHandler = async (event: any) => {
     event.preventDefault();
 
     setIsLoading(true);
     try {
-      await addTag(tagName);
+      await addPerson({
+        name: name,
+        profileImageUrl: url
+      });
       setError(null);
       navigate("/add/movie");
     } catch (ex: any) {
@@ -30,14 +38,23 @@ const AddTagForm = () => {
 
   return (
     <div>
-      <h1 className="title">Add new Tag</h1>
+      <h1 className="title">Add new Person</h1>
 
       {error !== null && <p className="error-message">{error}</p>}
 
       <div className="form-pair">
         <label>NAME</label>
         <input
-          onChange={tagNameChangeHandler}
+          onChange={nameChangeHandler}
+          className="input-dark input-add"
+          type={"text"}
+        />
+      </div>
+
+      <div className="form-pair">
+        <label>IMAGE URL</label>
+        <input
+          onChange={urlChangeHandler}
           className="input-dark input-add"
           type={"text"}
         />
@@ -61,4 +78,4 @@ const AddTagForm = () => {
   );
 };
 
-export default AddTagForm;
+export default AddPersonForm;
