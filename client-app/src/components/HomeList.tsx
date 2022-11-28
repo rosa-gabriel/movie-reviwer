@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getMovies } from "../functions/MoviesData";
 import { MovieType } from "../Type/Types";
 import Container from "./UI/Container";
+import Modal from "./UI/Modal";
 
 const HomeList = () => {
   const [movies, setMovies] = useState<MovieType[]>([]);
@@ -28,25 +29,29 @@ const HomeList = () => {
   }, []);
 
   return (
-    <Container>
-      <>
-        <h1 className="title">Latest Movies</h1>
-        {!isLoading && !hasError && movies.length > 0 && (
-          <div className="grid-container">
-            {movies.map((movie: any) => {
-              return <Movie movie={movie} key={movie.id} />;
-            })}
-          </div>
-        )}
+    <>
+      <Container>
+        <>
+          <h1 className="title">Latest Movies</h1>
+          {!isLoading && !hasError && movies.length > 0 && (
+            <div className="grid-container">
+              {movies.map((movie: any) => {
+                return <Movie movie={movie} key={movie.id} />;
+              })}
+            </div>
+          )}
 
-        {!isLoading && !hasError && movies.length === 0 && (
-          <p>0 movies registered.</p>
-        )}
+          {!isLoading && !hasError && movies.length === 0 && (
+            <p className="faded centered-message">No movies registered.</p>
+          )}
 
-        {!isLoading && hasError && <p className="error-message">{error}</p>}
-        {isLoading && !hasError && <LoadingCircle />}
-      </>
-    </Container>
+          {!isLoading && hasError && (
+            <p className="error centered-message">{error}</p>
+          )}
+          {isLoading && !hasError && <LoadingCircle />}
+        </>
+      </Container>
+    </>
   );
 };
 export default HomeList;

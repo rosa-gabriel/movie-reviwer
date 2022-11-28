@@ -1,25 +1,136 @@
 using Microsoft.AspNetCore.Mvc;
 using Domain;
 using Persistence;
-using Microsoft.EntityFrameworkCore;
-using System.Net;
 using Application;
-using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("[Controller]")]
 
-    public class MoviesController : ControllerBase
+    public class MoviesController : ControllerInit
     {
-        private readonly DataContext _context;
         private readonly MovieLogic movieLogic;
-        public MoviesController(DataContext context)
+        public MoviesController(DataContext context) : base(context)
         {
-            _context = context;
             movieLogic = new MovieLogic(_context);
         }
+
+        //Tags Requests
+
+        [HttpGet("/Tags")]
+        public async Task<ActionResult<List<TagResponse>>> GetTags()
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListTags());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("/Tag/{id}")]
+        public async Task<ActionResult<TagName>> GetTag(Guid id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.FindTag(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("/Create/tag")]
+        public async Task<ActionResult> PostTag(TagName newTag)
+        {
+            try
+            {
+                TagName responseTag = await movieLogic.AddTag(newTag);
+                return Ok(responseTag);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+        [HttpGet("/Tag/{id}/movies")]
+        public async Task<ActionResult<Movie>> GetMoviesFromTag(Guid id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListMoviesFromTag(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //Cast Requests
+
+        [HttpGet("/Cast")]
+        public async Task<ActionResult<List<Person>>> GetCast()
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListCast());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("/Person/{id}")]
+        public async Task<ActionResult<Person>> GetPerson(Guid id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.FindPerson(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("/Person/{id}/movies")]
+        public async Task<ActionResult<Movie>> GetMoviesFromPerson(Guid id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListMoviesFromPerson(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("/Create/person")]
+        public async Task<ActionResult<Person>> PostPerson(Person newPerson)
+        {
+            try
+            {
+                Person responsePerson = await movieLogic.AddPerson(newPerson);
+                return Ok(responsePerson);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //Movie Requests
 
         [HttpGet]
         public async Task<ActionResult<List<Movie>>> GetMovies()
@@ -30,91 +141,25 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return BadRequest(ex);
             }
         }
 
-        [HttpGet("tag/{id}")]
-        public async Task<ActionResult<TagName>> GetTag(int id)
+        [HttpGet("/Movie/{id}")]
+        public async Task<ActionResult<MovieResponse>> getMovie(Guid id)
         {
             try
             {
-                return Ok(await this.movieLogic.FindTag(id));
+                return Ok(await this.movieLogic.ListMoviesInfo(id));
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return BadRequest(ex);
             }
         }
 
-        [HttpGet("person/{id}")]
-        public async Task<ActionResult<Cast>> GetPerson(int id)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.FindPerson(id));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpGet("from/tag/{id}")]
-        public async Task<ActionResult<TagName>> GetMoviesFromTag(int id)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListMoviesFromTag(id));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpGet("tags")]
-        public async Task<ActionResult<List<TagResponse>>> GetTags()
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListTags());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPost("tags")]
-        public async Task<ActionResult> PostTags(TagName newTag)
-        {
-            try
-            {
-                await movieLogic.AddTag(newTag);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPost("person")]
-        public async Task<ActionResult> PostPerson(Cast newPerson)
-        {
-            try
-            {
-                await movieLogic.AddPerson(newPerson);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPost]
+        [Authorize]
+        [HttpPost("/Create/movie")]
         public async Task<ActionResult> PostMovie(MovieResponse newMovie)
         {
             try
@@ -124,35 +169,12 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return BadRequest(ex);
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<MovieResponse>> getMovie(int id)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListMoviesInfo(id));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
 
-        [HttpGet("cast")]
-        public async Task<ActionResult<List<Cast>>> GetCast()
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListCast());
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
-            }
-        }
+
 
     }
 }

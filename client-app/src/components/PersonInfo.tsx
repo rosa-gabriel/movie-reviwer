@@ -1,5 +1,10 @@
 import GenericMovielist from "./UI/GenericMovieList";
-import { getMoviesFromTag, getPerson, getTag } from "../functions/MoviesData";
+import {
+  getMoviesFromPerson,
+  getMoviesFromTag,
+  getPerson,
+  getTag,
+} from "../functions/MoviesData";
 import { CastType, MovieType, PersonType, TagType } from "../Type/Types";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
@@ -22,14 +27,16 @@ const TagList = () => {
         const data: PersonType = await getPerson(String(params.id));
         setPerson(data);
         setHasError(null);
+        const MovieData: MovieType[] = await getMoviesFromPerson(
+          String(data.id)
+        );
+        setMovies(MovieData);
       } catch (ex: any) {
         setHasError(ex.message);
         navigate("/error");
       }
     })();
   }, []);
-
-  console.log(person);
 
   return (
     <Container>
@@ -41,7 +48,7 @@ const TagList = () => {
                 <img
                   src={person.profileImageUrl}
                   className="details_cover"
-                  alt={"Cover for " + person.name}
+                  alt={"Cover image for " + person.name}
                 />
 
                 <div className="details_info">
@@ -49,6 +56,9 @@ const TagList = () => {
                 </div>
               </div>
             </div>
+
+            <h1 className="title">Movie Apearences</h1>
+
             <div style={{ marginTop: "50px" }}>
               {!isLoading && !hasError && movies.length > 0 && (
                 <div className="grid-container">
@@ -59,7 +69,9 @@ const TagList = () => {
               )}
 
               {!isLoading && !hasError && movies.length === 0 && (
-                <p>0 movies registered.</p>
+                <p className="faded centered-message">
+                  None movies apearences.
+                </p>
               )}
 
               {!isLoading && hasError && (

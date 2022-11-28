@@ -11,11 +11,9 @@ namespace Application
     public class MovieLogic
     {
         private readonly DataContext _context;
-        private readonly GenerateIds generateIds;
         public MovieLogic(DataContext context)
         {
             _context = context;
-            this.generateIds = new GenerateIds(this._context);
         }
 
         //Get all the movies in the database on a list<Movie> format
@@ -25,30 +23,34 @@ namespace Application
             {
                 return await this._context.Movies.ToListAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
         }
 
-        public async Task<Cast> FindPerson(int id)
+        public async Task<Person> FindPerson(Guid id)
         {
             try
             {
-                return await this._context.Casts.Where(c => c.Id == id).FirstAsync();
+                Person person = await this._context.People.Where(c => c.Id == id).FirstAsync();
+                if (person == null) throw new Exception("Id not found");
+                return person;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
         }
-        public async Task<TagName> FindTag(int id)
+        public async Task<TagName> FindTag(Guid id)
         {
             try
             {
-                return await this._context.TagNames.Where(tn => tn.Id == id).FirstAsync();
+                TagName tag = await this._context.TagNames.Where(tn => tn.Id == id).FirstAsync();
+                if (tag == null) throw new Exception("Id not found");
+                return tag;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
@@ -74,33 +76,46 @@ namespace Application
                 }
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
         }
 
-        public async Task<List<Movie>> ListMoviesFromTag(int id)
+        public async Task<List<Movie>> ListMoviesFromTag(Guid id)
         {
             try
             {
                 List<Movie> response = await _context.TagEntries.Include(m => m.Film).Where(m => m.Tag.Id == id).Select(m => m.Film).ToListAsync();
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
         }
 
-        public async Task<List<Cast>> ListCast()
+        public async Task<List<Movie>> ListMoviesFromPerson(Guid id)
         {
             try
             {
-                List<Cast> response = await this._context.Casts.ToListAsync();
+                List<Movie> response = await _context.CastEntries.Include(ce => ce.Film).Where(ce => ce.Person.Id == id).Select(ce => ce.Film).ToListAsync();
                 return response;
             }
-            catch (Exception ex)
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        public async Task<List<Person>> ListCast()
+        {
+            try
+            {
+                List<Person> response = await this._context.People.ToListAsync();
+                return response;
+            }
+            catch (Exception)
             {
                 throw new Exception();
             }
@@ -109,15 +124,14 @@ namespace Application
         //Adds a movie to the database
         public async Task AddMovie(MovieResponse newMovie)
         {
-            if (newMovie.movie.Name.Trim().Length == 0 || newMovie.movie.CoverUrl.Trim().Length == 0) throw new Exception();
+            if (string.IsNullOrWhiteSpace(newMovie.movie.Name)) throw new Exception();
+            if (string.IsNullOrWhiteSpace(newMovie.movie.CoverUrl)) newMovie.movie.CoverUrl = "";
             try
             {
-                newMovie.movie.Id = await this.generateIds.newMovieId();
                 _context.Movies.Add(newMovie.movie);
                 foreach (TagResponse tr in newMovie.tags)
                 {
                     TagEntry newTagEntry = new TagEntry();
-                    newTagEntry.Id = await generateIds.newTagEntryId();
                     newTagEntry.Tag = await this._context.TagNames.FindAsync(tr.TagId);
                     newTagEntry.Film = newMovie.movie;
                     _context.TagEntries.Add(newTagEntry);
@@ -126,8 +140,7 @@ namespace Application
                 foreach (CastResponse cr in newMovie.castMembers)
                 {
                     CastEntry newCastEntry = new CastEntry();
-                    newCastEntry.Id = await generateIds.newCastEntryId();
-                    newCastEntry.Person = await this._context.Casts.Where(p => p.Name == cr.Name).FirstAsync();
+                    newCastEntry.Person = await this._context.People.Where(p => p.Name == cr.Name).FirstAsync();
                     newCastEntry.Role = cr.Role;
                     newCastEntry.Film = newMovie.movie;
                     _context.CastEntries.Add(newCastEntry);
@@ -135,43 +148,47 @@ namespace Application
 
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
         }
 
-        public async Task AddTag(TagName newTag)
+        public async Task<TagName> AddTag(TagName newTag)
         {
-            if (newTag.Name.Trim().Length == 0 || newTag.Name.Trim().Length == 0) throw new Exception();
+            if (string.IsNullOrWhiteSpace(newTag.Name)) throw new Exception();
+
             try
             {
-                newTag.Id = await this.generateIds.newTagId();
                 _context.TagNames.Add(newTag);
                 await _context.SaveChangesAsync();
+                return newTag;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
         }
 
-        public async Task AddPerson(Cast newPerson)
+        public async Task<Person> AddPerson(Person newPerson)
         {
-            if (newPerson.Name.Trim().Length == 0 || newPerson.ProfileImageUrl.Trim().Length == 0) throw new Exception();
+            if (string.IsNullOrWhiteSpace(newPerson.Name)) throw new Exception();
+            if (string.IsNullOrWhiteSpace(newPerson.ProfileImageUrl)) newPerson.ProfileImageUrl = "";
+
             try
             {
-                newPerson.Id = await this.generateIds.newCastId();
-                _context.Casts.Add(newPerson);
+                _context.People.Add(newPerson);
                 await _context.SaveChangesAsync();
+                return newPerson;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
         }
+
         //Get the full inofo for a movie, it's tags and its's cast.
-        public async Task<MovieResponse> ListMoviesInfo(int id)
+        public async Task<MovieResponse> ListMoviesInfo(Guid id)
         {
             Movie? dataMovie = await _context.Movies.FindAsync(id);
             if (dataMovie == null) throw new Exception();
@@ -185,7 +202,7 @@ namespace Application
                 movieResponse.castMembers = await this.ListMovieCast(dataMovie);
                 return movieResponse;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }
@@ -202,6 +219,7 @@ namespace Application
         public async Task<List<TagResponse>> ListMovieTags(Movie movie)
         {
             if (movie == null) throw new Exception();
+
             List<TagName> tags = await _context.TagEntries.Include(fe => fe.Tag).Where(fe => fe.Film == movie).Select(fe => fe.Tag).ToListAsync();
             List<TagResponse> tagResponses = new List<TagResponse>();
             foreach (TagName t in tags)
@@ -220,6 +238,7 @@ namespace Application
         public async Task<List<CastResponse>> ListMovieCast(Movie movie)
         {
             if (movie == null) throw new Exception();
+
             List<CastEntry> cast = await _context.CastEntries.Include(ce => ce.Person).Where(ce => ce.Film == movie).ToListAsync();
             List<CastResponse> castResponses = new List<CastResponse>();
             foreach (CastEntry c in cast)
@@ -227,7 +246,7 @@ namespace Application
                 castResponses.Add(new CastResponse()
                 {
                     PersonId = c.Person.Id,
-                    Name = c.Film.Name,
+                    Name = c.Person.Name,
                     Role = c.Role
                 });
             }

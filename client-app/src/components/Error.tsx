@@ -4,12 +4,12 @@ import Container from "./UI/Container";
 const Details = () => {
   return (
     <Container>
-      <div style={{ textAlign: "center" }}>
-        <h1 style={{ marginBottom: "20px" }}>
+      <>
+        <h1 className="title">
           Url not found! Return to the main menu.
         </h1>
-        <Link to={"/"}>Home</Link>
-      </div>
+        <Link className="error centered-message" to={"/"}>Home</Link>
+      </>
     </Container>
   );
 };

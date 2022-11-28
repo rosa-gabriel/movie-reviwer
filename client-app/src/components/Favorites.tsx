@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import AccountCheck from "./AccountForms/AccountCheck";
 import Container from "./UI/Container";
 
 const Details = () => {
@@ -6,7 +7,10 @@ const Details = () => {
 
   return (
     <Container>
-      <h1>Favorites</h1>
+      <>
+        <AccountCheck />
+        <h1 className="title">Favorites</h1>
+      </>
     </Container>
   );
 };

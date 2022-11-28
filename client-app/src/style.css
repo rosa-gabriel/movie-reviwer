@@ -48,14 +48,17 @@ nav {
   text-align: center;
 }
 
-.faded{
+.faded {
   color: #686868;
 }
 
-.error-message{
+.error {
   color: red;
-  text-align: center;
   margin-bottom: 10px;
+}
+
+.centered-message {
+  text-align: center;
 }
 
 .grid-container {
@@ -119,8 +122,11 @@ nav {
   height: 50px;
   justify-content: center;
   position: relative;
+  border: 0px;
+  background-color: transparent;
+  font-size: 15px;
 }
-.nav-link-selected::after{
+.nav-link-selected::after {
   content: "";
   position: absolute;
   width: 20px;
@@ -131,6 +137,7 @@ nav {
 
 .nav-link:hover {
   background-color: #3a3a3a;
+  border: 0px;
 }
 
 .login-links {
@@ -170,11 +177,11 @@ nav {
   background-color: var(--red);
 }
 
-.creation_nav{
+.creation_nav {
   background-color: #991030;
 }
 
-.creation_nav .nav-link:hover{
+.creation_nav .nav-link:hover {
   background-color: #70071f;
 }
 
@@ -196,7 +203,7 @@ nav {
   margin-bottom: 10px;
 }
 
-.button{
+.button {
   background-color: var(--red);
   border: none;
   border-radius: 10px;
@@ -215,88 +222,91 @@ nav {
   background-color: #991030;
 }
 
-.button:disabled{
+.button:disabled {
   background-color: #8f6666;
 }
 
-.details_cover{
+.details_cover {
   width: 400px;
   margin-left: 30px;
+  height: auto;
   border-radius: 10px;
 }
 
-.details_container{
+.details_container {
   display: flex;
   width: 100%;
   padding-top: 30px;
 }
 
-.details_info{
+.details_info {
   padding-left: 40px;
 }
 
-.details_container button{
+.details_container button {
   margin-top: 30px;
   padding: 7px;
   font-size: 23px;
 }
 
-.info_container_title{
+.info_container_title {
   margin: 20px 0 5px 0;
 }
-.info_container{
+.info_container {
+  max-height: 200px;
   display: flex;
   flex-wrap: wrap;
-
+  overflow: hidden;
 }
 
-.tag{
+.tag {
   background-color: #3a3a3a;
   width: fit-content;
   border-radius: 5px;
   overflow: hidden;
-  margin-right: 10px;
-  transition: .2s;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  transition: 0.2s;
 }
 
-.tag:hover{
+.tag:hover {
   background-color: #474747;
 }
 
-.tag a{
+.tag a {
   text-decoration: none;
   display: flex;
 }
 
-.tag a span{
+.tag a span {
   padding: 7px;
 }
 
-.tag a span:nth-child(2){
+.tag a span:nth-child(2) {
   background-color: #222222;
-  transition: .2s;
+  transition: 0.2s;
 }
 
-.tag:hover a span:nth-child(2){
+.tag:hover a span:nth-child(2) {
   background-color: #303030;
 }
 
-.form-tag{
+.form-tag {
   width: fit-content;
   border-radius: 5px;
   overflow: hidden;
   background-color: #3a3a3a;
   margin-right: 10px;
 }
-.form-tag div{ 
+.form-tag div {
   display: flex;
 }
 
-.form-tag div span{
- padding: 7px; 
+.form-tag div span {
+  padding: 7px;
 }
 
-.form-tag button{
+.form-tag button {
   border-radius: 100%;
   border: none;
   background-color: #ed2553;
@@ -304,18 +314,18 @@ nav {
   height: 20px;
 }
 
-.tag-box{
+.tag-box {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.details-releaseDate{
+.details-releaseDate {
   margin-top: 20px;
   color: rgb(163, 163, 163);
 }
 
-.click-add-container{
+.click-add-container {
   position: relative;
   display: flex;
   background-color: var(--container);
@@ -323,7 +333,7 @@ nav {
   overflow: hidden;
 }
 
-.click-add-container select{
+.click-add-container select {
   background-color: var(--container);
   border: none;
   padding: 7px;
@@ -332,7 +342,7 @@ nav {
   margin-right: 10px;
 }
 
-.click-add-container button{
+.click-add-container button {
   width: 30px;
   font-size: 20px;
   border-radius: 0;
@@ -340,12 +350,45 @@ nav {
   width: 32px;
 }
 
-.click-add-container input{
+.click-add-container input {
   background-color: transparent;
   border: none;
   padding-left: 10px;
 }
 
-.person-info{
+.person-info {
   width: 100%;
+}
+
+.modal-background {
+  top: 0;
+  position: fixed;
+  height: 150vh;
+  width: 100%;
+  background-color: rgba(163, 163, 163, 0.459);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-box {
+  margin-top: 400px;
+  width: 500px;
+  height: fit-content;
+  background-color: var(--container);
+  padding-bottom: 40px;
+  border-radius: 10px;
+}
+
+.modal-box p{margin-bottom: 15px;}
+
+.modal-buttons {
+  width: fit-content;
+  margin: auto;
+}
+
+.modal-buttons button {
+  padding: 10px;
+  margin: 3px;
+  border-radius: 5px;
 }

@@ -7,7 +7,7 @@ namespace Domain
 {
     public class CastResponse
     {
-        public int PersonId { get; set; }
+        public Guid PersonId { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
     }

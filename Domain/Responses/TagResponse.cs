@@ -9,7 +9,7 @@ namespace Domain
     public class TagResponse
     {
         public TagResponse(){}
-        public int TagId { get; set; }
+        public Guid TagId { get; set; }
         public string Name { get; set; }
         public int Entries { get; set; }
     }

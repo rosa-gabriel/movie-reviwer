@@ -40,3 +40,16 @@ G:\Projetos\galeryReact\API\obj\Debug\net6.0\ref\API.dll
 G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Application.dll
 G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Application.pdb
 G:\Projetos\galeryReact\API\bin\Debug\net6.0\Newtonsoft.Json.dll
+G:\Projetos\galeryReact\API\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+G:\Projetos\galeryReact\API\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+G:\Projetos\galeryReact\API\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+G:\Projetos\galeryReact\API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+G:\Projetos\galeryReact\API\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+G:\Projetos\galeryReact\APi\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll

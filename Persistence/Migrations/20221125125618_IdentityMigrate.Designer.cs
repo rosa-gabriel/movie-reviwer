@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221118191552_newMigration")]
-    partial class newMigration
+    [Migration("20221125125618_IdentityMigrate")]
+    partial class IdentityMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,40 +21,23 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Domain.Cast", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ProfileImageUrl")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Casts");
-                });
-
             modelBuilder.Entity("Domain.CastEntry", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    b.Property<int?>("FilmId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("FilmId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int?>("PersonId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PersonId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Role")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TypeId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -69,9 +52,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.CastType", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
@@ -83,19 +66,19 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.FavoriteEntry", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    b.Property<int?>("FanId")
-                        .HasColumnType("int");
+                    b.Property<string>("FanProfileImageUrl")
+                        .HasColumnType("varchar(255)");
 
-                    b.Property<int?>("FilmId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("FilmId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FanId");
+                    b.HasIndex("FanProfileImageUrl");
 
                     b.HasIndex("FilmId");
 
@@ -104,9 +87,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Movie", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("CoverUrl")
                         .HasColumnType("longtext");
@@ -122,17 +105,34 @@ namespace Persistence.Migrations
                     b.ToTable("Movies");
                 });
 
+            modelBuilder.Entity("Domain.Person", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ProfileImageUrl")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("People");
+                });
+
             modelBuilder.Entity("Domain.TagEntry", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    b.Property<int?>("FilmId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("FilmId")
+                        .HasColumnType("char(36)");
 
-                    b.Property<int?>("TagId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TagId")
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -145,9 +145,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.TagName", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
@@ -159,20 +159,58 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("ProfileImageUrl")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Bio")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("ProfileImageUrl")
+                    b.Property<string>("Email")
                         .HasColumnType("longtext");
 
-                    b.HasKey("Id");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("ProfileImageUrl");
 
                     b.ToTable("Users");
                 });
@@ -183,7 +221,7 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("FilmId");
 
-                    b.HasOne("Domain.Cast", "Person")
+                    b.HasOne("Domain.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId");
 
@@ -202,7 +240,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.User", "Fan")
                         .WithMany()
-                        .HasForeignKey("FanId");
+                        .HasForeignKey("FanProfileImageUrl");
 
                     b.HasOne("Domain.Movie", "Film")
                         .WithMany()

@@ -10,7 +10,7 @@ namespace Domain
     {
         
         [Key]
-        public int Id {get; set;}
+        public Guid Id {get; set;}
         public TagName Tag { get; set; }
         public Movie Film{get; set;}
     }

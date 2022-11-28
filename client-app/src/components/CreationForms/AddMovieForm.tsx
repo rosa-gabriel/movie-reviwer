@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addMovie, getCast, getTags } from "../../functions/MoviesData";
 import LoadingCircle from "../UI/LoadingCircle";
-import { AllMovieInfoType, CastType, TagEntriesType, TagType } from "../../Type/Types";
+import { AllMovieInfoType, CastType, TagEntriesType } from "../../Type/Types";
 import ItemInput from "./inputs/ItemInput";
+import SubmitButton from "../SubmitButton";
+import { UserContext } from "../Context/UserContext";
 
 const AddMovieForm = () => {
   const [error, setError] = useState<string | null>(null);
@@ -20,8 +22,7 @@ const AddMovieForm = () => {
   const [cast, setCast] = useState<CastType[]>([]);
 
   const navigate = useNavigate();
-
-  console.log(cast);
+  const context = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
@@ -70,6 +71,7 @@ const AddMovieForm = () => {
   };
 
   const submitHandler = async (event: any) => {
+    event.preventDefault();
     const newMovie: AllMovieInfoType = {
       movie: {
         name: name,
@@ -80,10 +82,10 @@ const AddMovieForm = () => {
       tags: tags,
       castMembers: cast,
     };
-
+    if (!context.userInfo) return;
     try {
       setLoading(true);
-      await addMovie(newMovie);
+      await addMovie(newMovie, context.userInfo.token);
       setError(null);
       navigate("/");
     } catch (ex: any) {
@@ -94,10 +96,10 @@ const AddMovieForm = () => {
   };
 
   return (
-    <div>
+    <form onSubmit={submitHandler}>
       <h1 className="title">Add new Movie</h1>
 
-      {error !== null && <p className="error-message">{error}</p>}
+      {error !== null && <p className="error centered-message">{error}</p>}
 
       <div className="form-pair">
         <label>NAME</label>
@@ -133,6 +135,7 @@ const AddMovieForm = () => {
           dataItems={dataTags}
           items={tags}
           placeHolder={"Choose a person"}
+          idProp={"tagId"}
         />
       </div>
 
@@ -144,6 +147,7 @@ const AddMovieForm = () => {
           items={cast}
           role={role}
           placeHolder={"Choose a person"}
+          idProp={"id"}
         >
           <input
             type={"text"}
@@ -153,21 +157,8 @@ const AddMovieForm = () => {
         </ItemInput>
       </div>
 
-      {!loading && (
-        <button
-          onClick={submitHandler}
-          type="button"
-          className="add-button button"
-        >
-          Add
-        </button>
-      )}
-      {loading && (
-        <button style={{ display: "flex" }} className="add-button" disabled>
-          <LoadingCircle />
-        </button>
-      )}
-    </div>
+      <SubmitButton loading={loading} buttonText={"Add"}></SubmitButton>
+    </form>
   );
 };
 

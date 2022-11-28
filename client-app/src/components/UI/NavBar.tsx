@@ -1,31 +1,50 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { UserContext } from "../Context/UserContext";
 import { active } from "../CreationForms/CreationOptions";
 
 const NavBar = () => {
+  const context = useContext(UserContext);
   return (
     <nav>
       <NavLink to={"/"} className={active}>
         Home
       </NavLink>
       <form className="search-bar">
-        <input className="input-dark" type="text" placeholder="Search..."/>
+        <input className="input-dark" type="text" placeholder="Search..." />
         <button type="submit">
-          <i className="fa-solid fa-magnifying-glass"/>
+          <i className="fa-solid fa-magnifying-glass" />
         </button>
       </form>
-      <NavLink to={"/add/movie"} className={active}>
-        Add
-      </NavLink>
-      <NavLink to={"/:userId/favorites/"} className={active}>
-        Favorites
-      </NavLink>
+      {context.isLogedIn && (
+        <NavLink to={"/add/movie"} className={active}>
+          Add
+        </NavLink>
+      )}
       <div className="login-links">
-        <NavLink to={""} className={active}>
-          Sign in
-        </NavLink>
-        <NavLink to={""} className={active}>
-          Register
-        </NavLink>
+        {!context.isLogedIn && (
+          <>
+            <NavLink to={"/account/login"} className={active}>
+              Sign in
+            </NavLink>
+            <NavLink to={"/account/register"} className={active}>
+              Register
+            </NavLink>
+          </>
+        )}
+        {context.isLogedIn && (
+          <>
+            <NavLink to={"/:userId/favorites/"} className={active}>
+              Favorites
+            </NavLink>
+            <button
+              onClick={context.logOut}
+              className={"nav-link"}
+            >
+              Log Out
+            </button>
+          </>
+        )}
       </div>
     </nav>
   );

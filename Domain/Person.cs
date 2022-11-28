@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class Cast 
+    public class Person
     {
         [Key]
-        public int Id{ get; set; }
+        public Guid Id{ get; set; }
         public string Name{ get; set; }
         public string ProfileImageUrl { get; set; }
     }

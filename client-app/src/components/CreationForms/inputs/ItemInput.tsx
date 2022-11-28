@@ -9,6 +9,7 @@ type ItemInputProps = {
   children?: JSX.Element;
   role?: string | null;
   placeHolder: string;
+  idProp: string;
 };
 
 const ItemInput = (props: ItemInputProps) => {
@@ -47,15 +48,23 @@ const ItemInput = (props: ItemInputProps) => {
     <div style={{ minHeight: "36px" }} className="input-dark input-add tag-box">
       {props.items.map((item) => {
         return (
-          <ItemInputClick key={item.name} item={item} onDelete={deleteItem} />
+          <ItemInputClick
+            key={"selectedClick" + item[props.idProp]}
+            item={item}
+            onDelete={deleteItem}
+          />
         );
       })}
       <div className="click-add-container">
         <select name="select" onChange={itemTextChangeHandler}>
           <option value={""}>{props.placeHolder}</option>
           {props.dataItems.map((item) => {
+            if (item[props.idProp] == undefined) console.log(item);
             return (
-              <option key={item.name} value={item.name}>
+              <option
+                key={"optionClick" + item[props.idProp]}
+                value={item.name}
+              >
                 {item.name}
               </option>
             );

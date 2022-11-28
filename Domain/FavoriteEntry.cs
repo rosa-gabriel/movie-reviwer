@@ -9,7 +9,7 @@ namespace Domain
     public class FavoriteEntry 
     {
         [Key]
-        public int Id{ get; set; }
+        public Guid Id{ get; set; }
         public Movie Film{ get; set; }
         public User Fan{ get; set; }
     }
