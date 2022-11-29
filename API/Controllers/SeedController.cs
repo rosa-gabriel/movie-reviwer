@@ -9,10 +9,8 @@ namespace API.Controllers
     [Route("[controller]")]
     public class SeedController : ControllerInit
     {
-        private readonly MovieLogic movieLogic;
         public SeedController(DataContext context) : base(context)
         {
-            movieLogic = new MovieLogic(this._context);
         }
 
         [HttpPost("movies")]

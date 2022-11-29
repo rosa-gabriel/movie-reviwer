@@ -81,7 +81,7 @@ const TagList = () => {
             </div>
           </>
         )}
-        {!person === null && <LoadingCircle />}
+        {person === null && <LoadingCircle />}
       </>
     </Container>
   );

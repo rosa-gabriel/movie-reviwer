@@ -12,5 +12,6 @@ namespace Domain
         public Guid Id{ get; set; }
         public Movie Film{ get; set; }
         public User Fan{ get; set; }
+        public DateTime FavoriteDate {get; set;}
     }
 }

@@ -1,10 +1,10 @@
-import { tokenToString } from "typescript";
 import { uri } from "../App";
 import {
   AllMovieInfoType,
   CastType,
   MovieType,
   PersonType,
+  ProfileType,
   TagEntriesType,
   TagType,
 } from "../Type/Types";
@@ -30,7 +30,7 @@ export const addMovie = async (movie: AllMovieInfoType, token: string) => {
     const response: Response = await fetch(`${uri}/Create/movie`, {
       method: "POST",
       headers: {
-        Authorization: "Bearer "+ token,
+        Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(movie),
@@ -51,7 +51,7 @@ export const addTag = async (tag: string, token: string) => {
   try {
     const response: Response = await fetch(`${uri}/Create/tag`, {
       headers: {
-        Authorization: "Bearer "+ token,
+        Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
       method: "POST",
@@ -77,7 +77,7 @@ export const addPerson = async (person: PersonType, token: string) => {
   try {
     const response: Response = await fetch(`${uri}/Create/person`, {
       headers: {
-        Authorization: "Bearer "+ token,
+        Authorization: "Bearer " + token,
         "Content-Type": "application/json",
       },
       method: "POST",
@@ -179,6 +179,86 @@ export const getCast = async () => {
 
     return data;
   } catch (ex) {
+    throw new Error(connectionFailString);
+  }
+};
+
+export const putFavorite = async (
+  movieId: string,
+  desiredBool: boolean,
+  token: string
+) => {
+  try {
+    const response: Response = await fetch(`${uri}/Account/favorite`, {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ movieId, desiredBool }),
+    });
+
+    if (!response.ok) throw "";
+  } catch (ex) {
+    throw new Error(connectionFailString);
+  }
+};
+
+export const getIsFavorite = async (movieId: string, token: string) => {
+  try {
+    const response: Response = await fetch(
+      `${uri}/Account/favorite/${movieId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (!response.ok) throw "";
+
+    const data = await response.json();
+    return data;
+  } catch (ex) {
+    console.error(ex);
+    throw new Error(connectionFailString);
+  }
+};
+
+export const getUserFavorites = async (token: string) => {
+  try {
+    const response: Response = await fetch(`${uri}/Account/favorites`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (!response.ok) throw "";
+    const data = await response.json();
+    return data;
+  } catch (ex) {
+    console.error(ex);
+    throw new Error(connectionFailString);
+  }
+};
+
+export const getProfile = async (userId: string, token?: string) => {
+  try {
+    const response: Response = await fetch(`${uri}/Account/profile/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + String(token),
+      },
+    });
+
+    if (!response.ok) throw "";
+
+    let data: ProfileType = await response.json();
+    data = { ...data, creationDate: new Date(data.creationDate) };
+    console.log(data);
+    return data;
+  } catch (ex) {
+    console.error(ex);
     throw new Error(connectionFailString);
   }
 };

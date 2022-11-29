@@ -34,13 +34,15 @@ const NavBar = () => {
         )}
         {context.isLogedIn && (
           <>
-            <NavLink to={"/:userId/favorites/"} className={active}>
+            <NavLink to={"/favorites"} className={active}>
               Favorites
             </NavLink>
-            <button
-              onClick={context.logOut}
-              className={"nav-link"}
-            >
+            <NavLink to={`/account/profile/${context.userInfo?.id}`}>
+              <div className="nav-profile-container">
+                <img src={context.userInfo?.profileImageUrl} />
+              </div>
+            </NavLink>
+            <button onClick={context.logOut} className={"nav-link"}>
               Log Out
             </button>
           </>

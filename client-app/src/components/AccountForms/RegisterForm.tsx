@@ -14,9 +14,14 @@ const RegisterForm = () => {
   const [username, setUsername] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const usernameChangeHandler = (event: any) => {
     setUsername(event.target.value);
+  };
+
+  const confirmPasswordChangeHandler = (event: any) => {
+    setConfirmPassword(event.target.value);
   };
 
   const passwordChangeHandler = (event: any) => {
@@ -32,12 +37,14 @@ const RegisterForm = () => {
 
     try {
       setIsLoading(true);
+      if (password != confirmPassword) {
+        setError("Passwords need to match!");
+      }
       const userInfo: UserRegisterType = {
         email: email,
         username: username,
         password: password,
       };
-
       const response = await register(userInfo);
       context.logIn(response);
       setIsLoading(false);
@@ -82,6 +89,16 @@ const RegisterForm = () => {
             className="input-add input-dark"
             onChange={passwordChangeHandler}
             placeholder="Password"
+          />
+        </div>
+
+        <div className="form-pair">
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            className="input-add input-dark"
+            onChange={confirmPasswordChangeHandler}
+            placeholder="Confirm password"
           />
         </div>
 

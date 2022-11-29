@@ -5,8 +5,6 @@ import { UserInfoType } from "../../Type/Types";
 import RegisterForm from "../AccountForms/RegisterForm";
 import Modal from "../UI/Modal";
 
-const localUserInfoString: string | null = localStorage.getItem("token");
-
 type UserContextType = {
   isLogedIn: boolean;
   userInfo: null | UserInfoType;
@@ -26,16 +24,16 @@ type UserContextProviderProps = {
 };
 
 export const UserContextProvider = (props: UserContextProviderProps) => {
-  const [isLoged, setIsLoged] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
-  const [showModal, setShowModal] = useState<boolean>(false);
-
-  useEffect(() => {
+  const [isLoged, setIsLoged] = useState<boolean>(() => {
+  const localUserInfoString: string | null = localStorage.getItem("token");
     if (localUserInfoString) {
       setUserInfo(JSON.parse(localUserInfoString));
-      setIsLoged(true);
+      return true;
     }
-  }, []);
+    return false
+  });
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const cancelModalHandler = () => {
     setShowModal(false);
@@ -64,14 +62,14 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
         },
       }}
     >
-      {showModal &&
+      {showModal && (
         <Modal
           title={"Sining out!"}
           text={"Are you sure you want to leave your account?"}
           onCancel={cancelModalHandler}
           onConfirm={confirmModalHandler}
         />
-      }
+      )}
       {props.children}
     </UserContext.Provider>
   );

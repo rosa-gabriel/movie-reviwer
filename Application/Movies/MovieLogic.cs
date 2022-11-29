@@ -21,7 +21,7 @@ namespace Application
         {
             try
             {
-                return await this._context.Movies.ToListAsync();
+                return await this._context.Movies.OrderByDescending(m => m.ReleaseDate).ToListAsync();
             }
             catch (Exception)
             {
@@ -33,7 +33,7 @@ namespace Application
         {
             try
             {
-                Person person = await this._context.People.Where(c => c.Id == id).FirstAsync();
+                Person? person = await this._context.People.Where(c => c.Id == id).FirstOrDefaultAsync();
                 if (person == null) throw new Exception("Id not found");
                 return person;
             }
@@ -86,7 +86,7 @@ namespace Application
         {
             try
             {
-                List<Movie> response = await _context.TagEntries.Include(m => m.Film).Where(m => m.Tag.Id == id).Select(m => m.Film).ToListAsync();
+                List<Movie> response = await _context.TagEntries.Include(m => m.Film).Where(m => m.Tag.Id == id).Select(m => m.Film).OrderByDescending(m => m.ReleaseDate).ToListAsync();
                 return response;
             }
             catch (Exception)
@@ -99,7 +99,7 @@ namespace Application
         {
             try
             {
-                List<Movie> response = await _context.CastEntries.Include(ce => ce.Film).Where(ce => ce.Person.Id == id).Select(ce => ce.Film).ToListAsync();
+                List<Movie> response = await _context.CastEntries.Include(ce => ce.Film).Where(ce => ce.Person.Id == id).Select(ce => ce.Film).OrderByDescending(ce => ce.ReleaseDate).ToListAsync();
                 return response;
             }
             catch (Exception)
@@ -188,7 +188,7 @@ namespace Application
         }
 
         //Get the full inofo for a movie, it's tags and its's cast.
-        public async Task<MovieResponse> ListMoviesInfo(Guid id)
+        public async Task<MovieResponse> FindMoviesInfo(Guid id)
         {
             Movie? dataMovie = await _context.Movies.FindAsync(id);
             if (dataMovie == null) throw new Exception();
@@ -251,6 +251,80 @@ namespace Application
                 });
             }
             return castResponses;
+        }
+        public async Task<List<Movie>> ListFavorites(string userId)
+        {
+            try
+            {
+                List<Movie> movies = await _context.FavoriteEntries.Include(fe => fe.Film).Where(fe => fe.Fan.Id == userId).OrderByDescending(fe => fe.FavoriteDate).Select(fe => fe.Film).ToListAsync();
+                return movies;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<List<Movie>> ListRecentFavorites(User user)
+        {
+            try
+            {
+                List<Movie> movies = await _context.FavoriteEntries.Include(fe => fe.Film).Where(fe => fe.Fan == user).OrderByDescending(fe => fe.FavoriteDate).Select(fe => fe.Film).Take(5).ToListAsync();
+                return movies;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task FavoriteMovie(User user, Guid movieId, bool boolDesire)
+        {
+            try
+            {
+                Movie? movie = await _context.Movies.FindAsync(movieId);
+                if (movie == null) throw new Exception("Invalid movie Id");
+
+                bool addFavorite = boolDesire && !(await this.isFavorite(user, movieId));
+
+                if (!addFavorite)
+                {
+                    FavoriteEntry? favoriteEntry = await _context.FavoriteEntries.Where(fe => fe.Fan == user).Where(fe => fe.Film.Id == movieId).FirstOrDefaultAsync();
+
+                    if (favoriteEntry == null) return;
+
+                    _context.FavoriteEntries.Remove(favoriteEntry);
+                }
+                else
+                {
+                    FavoriteEntry newFavoriteEntry = new FavoriteEntry
+                    {
+                        Id = new Guid(),
+                        Film = movie,
+                        Fan = user,
+                        FavoriteDate = DateTime.Now,
+                    };
+                    _context.FavoriteEntries.Add(newFavoriteEntry);
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Boolean> isFavorite(User user, Guid movieId)
+        {
+            try
+            {
+                FavoriteEntry? favoriteEntry = await _context.FavoriteEntries.FirstOrDefaultAsync(fe => fe.Film.Id == movieId && fe.Fan == user);
+                return favoriteEntry != null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

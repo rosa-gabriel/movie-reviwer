@@ -11,14 +11,8 @@ namespace API.Controllers
 
     public class MoviesController : ControllerInit
     {
-        private readonly MovieLogic movieLogic;
-        public MoviesController(DataContext context) : base(context)
-        {
-            movieLogic = new MovieLogic(_context);
-        }
-
+        public MoviesController(DataContext context) : base(context){}
         //Tags Requests
-
         [HttpGet("/Tags")]
         public async Task<ActionResult<List<TagResponse>>> GetTags()
         {
@@ -150,7 +144,8 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.ListMoviesInfo(id));
+                bool isLogged = User.Identity.IsAuthenticated;
+                return Ok(await this.movieLogic.FindMoviesInfo(id));
             }
             catch (Exception ex)
             {
@@ -172,9 +167,6 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
-
-
 
     }
 }

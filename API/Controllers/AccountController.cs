@@ -1,7 +1,8 @@
+using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
-using Application;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,7 @@ namespace API.Controllers
                         Username = user.UserName,
                         ProfileImageUrl = user.ProfileImageUrl,
                         Token = _tokenService.CreateToken(user),
+                        Id = user.Id,
                     };
                 }
                 return Unauthorized();
@@ -57,7 +59,6 @@ namespace API.Controllers
         {
             try
             {
-
                 if (await _userManager.Users.AnyAsync(u => u.Email == registerDto.Email)) return BadRequest("Email Taken");
                 if (await _userManager.Users.AnyAsync(u => u.UserName == registerDto.UserName)) return BadRequest("Username Taken");
 
@@ -65,15 +66,17 @@ namespace API.Controllers
                 {
                     UserName = registerDto.UserName,
                     Email = registerDto.Email,
-                    ProfileImageUrl = "https://i.imgur.com/9S91hcw.png",
+                    ProfileImageUrl = "https://i.imgur.com/mggfJH8.png",
+                    CreationDate = DateTime.Now,
                 };
 
-                var response = await _userManager.CreateAsync(user, registerDto.Password);
+                var response = await _userManager.CreateAsync(user, "Pa$$L0rd");
 
                 if (response.Succeeded)
                 {
                     return new UserDto
                     {
+                        Id = user.Id,
                         Email = user.Email,
                         Username = user.UserName,
                         ProfileImageUrl = user.ProfileImageUrl,
@@ -82,6 +85,80 @@ namespace API.Controllers
                 }
 
                 return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("favorite")]
+        public async Task<ActionResult> PutFavorite(FavoriteResponse responseDto)
+        {
+            try
+            {
+                User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+                if (user == null) return BadRequest("Invalid user token");
+
+                await this.movieLogic.FavoriteMovie(user, responseDto.movieId, responseDto.desiredBool);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("favorite/{id}")]
+        public async Task<ActionResult<Boolean>> GetIsFavorite(Guid id)
+        {
+            try
+            {
+                User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+                if (user == null) return BadRequest("Invalid user token");
+
+                bool isFavorite = await this.movieLogic.isFavorite(user, id);
+                return Ok(isFavorite);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("favorites")]
+        public async Task<ActionResult<List<Movie>>> GetFavorites()
+        {
+            try
+            {
+                string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                return await movieLogic.ListFavorites(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("profile/{id}")]
+        public async Task<ActionResult<ProfileResponse>> GetProfile(string id)
+        {
+            try
+            {
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                ProfileResponse profile;
+                User user = await _userManager.FindByIdAsync(id);
+
+                if (user == null) return BadRequest("User not found!");
+                profile = new ProfileResponse(user);
+
+                profile.RecentFavorites = await movieLogic.ListRecentFavorites(user);
+                profile.IsLogedIn = id.Equals(userId);
+
+                return Ok(profile);
             }
             catch (Exception ex)
             {

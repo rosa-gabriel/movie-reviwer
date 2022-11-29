@@ -13,6 +13,7 @@
   --back: #0d0d0d;
   --container: #1f1f1f;
   --red: #ed2553;
+  --nav-heigth: 50px;
 }
 body {
   background-color: var(--back);
@@ -27,6 +28,28 @@ nav {
   display: flex;
   align-items: center;
   padding: 0 3%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #575757;
+  border-radius: 20px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .container {
@@ -146,6 +169,7 @@ nav {
   height: 50px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .search-bar {
@@ -253,7 +277,6 @@ nav {
   margin: 20px 0 5px 0;
 }
 .info_container {
-  max-height: 200px;
   display: flex;
   flex-wrap: wrap;
   overflow: hidden;
@@ -380,7 +403,9 @@ nav {
   border-radius: 10px;
 }
 
-.modal-box p{margin-bottom: 15px;}
+.modal-box p {
+  margin-bottom: 15px;
+}
 
 .modal-buttons {
   width: fit-content;
@@ -391,4 +416,49 @@ nav {
   padding: 10px;
   margin: 3px;
   border-radius: 5px;
+}
+
+.nav-profile-container {
+  width: 45px;
+  height: 45px;
+  background-color: rgb(134, 133, 133);
+  border-radius: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0 10px;
+}
+
+.nav-profile-container img {
+  height: 45px;
+  min-width: 45px;
+}
+
+.show-more {
+  background-color: transparent;
+  border: none;
+  font-size: 15px !important;
+  color: var(--red);
+}
+.show-more:hover {
+  color: #c0022e;
+}
+
+.profile-info{
+  margin-top: 10px;
+  color: #8b8b8b;
+}
+
+.favorite-button{
+  background-color: transparent;
+  border: none;
+}
+
+.selected-text i{
+  color: var(--red);
+}
+
+.favorite-button i{
+  margin-right: 10px;
 }

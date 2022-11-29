@@ -48,6 +48,7 @@ export type UserLoginType = {
 };
 
 export type UserInfoType = {
+  id: string;
   email: string;
   token: string;
   username: string;
@@ -57,4 +58,14 @@ export type UserRegisterType = {
   password: string;
   username: string;
   email: string;
+};
+
+export type ProfileType = {
+  id: string;
+  isLogedIn: boolean;
+  imageUrl: string;
+  name: string;
+  creationDate: Date;
+  recentFavorites: MovieType[];
+  bio?: string;
 };
