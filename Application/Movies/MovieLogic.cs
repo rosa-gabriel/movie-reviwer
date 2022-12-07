@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Persistence;
 using Domain;
 using Microsoft.EntityFrameworkCore;
+using Domain.Responses;
 
 namespace Application
 {
@@ -17,15 +18,24 @@ namespace Application
         }
 
         //Get all the movies in the database on a list<Movie> format
-        public async Task<List<Movie>> ListMovies()
+        public async Task<MoviePageResponse> ListMoviesAtPage(int page)
         {
             try
             {
-                return await this._context.Movies.OrderByDescending(m => m.ReleaseDate).ToListAsync();
+                List<Movie> movies = await this._context.Movies.OrderByDescending(m => m.ReleaseDate).Skip((page - 1) * 25).Take(25).ToListAsync();
+                if (page > 1 && movies.Count == 0)
+                {
+                    throw new Exception("Invalid Page");
+                }
+                return new MoviePageResponse
+                {
+                    movies = movies,
+                    count = (int)Math.Ceiling(((double)this._context.Movies.Count()) / 25),
+                };
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
 

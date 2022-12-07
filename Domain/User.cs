@@ -7,6 +7,6 @@ namespace Domain
     {
         public string ProfileImageUrl { get; set; }
         public string Bio { get; set; }
-        public DateTime CreationDate {get; set;}
+        public DateTime CreationDate { get; set; }
     }
 }

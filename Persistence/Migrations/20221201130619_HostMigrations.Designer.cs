@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221125125812_IdentityDbMigrate")]
-    partial class IdentityDbMigrate
+    [Migration("20221201130619_HostMigrations")]
+    partial class HostMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,6 +72,9 @@ namespace Persistence.Migrations
 
                     b.Property<string>("FanId")
                         .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime>("FavoriteDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid?>("FilmId")
                         .HasColumnType("char(36)");
@@ -171,6 +174,9 @@ namespace Persistence.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)

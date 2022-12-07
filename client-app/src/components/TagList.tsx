@@ -4,6 +4,7 @@ import { TagType } from "../Type/Types";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import LoadingCircle from "./UI/LoadingCircle";
+import Container from "./UI/Container";
 
 const TagList = () => {
   const params = useParams();
@@ -20,23 +21,27 @@ const TagList = () => {
         setError(null);
       } catch (ex: any) {
         setError(ex.message);
-        navigate('/error');
+        navigate("/error");
       }
     })();
   }, []);
 
   return (
-    <>
-      {tag !== null && (
-        <GenericMovielist
-          title={"Tag - " + tag.name}
-          fetchFunction={getMoviesFromTag}
-          filterId={tag.id}
-        ></GenericMovielist>
-      )}
+    <Container>
+      <>
+        {tag !== null && (
+          <>
+            <h1 className="title">{`Tag - ${tag.name}`}</h1>
+            <GenericMovielist
+              fetchFunction={getMoviesFromTag}
+              filterId={tag.id}
+            ></GenericMovielist>
+          </>
+        )}
 
-      {!tag === null && <LoadingCircle />}
-    </>
+        {!tag === null && <LoadingCircle />}
+      </>
+    </Container>
   );
 };
 

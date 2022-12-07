@@ -3,6 +3,7 @@ using Domain;
 using Persistence;
 using Application;
 using Microsoft.AspNetCore.Authorization;
+using Domain.Responses;
 
 namespace API.Controllers
 {
@@ -11,7 +12,7 @@ namespace API.Controllers
 
     public class MoviesController : ControllerInit
     {
-        public MoviesController(DataContext context) : base(context){}
+        public MoviesController(DataContext context) : base(context) { }
         //Tags Requests
         [HttpGet("/Tags")]
         public async Task<ActionResult<List<TagResponse>>> GetTags()
@@ -126,12 +127,12 @@ namespace API.Controllers
 
         //Movie Requests
 
-        [HttpGet]
-        public async Task<ActionResult<List<Movie>>> GetMovies()
+        [HttpGet("{page}")]
+        public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
         {
             try
             {
-                return Ok(await this.movieLogic.ListMovies());
+                return await this.movieLogic.ListMoviesAtPage(page);
             }
             catch (Exception ex)
             {

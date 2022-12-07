@@ -63,6 +63,7 @@ nav {
   position: relative;
   overflow: hidden;
   flex-direction: column;
+  overflow-anchor: none;
 }
 
 .title {

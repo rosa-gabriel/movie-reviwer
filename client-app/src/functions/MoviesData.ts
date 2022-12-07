@@ -2,6 +2,7 @@ import { uri } from "../App";
 import {
   AllMovieInfoType,
   CastType,
+  MoviePageType,
   MovieType,
   PersonType,
   ProfileType,
@@ -12,10 +13,12 @@ import {
 const connectionFailString: string =
   "Failed to connect to the database! Try again later.";
 
-export const getMovies = async () => {
+export const getMoviesAtPage = async (page: number) => {
   try {
-    const response: Response = await fetch(uri + "/Movies/", { method: "GET" });
-    const data: MovieType[] = await response.json();
+    const response: Response = await fetch(`${uri}/Movies/${page}`, {
+      method: "GET",
+    });
+    const data: MoviePageType = await response.json();
 
     if (!response.ok) throw "";
 

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Details from "./components/Details";
 import Favorites from "./components/Favorites";
 import Error from "./components/Error";
@@ -11,6 +11,7 @@ import LoginForm from "./components/AccountForms/LoginForm";
 import { UserContextProvider } from "./components/Context/UserContext";
 import RegisterForm from "./components/AccountForms/RegisterForm";
 import Profile from "./components/Profile";
+import TestComp from "./TestComp";
 
 export const uri = "http://localhost:5000";
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="/add/*" element={<CreationOptions />} />
 
           <Route path="/error" element={<Error />} />
+          <Route path="/test" element={<TestComp />} />
           <Route path="/*" element={<Error />} />
         </Routes>
       </>

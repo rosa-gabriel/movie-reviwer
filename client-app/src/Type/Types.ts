@@ -69,3 +69,8 @@ export type ProfileType = {
   recentFavorites: MovieType[];
   bio?: string;
 };
+
+export type MoviePageType = {
+  movies: MovieType[];
+  count: number;
+};

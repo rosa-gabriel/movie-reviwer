@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { getUserFavorites } from "../functions/MoviesData";
 import AccountCheck from "./AccountForms/AccountCheck";
 import { UserContext } from "./Context/UserContext";
+import Container from "./UI/Container";
 import GenericMovielist from "./UI/GenericMovieList";
 
 const Details = () => {
@@ -23,14 +24,16 @@ const Details = () => {
   }, []);
 
   return (
-    <>
-      <AccountCheck />
-      <GenericMovielist
-        title={"Your Favorites"}
-        fetchFunction={getUserFavorites}
-        filterId={context.userInfo ? context.userInfo.token : ""}
-      />
-    </>
+    <Container>
+      <>
+        <AccountCheck />
+        <h1 className="title">{`Your Favorites`}</h1>
+        <GenericMovielist
+          fetchFunction={getUserFavorites}
+          filterId={context.userInfo ? context.userInfo.token : ""}
+        />
+      </>
+    </Container>
   );
 };
 export default Details;
