@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221201130619_HostMigrations")]
-    partial class HostMigrations
+    [Migration("20221207201651_sus")]
+    partial class sus
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

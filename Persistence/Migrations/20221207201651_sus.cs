@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class HostMigrations : Migration
+    public partial class sus : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
