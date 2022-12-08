@@ -111,20 +111,22 @@ export const getMovie = async (id: string) => {
   }
 };
 
-export const getMoviesFromTag = async (id: string) => {
+export const getMoviesFromTagAtPage = async (page: number, id: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Tag/${id}/movies`);
-    const data: TagType[] = await response.json();
+    const response: Response = await fetch(`${uri}/Tag/${id}/movies/${page}`);
+    const data: MoviePageType = await response.json();
     return data;
   } catch (ex) {
     throw connectionFailString;
   }
 };
 
-export const getMoviesFromPerson = async (id: string) => {
+export const getMoviesFromPersonAtPage = async (page: number, id: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Person/${id}/movies`);
-    const data: MovieType[] = await response.json();
+    const response: Response = await fetch(
+      `${uri}/Person/${id}/movies/${page}`
+    );
+    const data: MoviePageType = await response.json();
     return data;
   } catch (ex) {
     throw connectionFailString;

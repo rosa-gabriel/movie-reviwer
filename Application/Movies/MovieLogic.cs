@@ -88,12 +88,16 @@ namespace Application
             }
         }
 
-        public async Task<List<Movie>> ListMoviesFromTag(Guid id)
+        public async Task<MoviePageResponse> ListMoviesFromTagAtPage(Guid id, int page)
         {
             try
             {
                 List<Movie> response = await _context.TagEntries.Include(m => m.Film).Where(m => m.Tag.Id == id).Select(m => m.Film).OrderByDescending(m => m.ReleaseDate).ToListAsync();
-                return response;
+                return new MoviePageResponse
+                {
+                    movies = response,
+                    count = (int)Math.Ceiling(((double)this._context.TagEntries.Where(te => te.Tag.Id == id).Count()) / 25),
+                };
             }
             catch (Exception)
             {
@@ -101,12 +105,16 @@ namespace Application
             }
         }
 
-        public async Task<List<Movie>> ListMoviesFromPerson(Guid id)
+        public async Task<MoviePageResponse> ListMoviesFromPersonAtPage(Guid id, int page)
         {
             try
             {
-                List<Movie> response = await _context.CastEntries.Include(ce => ce.Film).Where(ce => ce.Person.Id == id).Select(ce => ce.Film).OrderByDescending(ce => ce.ReleaseDate).ToListAsync();
-                return response;
+                List<Movie> response = await _context.CastEntries.Include(ce => ce.Film).Where(ce => ce.Person.Id == id).Select(ce => ce.Film).OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((page - 1) * 25).ToListAsync();
+                return new MoviePageResponse
+                {
+                    movies = response,
+                    count = (int)Math.Ceiling(((double)this._context.CastEntries.Where(ce => ce.Person.Id == id).Count()) / 25),
+                };
             }
             catch (Exception)
             {

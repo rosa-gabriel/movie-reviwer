@@ -56,12 +56,12 @@ namespace API.Controllers
         }
 
 
-        [HttpGet("/Tag/{id}/movies")]
-        public async Task<ActionResult<Movie>> GetMoviesFromTag(Guid id)
+        [HttpGet("/Tag/{id}/movies/{page}")]
+        public async Task<ActionResult<Movie>> GetMoviesFromTag(Guid id, int page)
         {
             try
             {
-                return Ok(await this.movieLogic.ListMoviesFromTag(id));
+                return Ok(await this.movieLogic.ListMoviesFromTagAtPage(id, page));
             }
             catch (Exception ex)
             {
@@ -97,12 +97,12 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("/Person/{id}/movies")]
-        public async Task<ActionResult<Movie>> GetMoviesFromPerson(Guid id)
+        [HttpGet("/Person/{id}/movies/{page}")]
+        public async Task<ActionResult<MoviePageResponse>> GetMoviesFromPerson(Guid id, int page)
         {
             try
             {
-                return Ok(await this.movieLogic.ListMoviesFromPerson(id));
+                return Ok(await this.movieLogic.ListMoviesFromPersonAtPage(id, page));
             }
             catch (Exception ex)
             {

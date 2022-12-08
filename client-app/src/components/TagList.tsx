@@ -1,5 +1,5 @@
 import GenericMovielist from "./UI/GenericMovieList";
-import { getMoviesFromTag, getTag } from "../functions/MoviesData";
+import { getMoviesFromTagAtPage, getTag } from "../functions/MoviesData";
 import { TagType } from "../Type/Types";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ const TagList = () => {
           <>
             <h1 className="title">{`Tag - ${tag.name}`}</h1>
             <GenericMovielist
-              fetchFunction={getMoviesFromTag}
+              fetchFunction={getMoviesFromTagAtPage}
               filterId={tag.id}
             ></GenericMovielist>
           </>
