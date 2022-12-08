@@ -12,6 +12,7 @@ import { UserContextProvider } from "./components/Context/UserContext";
 import RegisterForm from "./components/AccountForms/RegisterForm";
 import Profile from "./components/Profile";
 import TestComp from "./TestComp";
+import SearchList from "./components/SearchList";
 
 export const uri = "http://localhost:5000";
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<HomeList />} />
           <Route path="/details/:movieId" element={<Details />} />
           <Route path="/tag/:id" element={<TagList />} />
+          <Route path="/search/:search" element={<SearchList />} />
           <Route path="/person/:id" element={<PersonInfo />} />
           <Route path="/account/login" element={<LoginForm />} />
           <Route path="/account/register" element={<RegisterForm />} />

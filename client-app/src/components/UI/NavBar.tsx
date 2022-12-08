@@ -1,17 +1,34 @@
-import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { useContext, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { UserContext } from "../Context/UserContext";
 import { active } from "../CreationForms/CreationOptions";
 
 const NavBar = () => {
   const context = useContext(UserContext);
+  const [search, setSeach] = useState();
+  const navigate = useNavigate();
+
+  const searchChangeHandler = (e: any) => {
+    setSeach(e.target.value);
+  };
+
+  const submitHandler = (e: any) => {
+    e.preventDefault();
+    navigate(`/search/${search}`);
+  };
+
   return (
     <nav>
       <NavLink to={"/"} className={active}>
         Home
       </NavLink>
-      <form className="search-bar">
-        <input className="input-dark" type="text" placeholder="Search..." />
+      <form className="search-bar" onSubmit={submitHandler}>
+        <input
+          className="input-dark"
+          onChange={searchChangeHandler}
+          type="text"
+          placeholder="Search..."
+        />
         <button type="submit">
           <i className="fa-solid fa-magnifying-glass" />
         </button>

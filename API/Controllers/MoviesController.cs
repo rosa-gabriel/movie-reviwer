@@ -169,5 +169,17 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("/Movies/search/{filter}/{page}")]
+        public async Task<ActionResult<MoviePageResponse>> GetMovieSearch(string filter, int page){
+            try
+            {
+                return Ok(await this.movieLogic.ListMoviesSearchAtPage(filter, page));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
     }
 }

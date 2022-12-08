@@ -133,6 +133,22 @@ export const getMoviesFromPersonAtPage = async (page: number, id: string) => {
   }
 };
 
+export const getMoviesFromSearchAtPage = async (
+  page: number,
+  search: string
+) => {
+  console.log(search);
+  try {
+    const response: Response = await fetch(
+      `${uri}/Movies/search/${search}/${page}`
+    );
+    const data: MoviePageType = await response.json();
+    return data;
+  } catch (ex) {
+    throw connectionFailString;
+  }
+};
+
 export const getPerson = async (id: string) => {
   try {
     const response: Response = await fetch(`${uri}/Person/${id}`);

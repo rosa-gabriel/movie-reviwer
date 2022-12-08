@@ -23,7 +23,7 @@ const GenericMovielist = (props: GenericMovielistProps) => {
       setIsLoading(true);
       try {
         const data: MoviePageType = await props.fetchFunction(nextPage, props.filterId);
-        console.log(data.count);
+        console.log(data);
         setMovies((prevMovies) => [...prevMovies, ...data.movies]);
         setMaxPage(data.count);
         setNextPage((prevPage) => prevPage + 1);

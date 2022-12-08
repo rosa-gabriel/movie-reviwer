@@ -122,6 +122,25 @@ namespace Application
             }
         }
 
+        public async Task<MoviePageResponse> ListMoviesSearchAtPage(string filter, int page)
+        {
+            try
+            {
+                IQueryable<Movie> search = _context.Movies.Where(m => m.Name.ToLower().Contains(filter.ToLower()));
+                List<Movie> response = await search.OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((page - 1) * 25).ToListAsync();
+                return new MoviePageResponse
+                {
+                    movies = response,
+                    count = (int)Math.Ceiling(((double)search.Count()) / 25),
+                };
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+
         public async Task<List<Person>> ListCast()
         {
             try
