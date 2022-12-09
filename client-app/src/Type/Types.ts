@@ -23,7 +23,13 @@ export type TagType = {
 };
 
 export type CastType = {
-  personId?: number;
+  id?: number;
+  name: string;
+  role: string;
+};
+
+export type CastEntryType = {
+  personId: number;
   name: string;
   role: string;
 };
@@ -38,7 +44,7 @@ export type AllMovieInfoType = {
   movie: MovieType;
   favorites: number;
   tags: TagEntriesType[];
-  castMembers: CastType[];
+  castMembers: CastEntryType[];
 };
 
 //Account types

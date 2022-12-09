@@ -1,6 +1,7 @@
 import { uri } from "../App";
 import {
   AllMovieInfoType,
+  CastEntryType,
   CastType,
   MoviePageType,
   MovieType,
@@ -189,6 +190,21 @@ export const getTags = async () => {
   }
 };
 
+export const getMissingTags = async (id: string) => {
+  try {
+    const response: Response = await fetch(`${uri}/Movies/${id}/missingTags`, {
+      method: "GET",
+    });
+    const data: TagEntriesType[] = await response.json();
+
+    if (!response.ok) throw "";
+
+    return data;
+  } catch (ex) {
+    throw new Error(connectionFailString);
+  }
+};
+
 export const getCast = async () => {
   try {
     const response: Response = await fetch(`${uri}/Cast`, {
@@ -246,7 +262,7 @@ export const getIsFavorite = async (movieId: string, token: string) => {
   }
 };
 
-export const getUserFavorites = async (token: string) => {
+export const getUserFavorites = async (page: number, token: string) => {
   try {
     const response: Response = await fetch(`${uri}/Account/favorites`, {
       method: "GET",
@@ -256,7 +272,7 @@ export const getUserFavorites = async (token: string) => {
     });
     if (!response.ok) throw "";
     const data = await response.json();
-    return data;
+    return { movies: data, page: 1 };
   } catch (ex) {
     console.error(ex);
     throw new Error(connectionFailString);

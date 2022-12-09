@@ -11,6 +11,7 @@ import { UserContext } from "./Context/UserContext";
 const Details = (props: any) => {
   const params = useParams();
   const context = useContext(UserContext);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [movieInfo, setMovieInfo] = useState<AllMovieInfoType | null>(null);
@@ -61,9 +62,21 @@ const Details = (props: any) => {
     })(params.movieId);
   }, [params.movieId, seed]);
 
+  const editClickHandler = () => {
+    navigate('edit');
+  };
+
   return (
     <Container>
       <>
+        {context.isLogedIn && (
+          <button
+            className="button edit-button"
+            type="button"
+            onClick={editClickHandler}
+          ><i className="fa-solid fa-pen-to-square"></i>
+          </button>
+        )}
         {!isLoading && movieInfo != null && (
           <div className="details_container">
             <div>
@@ -132,7 +145,11 @@ const Details = (props: any) => {
                   }
                   onClick={favoriteHandler}
                 >
-                  <i className={!isLiked ? "fa-regular fa-heart" : "fa-solid fa-heart"} />
+                  <i
+                    className={
+                      !isLiked ? "fa-regular fa-heart" : "fa-solid fa-heart"
+                    }
+                  />
                   {movieInfo.favorites}
                 </button>
               )}

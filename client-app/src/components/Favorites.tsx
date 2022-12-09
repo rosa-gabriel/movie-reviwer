@@ -23,6 +23,7 @@ const Details = () => {
     })();
   }, []);
 
+
   return (
     <Container>
       <>
@@ -30,7 +31,7 @@ const Details = () => {
         <h1 className="title">{`Your Favorites`}</h1>
         <GenericMovielist
           fetchFunction={getUserFavorites}
-          filterId={context.userInfo ? context.userInfo.token : ""}
+          filterId={context.userInfo ? context.userInfo.token : undefined}
         />
       </>
     </Container>

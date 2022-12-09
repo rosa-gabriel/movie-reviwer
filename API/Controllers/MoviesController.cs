@@ -27,6 +27,19 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("{id}/missingTags")]
+        public async Task<ActionResult<List<TagResponse>>> GetMissingTags(Guid id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListMissingTags(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         [HttpGet("/Tag/{id}")]
         public async Task<ActionResult<TagName>> GetTag(Guid id)
         {
@@ -170,7 +183,8 @@ namespace API.Controllers
         }
 
         [HttpGet("/Movies/search/{filter}/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetMovieSearch(string filter, int page){
+        public async Task<ActionResult<MoviePageResponse>> GetMovieSearch(string filter, int page)
+        {
             try
             {
                 return Ok(await this.movieLogic.ListMoviesSearchAtPage(filter, page));

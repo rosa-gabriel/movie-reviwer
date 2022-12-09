@@ -2,7 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { addMovie, getCast, getTags } from "../../functions/MoviesData";
 import LoadingCircle from "../UI/LoadingCircle";
-import { AllMovieInfoType, CastType, TagEntriesType } from "../../Type/Types";
+import {
+  AllMovieInfoType,
+  CastEntryType,
+  CastType,
+  TagEntriesType,
+} from "../../Type/Types";
 import ItemInput from "./inputs/ItemInput";
 import SubmitButton from "../SubmitButton";
 import { UserContext } from "../Context/UserContext";
@@ -19,7 +24,7 @@ const AddMovieForm = () => {
   const [tags, setTags] = useState<TagEntriesType[]>([]);
 
   const [dataCast, setDataCast] = useState<CastType[]>([]);
-  const [cast, setCast] = useState<CastType[]>([]);
+  const [cast, setCast] = useState<CastEntryType[]>([]);
 
   const navigate = useNavigate();
   const context = useContext(UserContext);
@@ -62,7 +67,7 @@ const AddMovieForm = () => {
   };
 
   const castChangeHandler = (
-    inputCast: CastType[],
+    inputCast: CastEntryType[],
     inputDataCast: CastType[]
   ) => {
     setDataCast([...inputDataCast]);
@@ -82,6 +87,7 @@ const AddMovieForm = () => {
       tags: tags,
       castMembers: cast,
     };
+    console.log(cast);
     if (!context.userInfo) return;
     try {
       setLoading(true);
@@ -153,6 +159,7 @@ const AddMovieForm = () => {
             type={"text"}
             onChange={roleChangeHandler}
             placeholder={"role"}
+            value={role}
           ></input>
         </ItemInput>
       </div>

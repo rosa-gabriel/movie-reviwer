@@ -88,6 +88,31 @@ namespace Application
             }
         }
 
+        public async Task<List<TagResponse>> ListMissingTags(Guid id)
+        {
+            try
+            {
+                List<TagName> tags = await this._context.TagNames.ToListAsync();
+                List<TagResponse> response = new List<TagResponse>();
+                foreach (TagName t in tags)
+                {
+                    TagResponse item = new TagResponse()
+                    {
+                        TagId = t.Id,
+                        Name = t.Name,
+                    };
+                    List<TagEntry> entries = await this._context.TagEntries.ToListAsync();
+                    item.Entries = entries.Count();
+                    response.Add(item);
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
         public async Task<MoviePageResponse> ListMoviesFromTagAtPage(Guid id, int page)
         {
             try

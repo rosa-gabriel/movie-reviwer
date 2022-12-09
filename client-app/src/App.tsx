@@ -13,6 +13,7 @@ import RegisterForm from "./components/AccountForms/RegisterForm";
 import Profile from "./components/Profile";
 import TestComp from "./TestComp";
 import SearchList from "./components/SearchList";
+import EditDetails from "./components/EditDetails";
 
 export const uri = "http://localhost:5000";
 
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeList />} />
           <Route path="/details/:movieId" element={<Details />} />
+          <Route path="/details/:movieId/edit" element={<EditDetails/>} />
           <Route path="/tag/:id" element={<TagList />} />
           <Route path="/search/:search" element={<SearchList />} />
           <Route path="/person/:id" element={<PersonInfo />} />

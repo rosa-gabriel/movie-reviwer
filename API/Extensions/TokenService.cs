@@ -17,10 +17,11 @@ namespace API.Extensions
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Key tester at now try"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("vMJhgpn-XH;|#7X@i~77"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var tokenDescriptor = new SecurityTokenDescriptor {
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = creds,

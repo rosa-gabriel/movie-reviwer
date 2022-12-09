@@ -264,6 +264,15 @@ nav {
   padding-top: 30px;
 }
 
+.edit-button{
+  height: 35px;
+  width: 35px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 15px;
+}
+
 .details_info {
   padding-left: 40px;
 }
@@ -462,4 +471,26 @@ nav {
 
 .favorite-button i{
   margin-right: 10px;
+}
+
+.edit-image{
+  position: relative;
+  width: fit-content;
+  margin: 30px;
+}
+
+.edit-image img{
+  margin: 0;
+}
+
+.edit-image div{
+  background-color: #70071f85;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

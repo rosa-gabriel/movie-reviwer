@@ -59,7 +59,7 @@ const ItemInput = (props: ItemInputProps) => {
         <select name="select" onChange={itemTextChangeHandler}>
           <option value={""}>{props.placeHolder}</option>
           {props.dataItems.map((item) => {
-            if (item[props.idProp] == undefined) console.log(item);
+            if (item[props.idProp] == undefined) return;
             return (
               <option
                 key={"optionClick" + item[props.idProp]}
