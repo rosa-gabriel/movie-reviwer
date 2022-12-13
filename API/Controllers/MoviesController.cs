@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Domain;
 using Persistence;
-using Application;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Responses;
+using Application;
 
 namespace API.Controllers
 {
@@ -174,6 +174,35 @@ namespace API.Controllers
             try
             {
                 await this.movieLogic.AddMovie(newMovie);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [Authorize]
+        [HttpPut("/Update/movie")]
+        public async Task<ActionResult> PutMovie(MovieResponse newMovie)
+        {
+            try
+            {
+                await this.movieLogic.UpdateMovie(newMovie);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMovie(Guid id)
+        {
+            try
+            {
+                await this.movieLogic.RemoveMovie(id);
                 return Ok();
             }
             catch (Exception ex)

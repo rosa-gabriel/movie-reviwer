@@ -35,6 +35,34 @@ namespace Application
             }
         }
 
+        public async Task RemoveMovie(Guid id)
+        {
+            try
+            {
+                Movie? movie = await this._context.Movies.Where(m => m.Id == id).FirstOrDefaultAsync();
+                if (movie == null) throw new Exception("Invalid Movie Id!");
+
+                IQueryable<TagEntry> tags = this._context.TagEntries.Where(te => te.Film == movie);
+                IQueryable<CastEntry> cast = this._context.CastEntries.Where(ce => ce.Film == movie);
+                IQueryable<FavoriteEntry> favorites = this._context.FavoriteEntries.Where(f => f.Film == movie);
+
+                this._context.TagEntries.RemoveRange(tags);
+                this._context.CastEntries.RemoveRange(cast);
+                this._context.FavoriteEntries.RemoveRange(favorites);
+
+                await _context.SaveChangesAsync();
+
+                this._context.Remove(movie);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+
         public async Task<Person> FindPerson(Guid id)
         {
             try
@@ -203,6 +231,28 @@ namespace Application
                     newCastEntry.Film = newMovie.movie;
                     _context.CastEntries.Add(newCastEntry);
                 }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
+        public async Task UpdateMovie(MovieResponse newMovie)
+        {
+            if (string.IsNullOrWhiteSpace(newMovie.movie.Name)) throw new Exception();
+            if (string.IsNullOrWhiteSpace(newMovie.movie.CoverUrl)) newMovie.movie.CoverUrl = "";
+
+            try
+            {
+                Movie? movie = this._context.Movies.FirstOrDefault(m => m.Id == newMovie.movie.Id); 
+                if(movie == null) throw new Exception("Movie not found!");
+
+                movie.CoverUrl = newMovie.movie.CoverUrl;
+                movie.Name = newMovie.movie.Name;
+                movie.ReleaseDate = newMovie.movie.ReleaseDate;
 
                 await _context.SaveChangesAsync();
             }

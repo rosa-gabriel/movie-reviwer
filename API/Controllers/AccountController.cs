@@ -54,6 +54,20 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("check")]
+        public ActionResult CheckLogin()
+        {
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(ex);
+            }
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
