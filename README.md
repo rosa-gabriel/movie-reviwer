@@ -4,6 +4,25 @@ Still in Development...
 
 A movie website created using REACT and ASP.NET, this project was inspired by sites like MyAnimeList, IMDb, and Rotten Tomates, this was a very good opportunity to concepts like requests, full-stack, CRUD, UML, and database design in a medium-sized website.
 
+# Prerequisites
+
+## Softwares:
+
+1. SDK version 6.0.403
+2. MySQL version 8.0.30 (if using a local database)
+3. NPM version 8.19.2
+4. React and React.dom package version 18.2.0
+5. TypeScript package version 4.9.4
+
+These are the versions used in the site development. Older versions may not work properly.
+
+# Future patches
+
+## Functionalities:
+1. Responsivity for mobile.
+2. Response pop-ups so the user is sure that his action worked properly.
+3. Remove repetitive fetch code.
+
 # Instalation
 
 ### 1. Clone the repository in a new folder.
@@ -30,7 +49,7 @@ dotnet watch
 
 This will start the local backend API server.
 
-## Pages
+# Pages
 
 ### 1. Home
 
