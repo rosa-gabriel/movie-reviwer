@@ -5,13 +5,16 @@ import { useNavigate } from "react-router";
 import SubmitButton from "../SubmitButton";
 import { UserContext } from "../Context/UserContext";
 import AccountCheck from "../AccountForms/AccountCheck";
+import { NotificationContext } from "../Context/NotificationContext";
 
 const AddTagForm = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [tagName, setTagName] = useState<string>("");
+
   const navigate = useNavigate();
   const context = useContext(UserContext);
+  const notification = useContext(NotificationContext);
 
   const tagNameChangeHandler = (event: any) => {
     setTagName(event.target.value);
@@ -25,6 +28,7 @@ const AddTagForm = () => {
     try {
       await addTag(tagName, context.userInfo.token);
       setError(null);
+      notification.addNotification({ code: 'ADDED', text: 'Tag was successfully added.', error: false});
       navigate("/add/movie");
     } catch (ex: any) {
       setError(ex.message);
@@ -32,7 +36,6 @@ const AddTagForm = () => {
       setIsLoading(false);
     }
   };
-
 
   return (
     <form onSubmit={submitHandler}>

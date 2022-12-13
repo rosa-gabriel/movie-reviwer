@@ -17,6 +17,7 @@ const TagList = () => {
       if (params.id == undefined) return;
       try {
         const data: PersonType = await getPerson(String(params.id));
+        console.log(data);
         setPerson(data);
         setHasError(null);
       } catch (ex: any) {

@@ -1,32 +1,33 @@
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import Tag from "./UI/details/Tag";
 import {
+  deleteMovie,
   getCast,
-  getIsFavorite,
-  getMissingTags,
   getMovie,
   getTags,
-  putFavorite,
+  updateMovie,
 } from "../functions/MoviesData";
-import CastSquare from "./UI/details/CastSquare";
 import LoadingCircle from "./UI/LoadingCircle";
 import {
   AllMovieInfoType,
+  CastEntryType,
   CastType,
-  PersonType,
   TagEntriesType,
 } from "../Type/Types";
 import Container from "./UI/Container";
 import { UserContext } from "./Context/UserContext";
-import AccountCheck from "./AccountForms/AccountCheck";
 import ItemInput from "./CreationForms/inputs/ItemInput";
-import { idText } from "typescript";
+import AccountCheck from "./AccountForms/AccountCheck";
+import { ModalContext } from "./Context/ModalContext";
+import { NotificationContext } from "./Context/NotificationContext";
 
-const EditDetails = (props: any) => {
+const EditDetails = () => {
   const params = useParams();
   const context = useContext(UserContext);
+  const modal = useContext(ModalContext);
+  const notification = useContext(NotificationContext);
   const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataTags, setDataTags] = useState<TagEntriesType[]>([]);
   const [tags, setTags] = useState<TagEntriesType[]>([]);
@@ -36,7 +37,7 @@ const EditDetails = (props: any) => {
   const [role, setRole] = useState<string>("");
 
   const [dataCast, setDataCast] = useState<CastType[]>([]);
-  const [cast, setCast] = useState<CastType[]>([]);
+  const [cast, setCast] = useState<CastEntryType[]>([]);
 
   useEffect(() => {
     (async (id: any) => {
@@ -78,7 +79,7 @@ const EditDetails = (props: any) => {
         setDataCast(missingCast);
         setCast(
           movieData.castMembers.map((p) => {
-            return { id: p.personId, name: p.name, role: p.role };
+            return { personId: p.personId, name: p.name, role: p.role };
           })
         );
         setUrl(movieData.movie.coverUrl);
@@ -93,7 +94,48 @@ const EditDetails = (props: any) => {
     })(params.movieId);
   }, [params.movieId]);
 
-  const deleteClickHandler = () => {};
+  const deleteClickHandler = () => {
+    modal.showModal(
+      "DELETE",
+      "Are you sure you want to delete this movie?",
+      async () => {
+        try {
+          await deleteMovie(
+            String(params.movieId),
+            String(context.userInfo?.token)
+          );
+          navigate("/");
+        } catch (ex: any) {
+          console.error(ex);
+        }
+      }
+    );
+  };
+
+  const editConfirmHandler = async () => {
+    const movie: AllMovieInfoType = {
+      movie: {
+        id: String(params.movieId),
+        name: name,
+        coverUrl: url,
+        releaseDate: date,
+      },
+      favorites: 0,
+      tags: tags,
+      castMembers: cast,
+    };
+    await updateMovie(movie, String(context.userInfo?.token));
+    notification.addNotification({
+      code: "UPDATED",
+      text: "The movie was successfully updated.",
+      error: false,
+    });
+    navigate(`/details/${String(params.movieId)}`);
+  };
+
+  const cancelHandler = () => {
+    navigate(`/details/${String(params.movieId)}`);
+  };
 
   const tagsChangeHandler = (
     inputTags: TagEntriesType[],
@@ -120,7 +162,7 @@ const EditDetails = (props: any) => {
   };
 
   const castChangeHandler = (
-    inputCast: CastType[],
+    inputCast: CastEntryType[],
     inputDataCast: CastType[]
   ) => {
     setDataCast([...inputDataCast]);
@@ -131,6 +173,7 @@ const EditDetails = (props: any) => {
   return (
     <Container>
       <>
+        <AccountCheck />
         {context.isLogedIn && (
           <button
             className="button edit-button"
@@ -141,66 +184,83 @@ const EditDetails = (props: any) => {
           </button>
         )}
         {!isLoading && (
-          <div className="details_container">
-            <div className="edit-image">
-              <img
-                src={url}
-                className="details_cover"
-                alt={"Cover for " + name}
-              />
-              <div>
+          <>
+            <div className="details_container">
+              <div className="edit-image">
+                <img
+                  src={url}
+                  className="details_cover"
+                  alt={"Cover for " + name}
+                />
+                <div>
+                  <input
+                    type={"text"}
+                    value={url}
+                    onChange={urlChangeHandler}
+                    className={"input-dark input-add"}
+                  ></input>
+                </div>
+              </div>
+
+              <div className="details_info">
                 <input
                   type={"text"}
-                  value={url}
-                  onChange={urlChangeHandler}
+                  className={"input-dark input-add"}
+                  value={name}
+                  onChange={nameChangeHandler}
+                ></input>
+
+                <p className="info_container_title">TAGS</p>
+
+                <ItemInput
+                  onChange={tagsChangeHandler}
+                  dataItems={dataTags}
+                  items={tags}
+                  placeHolder={"Choose a person"}
+                  itemId={"tagId"}
+                  dataItemId={"tagId"}
+                />
+
+                <p className="info_container_title">CAST</p>
+
+                <ItemInput
+                  onChange={castChangeHandler}
+                  dataItems={dataCast}
+                  items={cast}
+                  role={role}
+                  placeHolder={"Choose a person"}
+                  itemId={"personId"}
+                  dataItemId={"id"}
+                >
+                  <input
+                    type={"text"}
+                    onChange={roleChangeHandler}
+                    placeholder={"role"}
+                  ></input>
+                </ItemInput>
+
+                <input
+                  type={"date"}
+                  value={date.toISOString().split("T")[0]}
+                  onChange={dateChangeHandler}
                   className={"input-dark input-add"}
                 ></input>
               </div>
             </div>
 
-            <div className="details_info">
-              <input
-                type={"text"}
-                className={"input-dark input-add"}
-                value={name}
-                onChange={nameChangeHandler}
-              ></input>
-
-              <p className="info_container_title">TAGS</p>
-
-              <ItemInput
-                onChange={tagsChangeHandler}
-                dataItems={dataTags}
-                items={tags}
-                placeHolder={"Choose a person"}
-                idProp={"tagId"}
-              />
-
-              <p className="info_container_title">CAST</p>
-
-              <ItemInput
-                onChange={castChangeHandler}
-                dataItems={dataCast}
-                items={cast}
-                role={role}
-                placeHolder={"Choose a person"}
-                idProp={"id"}
+            <div className="edit-buttons-container">
+              <button className="button" type="button" onClick={cancelHandler}>
+                Cancel
+              </button>
+              <button
+                className="button"
+                type={"button"}
+                onClick={editConfirmHandler}
               >
-                <input
-                  type={"text"}
-                  onChange={roleChangeHandler}
-                  placeholder={"role"}
-                ></input>
-              </ItemInput>
-
-              <input
-                type={"date"}
-                value={date.toISOString().split("T")[0]}
-                onChange={dateChangeHandler}
-                className={"input-dark input-add"}
-              ></input>
+                Confirm
+              </button>
             </div>
-          </div>
+          </>
         )}
         {isLoading && <LoadingCircle />}
       </>

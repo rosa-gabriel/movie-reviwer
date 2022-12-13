@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
-import { CastType } from "../../../Type/Types";
+import { CastEntryType, CastType } from "../../../Type/Types";
 
 type CastSquareProps = {
-  person: CastType;
+  person: CastEntryType;
 };
 
 const CastSquare = (props: CastSquareProps) => {
+  console.log(props.person);
   return (
     <div className="tag">
-      <Link to={`/person/${String(props.person.id)}`}>
+      <Link to={`/person/${String(props.person.personId)}`}>
         <span>
           {props.person.name} ({props.person.role})
         </span>

@@ -11,6 +11,7 @@ import {
 import ItemInput from "./inputs/ItemInput";
 import SubmitButton from "../SubmitButton";
 import { UserContext } from "../Context/UserContext";
+import { NotificationContext } from "../Context/NotificationContext";
 
 const AddMovieForm = () => {
   const [error, setError] = useState<string | null>(null);
@@ -28,6 +29,7 @@ const AddMovieForm = () => {
 
   const navigate = useNavigate();
   const context = useContext(UserContext);
+  const notification = useContext(NotificationContext);
 
   useEffect(() => {
     (async () => {
@@ -87,12 +89,12 @@ const AddMovieForm = () => {
       tags: tags,
       castMembers: cast,
     };
-    console.log(cast);
     if (!context.userInfo) return;
     try {
       setLoading(true);
       await addMovie(newMovie, context.userInfo.token);
       setError(null);
+      notification.addNotification({ code: 'ADDED', text: 'Movies was successfully added.', error: false});
       navigate("/");
     } catch (ex: any) {
       setLoading(false);
@@ -141,7 +143,8 @@ const AddMovieForm = () => {
           dataItems={dataTags}
           items={tags}
           placeHolder={"Choose a person"}
-          idProp={"tagId"}
+          itemId={"tagId"}
+          dataItemId={"tagId"}
         />
       </div>
 
@@ -153,7 +156,8 @@ const AddMovieForm = () => {
           items={cast}
           role={role}
           placeHolder={"Choose a person"}
-          idProp={"id"}
+          itemId={"id"}
+          dataItemId={"id"}
         >
           <input
             type={"text"}

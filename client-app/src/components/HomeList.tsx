@@ -1,18 +1,18 @@
-import Movie from "./UI/Movie";
-import LoadingCircle from "./UI/LoadingCircle";
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { getMoviesAtPage } from "../functions/MoviesData";
-import { MoviePageType, MovieType } from "../Type/Types";
 import Container from "./UI/Container";
 import GenericMovielist from "./UI/GenericMovieList";
+import { NotificationContext } from "./Context/NotificationContext";
 
 const HomeList = () => {
+  const notification = useContext(NotificationContext);
+
   return (
     <>
       <Container>
         <>
           <h1 className="title">Latest Movies</h1>
-          <GenericMovielist fetchFunction={getMoviesAtPage}/>
+          <GenericMovielist fetchFunction={getMoviesAtPage} />
         </>
       </Container>
     </>

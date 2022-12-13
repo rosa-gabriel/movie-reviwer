@@ -14,18 +14,43 @@ import {
 const connectionFailString: string =
   "Failed to connect to the database! Try again later.";
 
+const getRequest = async (url: string, token?: string) => {
+  let requestBody: any = {};
+
+  requestBody.method = "GET";
+
+  if (token) {
+    requestBody.headers = {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    };
+  }
+
+  let response: any;
+  try {
+    response = await fetch(url, requestBody);
+
+    if (!response.ok) {
+      throw response.status;
+    }
+
+    if (response.json) {
+      return response.json();
+    }
+  } catch (ex: any) {
+    if (response.status == 404) {
+      throw connectionFailString;
+    }
+    throw ex.message;
+  }
+};
+
 export const getMoviesAtPage = async (page: number) => {
   try {
-    const response: Response = await fetch(`${uri}/Movies/${page}`, {
-      method: "GET",
-    });
-    const data: MoviePageType = await response.json();
-
-    if (!response.ok) throw "";
-
-    return data;
+    const response: MoviePageType = await getRequest(`${uri}/Movies/${page}`);
+    return response;
   } catch (ex) {
-    throw connectionFailString;
+    throw ex;
   }
 };
 
@@ -47,6 +72,44 @@ export const addMovie = async (movie: AllMovieInfoType, token: string) => {
     if (ex.message === "Failed to fetch") {
       throw new Error(connectionFailString);
     }
+    throw ex;
+  }
+};
+
+export const updateMovie = async (movie: AllMovieInfoType, token: string) => {
+  try {
+    const response: Response = await fetch(`${uri}/Update/movie`, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(movie),
+    });
+    switch (response.status) {
+      case 500:
+        throw "";
+        break;
+    }
+  } catch (ex: any) {
+    if (ex.message === "Failed to fetch") {
+      throw new Error(connectionFailString);
+    }
+    throw ex;
+  }
+};
+
+export const checkUser = async (token: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`${uri}/Account/check`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.ok;
+  } catch (ex: any) {
     throw ex;
   }
 };
@@ -104,31 +167,30 @@ export const addPerson = async (person: PersonType, token: string) => {
 
 export const getMovie = async (id: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Movie/${id}`);
-    const data: AllMovieInfoType = await response.json();
-    return data;
+    const response: AllMovieInfoType = await getRequest(`${uri}/Movie/${id}`);
+    return response;
   } catch (ex) {
-    throw connectionFailString;
+    throw ex;
   }
 };
 
 export const getMoviesFromTagAtPage = async (page: number, id: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Tag/${id}/movies/${page}`);
-    const data: MoviePageType = await response.json();
-    return data;
+    const response: MoviePageType = await getRequest(
+      `${uri}/Tag/${id}/movies/${page}`
+    );
+    return response;
   } catch (ex) {
-    throw connectionFailString;
+    throw ex;
   }
 };
 
 export const getMoviesFromPersonAtPage = async (page: number, id: string) => {
   try {
-    const response: Response = await fetch(
+    const response: MoviePageType = await getRequest(
       `${uri}/Person/${id}/movies/${page}`
     );
-    const data: MoviePageType = await response.json();
-    return data;
+    return response;
   } catch (ex) {
     throw connectionFailString;
   }
@@ -200,6 +262,22 @@ export const getMissingTags = async (id: string) => {
     if (!response.ok) throw "";
 
     return data;
+  } catch (ex) {
+    throw new Error(connectionFailString);
+  }
+};
+
+export const deleteMovie = async (movieId: string, token: string) => {
+  try {
+    const response: Response = await fetch(`${uri}/Movies/${movieId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) throw "";
   } catch (ex) {
     throw new Error(connectionFailString);
   }
@@ -292,7 +370,6 @@ export const getProfile = async (userId: string, token?: string) => {
 
     let data: ProfileType = await response.json();
     data = { ...data, creationDate: new Date(data.creationDate) };
-    console.log(data);
     return data;
   } catch (ex) {
     console.error(ex);

@@ -9,7 +9,8 @@ type ItemInputProps = {
   children?: JSX.Element;
   role?: string | null;
   placeHolder: string;
-  idProp: string;
+  itemId: string;
+  dataItemId: string;
 };
 
 const ItemInput = (props: ItemInputProps) => {
@@ -49,7 +50,7 @@ const ItemInput = (props: ItemInputProps) => {
       {props.items.map((item) => {
         return (
           <ItemInputClick
-            key={"selectedClick" + item[props.idProp]}
+            key={"selectedClick" + item[props.itemId]}
             item={item}
             onDelete={deleteItem}
           />
@@ -59,10 +60,10 @@ const ItemInput = (props: ItemInputProps) => {
         <select name="select" onChange={itemTextChangeHandler}>
           <option value={""}>{props.placeHolder}</option>
           {props.dataItems.map((item) => {
-            if (item[props.idProp] == undefined) return;
+            if (item[props.dataItemId] == undefined) return;
             return (
               <option
-                key={"optionClick" + item[props.idProp]}
+                key={"optionClick" + item[props.dataItemId]}
                 value={item.name}
               >
                 {item.name}

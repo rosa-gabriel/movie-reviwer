@@ -23,6 +23,7 @@ const Details = () => {
     })();
   }, []);
 
+  console.log(context);
 
   return (
     <Container>

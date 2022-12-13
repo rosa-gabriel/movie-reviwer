@@ -7,7 +7,7 @@ type ModalProps = {
 
 const Modal = (props: ModalProps) => {
   return (
-    <div className="modal-background">
+    <div className="modal-background" onClick={props.onCancel}>
       <div className="modal-box">
         <h2 className="title ">{props.title}</h2>
         <p className={"faded centered-message"}>{props.text}</p>

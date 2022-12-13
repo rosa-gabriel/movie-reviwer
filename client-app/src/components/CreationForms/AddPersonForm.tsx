@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { addPerson, addTag } from "../../functions/MoviesData";
 import { CastType, PersonType } from "../../Type/Types";
+import { NotificationContext } from "../Context/NotificationContext";
 import { UserContext } from "../Context/UserContext";
 import SubmitButton from "../SubmitButton";
 import LoadingCircle from "../UI/LoadingCircle";
@@ -11,8 +12,10 @@ const AddPersonForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [url, setUrl] = useState<string>("");
+
   const navigate = useNavigate();
   const context = useContext(UserContext);
+  const notification = useContext(NotificationContext);
 
   const nameChangeHandler = (event: any) => {
     setName(event.target.value);
@@ -35,6 +38,7 @@ const AddPersonForm = () => {
         context.userInfo.token
       );
       setError(null);
+      notification.addNotification({ code: 'ADDED', text: 'Person was successfully added.', error: false});
       navigate("/add/movie");
     } catch (ex: any) {
       setError(ex.message);

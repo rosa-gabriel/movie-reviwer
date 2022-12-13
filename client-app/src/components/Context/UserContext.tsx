@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createContext } from "react";
+import { checkUser } from "../../functions/MoviesData";
 import { logOut } from "../../functions/TokenData";
 import { UserInfoType } from "../../Type/Types";
 import RegisterForm from "../AccountForms/RegisterForm";
@@ -13,7 +14,7 @@ type UserContextType = {
 };
 
 export const UserContext = createContext<UserContextType>({
-  isLogedIn: false,
+  isLogedIn: true,
   userInfo: null,
   logIn: () => {},
   logOut: () => {},
@@ -25,26 +26,29 @@ type UserContextProviderProps = {
 
 export const UserContextProvider = (props: UserContextProviderProps) => {
   const [userInfo, setUserInfo] = useState<UserInfoType | null>(null);
-  const [isLoged, setIsLoged] = useState<boolean>(() => {
-  const localUserInfoString: string | null = localStorage.getItem("token");
-    if (localUserInfoString) {
-      setUserInfo(JSON.parse(localUserInfoString));
-      return true;
-    }
-    return false
-  });
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [isLoged, setIsLoged] = useState<boolean>(true);
 
-  const cancelModalHandler = () => {
-    setShowModal(false);
-  };
+  useEffect(() => {
+    (async () => {
+      const localUserInfoString: string | null = localStorage.getItem("token");
 
-  const confirmModalHandler = () => {
-    setShowModal(false);
-    logOut();
-    setUserInfo(null);
-    setIsLoged(false);
-  };
+      if (localUserInfoString) {
+        try {
+          const parsedInfo = JSON.parse(localUserInfoString);
+
+          const response: boolean = await checkUser(String(parsedInfo.token));
+
+          if (response) {
+            setUserInfo(parsedInfo);
+            setIsLoged(true);
+          } else setIsLoged(false);
+        } catch (ex: any) {
+          setIsLoged(false);
+          localStorage.removeItem("token");
+        }
+      } else setIsLoged(false);
+    })();
+  }, []);
 
   return (
     <UserContext.Provider
@@ -58,18 +62,12 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
           }
         },
         logOut: () => {
-          setShowModal(true);
+          logOut();
+          setUserInfo(null);
+          setIsLoged(false);
         },
       }}
     >
-      {showModal && (
-        <Modal
-          title={"Sining out!"}
-          text={"Are you sure you want to leave your account?"}
-          onCancel={cancelModalHandler}
-          onConfirm={confirmModalHandler}
-        />
-      )}
       {props.children}
     </UserContext.Provider>
   );

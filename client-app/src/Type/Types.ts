@@ -1,5 +1,5 @@
 export type MovieType = {
-  id?: number;
+  id?: string;
   name: string;
   coverUrl: string;
   releaseDate: Date;
@@ -18,24 +18,24 @@ export type TagEntriesType = {
 };
 
 export type TagType = {
-  id: number;
+  id: string;
   name: string;
 };
 
 export type CastType = {
-  id?: number;
+  id?: string;
   name: string;
   role: string;
 };
 
 export type CastEntryType = {
-  personId: number;
+  personId: string;
   name: string;
   role: string;
 };
 
 export type PersonType = {
-  id?: number;
+  id?: string;
   name: string;
   profileImageUrl: string;
 };
@@ -79,4 +79,10 @@ export type ProfileType = {
 export type MoviePageType = {
   movies: MovieType[];
   count: number;
+};
+
+export type MessageType = {
+  code: string;
+  text: string;
+  error: boolean
 };

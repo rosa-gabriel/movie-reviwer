@@ -1,10 +1,13 @@
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { logOut } from "../../functions/TokenData";
+import { ModalContext } from "../Context/ModalContext";
 import { UserContext } from "../Context/UserContext";
 import { active } from "../CreationForms/CreationOptions";
 
 const NavBar = () => {
   const context = useContext(UserContext);
+  const modal = useContext(ModalContext);
   const [search, setSeach] = useState();
   const navigate = useNavigate();
 
@@ -16,6 +19,14 @@ const NavBar = () => {
     e.preventDefault();
     navigate(`/search/${search}`);
   };
+
+  const logOutHandler = () => {
+    modal.showModal(
+      'sure',
+      'sure sure?',
+      context.logOut
+    );
+  }
 
   return (
     <nav>
@@ -59,7 +70,7 @@ const NavBar = () => {
                 <img src={context.userInfo?.profileImageUrl} />
               </div>
             </NavLink>
-            <button onClick={context.logOut} className={"nav-link"}>
+            <button onClick={logOutHandler} className={"nav-link"}>
               Log Out
             </button>
           </>
