@@ -529,5 +529,3 @@ _[Ss]cripts
 *.nupkg
 *.ncrunchsolution
 *.dot[Cc]over
-
-appsettings.Development.json
