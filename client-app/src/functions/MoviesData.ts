@@ -26,9 +26,8 @@ const getRequest = async (url: string, token?: string) => {
     };
   }
 
-  let response: any;
   try {
-    response = await fetch(url, requestBody);
+    const response = await fetch(url, requestBody);
 
     if (!response.ok) {
       throw response.status;
@@ -38,9 +37,7 @@ const getRequest = async (url: string, token?: string) => {
       return response.json();
     }
   } catch (ex: any) {
-    if (response.status == 404) {
-      throw connectionFailString;
-    }
+    if(ex.message == 'Failed to fetch') throw connectionFailString;
     throw ex.message;
   }
 };
