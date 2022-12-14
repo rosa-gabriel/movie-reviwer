@@ -1,8 +1,8 @@
 type ModalProps = {
   title: string;
   text: string;
-  onCancel: any;
-  onConfirm: any;
+  onCancel(): void;
+  onConfirm(): void;
 };
 
 const Modal = (props: ModalProps) => {

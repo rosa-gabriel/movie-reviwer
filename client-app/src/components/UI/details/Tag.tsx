@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { TagEntriesType, TagType } from "../../../Type/Types";
+import { TagEntriesType } from "../../../Type/Types";
 
 type TagProps = {
   tagItem: TagEntriesType;

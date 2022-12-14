@@ -7,20 +7,22 @@ type NotificationProps = {
 };
 
 const Notification = ({ message, close }: NotificationProps) => {
+  //States
   const [hide, setHide] = useState<boolean>(false);
 
-  console.log(hide);
-
+  //Class variables
   const closed = hide ? "closed " : "";
   const color = message.error ? "error-message" : "notification";
 
-  useEffect(() => {
-    setHide(close);
-  }, [close]);
-
+  //Button Handler
   const closeHandler = () => {
     setHide(true);
   };
+
+  //Effect
+  useEffect(() => {
+    setHide(close);
+  }, [close]);
 
   return (
     <>

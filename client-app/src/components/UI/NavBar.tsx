@@ -1,32 +1,35 @@
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { logOut } from "../../functions/TokenData";
-import { ModalContext } from "../Context/ModalContext";
-import { UserContext } from "../Context/UserContext";
-import { active } from "../CreationForms/CreationOptions";
+import { ModalContext } from "../../Context/ModalContext";
+import { UserContext } from "../../Context/UserContext";
+import { active } from "../../pages/CreationForms/CreationOptions";
 
 const NavBar = () => {
-  const context = useContext(UserContext);
-  const modal = useContext(ModalContext);
+  //States
   const [search, setSeach] = useState();
+  const context = useContext(UserContext);
+
+  //Contexts
+  const modal = useContext(ModalContext);
+
+  //Hooks
   const navigate = useNavigate();
 
+  //Input Handler
   const searchChangeHandler = (e: any) => {
     setSeach(e.target.value);
   };
 
+  //Submit Handler
   const submitHandler = (e: any) => {
     e.preventDefault();
     navigate(`/search/${search}`);
   };
 
+  //Log out Handler
   const logOutHandler = () => {
-    modal.showModal(
-      'sure',
-      'sure sure?',
-      context.logOut
-    );
-  }
+    modal.showModal("sure", "sure sure?", context.logOut);
+  };
 
   return (
     <nav>
@@ -67,7 +70,10 @@ const NavBar = () => {
             </NavLink>
             <NavLink to={`/account/profile/${context.userInfo?.id}`}>
               <div className="nav-profile-container">
-                <img src={context.userInfo?.profileImageUrl} />
+                <img
+                  src={context.userInfo?.profileImageUrl}
+                  alt={"User profile"}
+                />
               </div>
             </NavLink>
             <button onClick={logOutHandler} className={"nav-link"}>

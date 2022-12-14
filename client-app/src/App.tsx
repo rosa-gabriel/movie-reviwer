@@ -1,22 +1,20 @@
-import { Navigate, Route, Routes } from "react-router-dom";
-import Details from "./components/Details";
-import Favorites from "./components/Favorites";
-import Error from "./components/Error";
+import { Route, Routes } from "react-router-dom";
+import Details from "./pages/Details/Details";
+import Favorites from "./pages/User/Favorites";
+import Error from "./components/UI/Error";
 import NavBar from "./components/UI/NavBar";
-import CreationOptions from "./components/CreationForms/CreationOptions";
-import HomeList from "./components/HomeList";
-import TagList from "./components/TagList";
-import PersonInfo from "./components/PersonInfo";
-import LoginForm from "./components/AccountForms/LoginForm";
-import { UserContextProvider } from "./components/Context/UserContext";
-import RegisterForm from "./components/AccountForms/RegisterForm";
-import Profile from "./components/Profile";
-import TestComp from "./TestComp";
-import SearchList from "./components/SearchList";
-import EditDetails from "./components/EditDetails";
-import { ModalContextProvider } from "./components/Context/ModalContext";
-import Notification from "./components/UI/Notification";
-import { NotificationContextProvider } from "./components/Context/NotificationContext";
+import CreationOptions from "./pages/CreationForms/CreationOptions";
+import HomeList from "./pages/MovieLists/HomeList";
+import TagList from "./pages/MovieLists/TagList";
+import PersonInfo from "./pages/Details/PersonInfo";
+import LoginForm from "./pages/User/LoginForm";
+import { UserContextProvider } from "./Context/UserContext";
+import RegisterForm from "./pages/User/RegisterForm";
+import Profile from "./pages/User/Profile";
+import SearchList from "./pages/MovieLists/SearchList";
+import EditDetails from "./pages/Details/EditDetails";
+import { ModalContextProvider } from "./Context/ModalContext";
+import { NotificationContextProvider } from "./Context/NotificationContext";
 
 export const uri = "http://localhost:5000";
 
@@ -42,7 +40,6 @@ function App() {
               <Route path="/add/*" element={<CreationOptions />} />
 
               <Route path="/error" element={<Error />} />
-              <Route path="/test" element={<TestComp />} />
               <Route path="/*" element={<Error />} />
             </Routes>
           </>
