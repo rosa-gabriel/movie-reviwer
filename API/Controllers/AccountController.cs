@@ -84,7 +84,7 @@ namespace API.Controllers
                     CreationDate = DateTime.Now,
                 };
 
-                var response = await _userManager.CreateAsync(user, "Pa$$L0rd");
+                var response = await _userManager.CreateAsync(user, registerDto.Password);
 
                 if (response.Succeeded)
                 {

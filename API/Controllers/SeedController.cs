@@ -1,4 +1,3 @@
-using Application;
 using Domain;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;

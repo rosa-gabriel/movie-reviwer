@@ -19,6 +19,7 @@ These are the versions used in the site development. Older versions may not work
 # Future patches
 
 ## Functionalities:
+
 1. Responsivity for mobile.
 2. Response pop-ups so the user is sure that his action worked properly.
 3. Remove repetitive fetch code.
@@ -30,6 +31,12 @@ These are the versions used in the site development. Older versions may not work
 ```sh
 https://github.com/GabrielWaif/MovieApp.git
 ```
+
+## If on windows:
+
+### 2. Open the cloned folder and open the "StartMoviesApp.bat" file, this file will open 2 terminals each one part of the application.
+
+## If on another OS:
 
 ### 2. Inside the cloned folder there is a filter names 'client-app' run:
 
@@ -44,10 +51,24 @@ This will start the local front-end server.
 ### 4. Go back to the main folder and find the API folder, there run the command:
 
 ```sh
-dotnet watch
+dotnet run --launch-profile GitHub
 ```
 
 This will start the local backend API server.
+
+# Possible bugs
+
+## Port already in use:
+
+If you see this terminal response:
+
+<center>
+<img src="https://i.imgur.com/yy1ifgX.png" width="70%"/>
+</center>
+
+This means that some other process is already running on port 3000 (which is the front-end REACT application port), running the application on another port will cause the back-end CORS policy to reject any request made by the new port. The recommended step is to kill the current process running on port 3000.
+
+<a href="https://medium.com/@javatechie/how-to-kill-the-process-currently-using-a-port-on-localhost-in-windows-31ccdea2a3ea">For more information in how to do that.</a>
 
 # Pages
 
