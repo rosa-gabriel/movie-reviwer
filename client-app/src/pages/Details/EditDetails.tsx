@@ -82,9 +82,18 @@ const EditDetails = () => {
             String(params.movieId),
             String(context.userInfo?.token)
           );
+          notification.addNotification({
+            code: "DELETED",
+            text: "The movie was deleted successfully.",
+            error: false,
+          });
           navigate("/");
         } catch (ex: any) {
-          console.error(ex);
+          notification.addNotification({
+            code: "FAILED",
+            text: "Failed to delete the movie! Try again.",
+            error: true,
+          });
         }
       }
     );

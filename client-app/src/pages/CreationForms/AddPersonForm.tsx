@@ -30,7 +30,7 @@ const AddPersonForm = () => {
   //Submit Handler
   const submitHandler = async (event: any) => {
     event.preventDefault();
-    if (!context.userInfo) return;
+
     setIsLoading(true);
     try {
       await addPerson(
@@ -38,7 +38,7 @@ const AddPersonForm = () => {
           name: name,
           profileImageUrl: url,
         },
-        context.userInfo.token
+        String(context.userInfo?.token)
       );
       setError(null);
       notification.addNotification({

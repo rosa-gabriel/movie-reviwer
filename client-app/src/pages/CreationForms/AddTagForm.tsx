@@ -26,11 +26,11 @@ const AddTagForm = () => {
   //Submit Handler
   const submitHandler = async (event: any) => {
     event.preventDefault();
+    console.log("submit");
 
-    if (!context.userInfo) return;
     setIsLoading(true);
     try {
-      await addTag(tagName, context.userInfo.token);
+      await addTag(tagName, String(context.userInfo?.token));
       setError(null);
       notification.addNotification({
         code: "ADDED",

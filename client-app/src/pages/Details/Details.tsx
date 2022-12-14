@@ -12,6 +12,7 @@ import { AllMovieInfoType } from "../../Type/Types";
 import Container from "../../components/UI/Container";
 import { UserContext } from "../../Context/UserContext";
 import ErrorContainer from "../../components/UI/ErrorContainer";
+import { NotificationContext } from "../../Context/NotificationContext";
 
 const Details = (props: any) => {
   //States
@@ -24,6 +25,7 @@ const Details = (props: any) => {
 
   //Contexts
   const context = useContext(UserContext);
+  const notification = useContext(NotificationContext);
 
   //Hooks
   const params = useParams();
@@ -36,9 +38,21 @@ const Details = (props: any) => {
 
   //Button Handlers
   const favoriteHandler = async () => {
-    if (!context.userInfo) return;
-    await putFavorite(String(params.movieId), !isLiked, context.userInfo.token);
-    reset();
+    try {
+      if (!context.userInfo) return;
+      await putFavorite(
+        String(params.movieId),
+        !isLiked,
+        context.userInfo.token
+      );
+      reset();
+    } catch (ex: any) {
+      notification.addNotification({
+        code: "FAILED",
+        text: "Favorite wasn't registered! Try again later.",
+        error: true,
+      });
+    }
   };
   const showAllHandler = () => {
     setShowAllTags(true);

@@ -76,10 +76,10 @@ const AddMovieForm = () => {
       tags: tags,
       castMembers: cast,
     };
-    if (!context.userInfo) return;
+
+    setLoading(true);
     try {
-      setLoading(true);
-      await addMovie(newMovie, context.userInfo.token);
+      await addMovie(newMovie, String(context.userInfo?.token));
       setError(null);
       notification.addNotification({
         code: "ADDED",

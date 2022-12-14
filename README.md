@@ -1,6 +1,6 @@
 # MovieApp
 
-Still in Development...
+Still in Development... May not work properly
 
 A movie website created using REACT and ASP.NET, this project was inspired by sites like MyAnimeList, IMDb, and Rotten Tomates, this was a very good opportunity to concepts like requests, full-stack, CRUD, UML, and database design in a medium-sized website.
 
