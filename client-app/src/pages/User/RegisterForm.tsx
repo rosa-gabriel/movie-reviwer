@@ -5,6 +5,7 @@ import { UserRegisterType } from "../../Type/Types";
 import { UserContext } from "../../Context/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
+import { NotificationContext } from "../../Context/NotificationContext";
 
 const RegisterForm = () => {
   //States
@@ -17,6 +18,7 @@ const RegisterForm = () => {
 
   //Contexts
   const context = useContext(UserContext);
+  const notification = useContext(NotificationContext);
 
   //Hooks
   const navigate = useNavigate();
@@ -53,6 +55,11 @@ const RegisterForm = () => {
       context.logIn(response);
       setIsLoading(false);
       setError(null);
+      notification.addNotification({
+        code: "REGISTERED",
+        text: "Your user was successfully registered! You are now logged in.",
+        error: false,
+      });
       navigate("/");
     } catch (ex: any) {
       setError(ex.message);

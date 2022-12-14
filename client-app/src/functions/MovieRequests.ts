@@ -28,7 +28,8 @@ const getRequest = async (url: string, token?: string) => {
     const response = await fetch(url, requestBody);
 
     if (!response.ok) {
-      throw response.status;
+      if(response.status === 401) throw new Error('User unauthorized');
+      throw new Error(String(response.status));
     }
 
     if (response.json) {
@@ -192,24 +193,17 @@ export const getMoviesFromSearchAtPage = async (
 
 export const getPerson = async (id: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Person/${id}`);
-    const data: PersonType = await response.json();
-
-    if (!response.ok) throw new Error("Error fetching person");
-
-    return data;
+    const response: PersonType = await getRequest(`${uri}/Person/${id}`);
+    return response;
   } catch (ex: any) {
     throw ex;
   }
 };
+
 export const getTag = async (id: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Tag/${id}`);
-    const data: TagType = await response.json();
-
-    if (!response.ok) throw new Error("Error fetching tag");
-
-    return data;
+    const response: TagType = await getRequest(`${uri}/Tag/${id}`);
+    return response;
   } catch (ex) {
     throw ex;
   }
@@ -217,31 +211,21 @@ export const getTag = async (id: string) => {
 
 export const getTags = async () => {
   try {
-    const response: Response = await fetch(`${uri}/Tags`, {
-      method: "GET",
-    });
-    const data: TagEntriesType[] = await response.json();
-
-    if (!response.ok) throw new Error("");
-
-    return data;
+    const response: TagEntriesType[] = await getRequest(`${uri}/Tags`);
+    return response;
   } catch (ex) {
-    throw new Error(connectionFailString);
+    throw ex;
   }
 };
 
 export const getMissingTags = async (id: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Movies/${id}/missingTags`, {
-      method: "GET",
-    });
-    const data: TagEntriesType[] = await response.json();
-
-    if (!response.ok) throw new Error("");
-
-    return data;
+    const response: TagEntriesType[] = await getRequest(
+      `${uri}/Movies/${id}/missingTags`
+    );
+    return response;
   } catch (ex) {
-    throw new Error(connectionFailString);
+    throw ex;
   }
 };
 
@@ -263,16 +247,10 @@ export const deleteMovie = async (movieId: string, token: string) => {
 
 export const getCast = async () => {
   try {
-    const response: Response = await fetch(`${uri}/Cast`, {
-      method: "GET",
-    });
-    const data: CastType[] = await response.json();
-
-    if (!response.ok) throw new Error("");
-
-    return data;
+    const response: CastType[] = await getRequest(`${uri}/Cast`);
+    return response;
   } catch (ex) {
-    throw new Error(connectionFailString);
+    throw ex;
   }
 };
 
@@ -319,36 +297,25 @@ export const getIsFavorite = async (movieId: string, token: string) => {
 
 export const getUserFavorites = async (page: number, token: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Account/favorites`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    if (!response.ok) throw new Error("");
-    const data = await response.json();
-    return { movies: data, page: 1 };
+    const response: Response = await getRequest(
+      `${uri}/Account/favorites/${page}`,
+      token
+    );
+    return response;
   } catch (ex) {
-    throw new Error(connectionFailString);
+    throw ex;
   }
 };
 
 export const getProfile = async (userId: string, token?: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Account/profile/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + String(token),
-      },
-    });
-
-    if (!response.ok) throw new Error("");
-
-    let data: ProfileType = await response.json();
-    data = { ...data, creationDate: new Date(data.creationDate) };
-    return data;
+    let response: ProfileType = await getRequest(
+      `${uri}/Account/profile/${userId}`,
+      token
+    );
+    response = { ...response, creationDate: new Date(response.creationDate) };
+    return response;
   } catch (ex) {
-    console.error(ex);
-    throw new Error(connectionFailString);
+    throw ex;
   }
 };

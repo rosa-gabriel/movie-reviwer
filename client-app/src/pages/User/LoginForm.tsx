@@ -5,23 +5,31 @@ import { UserLoginType } from "../../Type/Types";
 import { UserContext } from "../../Context/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
+import { NotificationContext } from "../../Context/NotificationContext";
 
 const LoginForm = () => {
-  const context = useContext(UserContext);
-  const navigate = useNavigate();
+  //States
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  //Contexts
+  const context = useContext(UserContext);
+  const notification = useContext(NotificationContext);
+
+  //Hooks
+  const navigate = useNavigate();
+
+  //Input Handlers
   const usernameChangeHandler = (event: any) => {
     setUsername(event.target.value);
   };
-
   const passwordChangeHandler = (event: any) => {
     setPassword(event.target.value);
   };
 
+  //Submir Handler
   const submitHandler = async (event: any) => {
     event.preventDefault();
 
@@ -35,6 +43,11 @@ const LoginForm = () => {
       context.logIn(response);
       setIsLoading(false);
       setError(null);
+      notification.addNotification({
+        code: "LOGGED",
+        text: "You are now successfully logged in!",
+        error: false,
+      });
       navigate("/");
     } catch (ex: any) {
       setError(ex.message);

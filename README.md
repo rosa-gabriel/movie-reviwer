@@ -21,7 +21,7 @@ These are the versions used in the site development. Older versions may not work
 ## Functionalities:
 
 1. Responsivity for mobile.
-2. Response pop-ups so the user is sure that his action worked properly.
+2. Add better response messages so the user understands why errors occurred.
 3. Remove repetitive fetch code.
 
 # Instalation

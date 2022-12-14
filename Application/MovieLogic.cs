@@ -247,8 +247,8 @@ namespace Application
 
             try
             {
-                Movie? movie = this._context.Movies.FirstOrDefault(m => m.Id == newMovie.movie.Id); 
-                if(movie == null) throw new Exception("Movie not found!");
+                Movie? movie = this._context.Movies.FirstOrDefault(m => m.Id == newMovie.movie.Id);
+                if (movie == null) throw new Exception("Movie not found!");
 
                 movie.CoverUrl = newMovie.movie.CoverUrl;
                 movie.Name = newMovie.movie.Name;
@@ -360,19 +360,23 @@ namespace Application
             }
             return castResponses;
         }
-        public async Task<List<Movie>> ListFavorites(string userId)
+        public async Task<MoviePageResponse> ListFavorites(string userId, int page)
         {
             try
             {
-                List<Movie> movies = await _context.FavoriteEntries.Include(fe => fe.Film).Where(fe => fe.Fan.Id == userId).OrderByDescending(fe => fe.FavoriteDate).Select(fe => fe.Film).ToListAsync();
-                return movies;
+                IQueryable<FavoriteEntry> search = _context.FavoriteEntries.Include(fe => fe.Film).Where(fe => fe.Fan.Id == userId);
+                List<Movie> response = await search.OrderByDescending(fe => fe.FavoriteDate).Take(25).Skip((page - 1) * 25).Select(fe => fe.Film).ToListAsync();
+                return new MoviePageResponse
+                {
+                    movies = response,
+                    count = (int)Math.Ceiling(((double)search.Count()) / 25),
+                };
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw new Exception();
             }
         }
-
         public async Task<List<Movie>> ListRecentFavorites(User user)
         {
             try

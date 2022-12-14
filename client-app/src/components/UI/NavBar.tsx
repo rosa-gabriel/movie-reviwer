@@ -28,7 +28,11 @@ const NavBar = () => {
 
   //Log out Handler
   const logOutHandler = () => {
-    modal.showModal("lo", "sure sure?", context.logOut);
+    modal.showModal(
+      "LOGGING OUT",
+      "Are you sure you want to log out?",
+      context.logOut
+    );
   };
 
   return (

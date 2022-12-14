@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
 using Domain;
+using Domain.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -143,13 +144,13 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpGet("favorites")]
-        public async Task<ActionResult<List<Movie>>> GetFavorites()
+        [HttpGet("favorites/{page}")]
+        public async Task<ActionResult<MoviePageResponse>> GetFavorites(int page)
         {
             try
             {
                 string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return await movieLogic.ListFavorites(id);
+                return await movieLogic.ListFavorites(id, page);
             }
             catch (Exception ex)
             {

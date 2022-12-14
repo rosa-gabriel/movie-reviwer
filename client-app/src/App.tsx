@@ -20,9 +20,9 @@ export const uri = "http://localhost:5000";
 
 function App() {
   return (
-    <ModalContextProvider>
-      <NotificationContextProvider>
-        <UserContextProvider>
+    <UserContextProvider>
+      <ModalContextProvider>
+        <NotificationContextProvider>
           <>
             <NavBar />
             <Routes>
@@ -43,9 +43,9 @@ function App() {
               <Route path="/*" element={<Error />} />
             </Routes>
           </>
-        </UserContextProvider>
-      </NotificationContextProvider>
-    </ModalContextProvider>
+        </NotificationContextProvider>
+      </ModalContextProvider>
+    </UserContextProvider>
   );
 }
 

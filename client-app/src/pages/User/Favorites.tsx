@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getUserFavorites } from "../../functions/MovieRequests";
 import AccountCheck from "../../components/Account/AccountCheck";
 import { UserContext } from "../../Context/UserContext";
@@ -20,7 +20,7 @@ const Details = () => {
           <h1 className="title">{`Your Favorites`}</h1>
           <GenericMovielist
             fetchFunction={getUserFavorites}
-            filterId={context.userInfo ? context.userInfo.token : undefined}
+            filterId={String(context.userInfo?.token)}
           />
         </>
       </ErrorContainer>
