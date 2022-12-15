@@ -4,7 +4,7 @@ import Tag from "../../components/UI/details/Tag";
 import {
   getIsFavorite,
   getMovie,
-  putFavorite,
+  addFavorite,
 } from "../../functions/MovieRequests";
 import CastSquare from "../../components/UI/details/CastSquare";
 import LoadingCircle from "../../components/UI/LoadingCircle";
@@ -40,7 +40,7 @@ const Details = (props: any) => {
   const favoriteHandler = async () => {
     try {
       if (!context.userInfo) return;
-      await putFavorite(
+      await addFavorite(
         String(params.movieId),
         !isLiked,
         context.userInfo.token

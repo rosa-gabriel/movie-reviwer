@@ -16,13 +16,12 @@ A movie website created using REACT and ASP.NET, this project was inspired by si
 
 These are the versions used in the site development. Older versions may not work properly.
 
-# Future patches
-
-## Functionalities:
+# Future updates
 
 1. Responsivity for mobile.
 2. Add better response messages so the user understands why errors occurred.
 3. Remove repetitive fetch code.
+4. Fix timezone issues when changing dates.
 
 # Instalation
 

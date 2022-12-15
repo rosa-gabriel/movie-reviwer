@@ -12,10 +12,10 @@ import {
 const connectionFailString: string =
   "Failed to connect to the database! Try again later.";
 
-const getRequest = async (url: string, token?: string) => {
+const createRequest = (method: string, body?: any, token?: string) => {
   let requestBody: any = {};
 
-  requestBody.method = "GET";
+  requestBody.method = method;
 
   if (token) {
     requestBody.headers = {
@@ -24,18 +24,56 @@ const getRequest = async (url: string, token?: string) => {
     };
   }
 
+  switch (method) {
+    case "GET":
+      return requestBody;
+    case "POST":
+      requestBody.body = JSON.stringify(body);
+      return requestBody;
+    case "PUT":
+      break;
+    case "DELETE":
+      break;
+  }
+};
+
+const getRequest = async (url: string, token?: string) => {
+  const request: any = createRequest("GET", undefined, token);
+
   try {
-    const response = await fetch(url, requestBody);
+    const response = await fetch(url, request);
 
     if (!response.ok) {
-      if(response.status === 401) throw new Error('User unauthorized');
+      if (response.status === 401) throw new Error("User unauthorized");
       throw new Error(String(response.status));
     }
 
-    if (response.json) {
-      return response.json();
-    }
+    try {
+      return await response.json();
+    } catch (ex) {}
   } catch (ex: any) {
+    console.error(ex);
+    if (ex.message === "Failed to fetch") throw new Error(connectionFailString);
+    throw ex;
+  }
+};
+
+const postRequest = async (url: string, body: any, token?: string) => {
+  const request = createRequest("POST", body, token);
+
+  try {
+    const response = await fetch(url, request);
+
+    if (!response.ok) {
+      if (response.status === 401) throw new Error("User unauthorized");
+      throw new Error(String(response.status));
+    }
+
+    try {
+      return await response.json();
+    } catch (ex) {}
+  } catch (ex: any) {
+    console.error(ex);
     if (ex.message === "Failed to fetch") throw new Error(connectionFailString);
     throw ex;
   }
@@ -52,22 +90,10 @@ export const getMoviesAtPage = async (page: number) => {
 
 export const addMovie = async (movie: AllMovieInfoType, token: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Create/movie`, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(movie),
-    });
-    switch (response.status) {
-      case 500:
-        throw new Error("Invalid name or url! Try again.");
-    }
+    const response = await postRequest(`${uri}/Create/movie`, movie, token);
+
+    return response.json();
   } catch (ex: any) {
-    if (ex.message === "Failed to fetch") {
-      throw new Error(connectionFailString);
-    }
     throw ex;
   }
 };
@@ -96,50 +122,25 @@ export const updateMovie = async (movie: AllMovieInfoType, token: string) => {
 
 export const addTag = async (tag: string, token: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Create/tag`, {
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ Name: tag }),
-    });
-
-    switch (response.status) {
-      case 500:
-        throw new Error("Invalid name or url! Try again.");
-    }
-
-    const data = await response.json();
-    return await data;
+    const response = await postRequest(`${uri}/Create/tag`, tag, token);
+    return response;
   } catch (ex: any) {
-    if (ex.message === "Failed to fetch") {
-      throw new Error(connectionFailString);
-    }
+    if (ex.message === "500") throw new Error("Invalid name! Try again.");
     throw ex;
   }
 };
 
 export const addPerson = async (person: PersonType, token: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Create/person`, {
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify(person),
-    });
-    switch (response.status) {
-      case 500:
-        throw new Error("Invalid name or url! Try again.");
-    }
-
-    const data = await response.json();
-    return await data;
+    const response: any = await postRequest(
+      `${uri}/Create/person`,
+      person,
+      token
+    );
+    return response;
   } catch (ex: any) {
-    if (ex.message === "Failed to fetch") {
-      throw new Error(connectionFailString);
+    if (ex.message === "500") {
+      throw new Error("Invalid name or url! Try again.");
     }
     throw ex;
   }
@@ -150,6 +151,7 @@ export const getMovie = async (id: string) => {
     const response: AllMovieInfoType = await getRequest(`${uri}/Movie/${id}`);
     return response;
   } catch (ex) {
+    console.error(ex);
     throw ex;
   }
 };
@@ -181,11 +183,10 @@ export const getMoviesFromSearchAtPage = async (
   search: string
 ) => {
   try {
-    const response: Response = await fetch(
+    const response: MoviePageType = await getRequest(
       `${uri}/Movies/search/${search}/${page}`
     );
-    const data: MoviePageType = await response.json();
-    return data;
+    return response;
   } catch (ex) {
     throw ex;
   }
@@ -254,44 +255,32 @@ export const getCast = async () => {
   }
 };
 
-export const putFavorite = async (
+export const addFavorite = async (
   movieId: string,
   desiredBool: boolean,
   token: string
 ) => {
   try {
-    const response: Response = await fetch(`${uri}/Account/favorite`, {
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ movieId, desiredBool }),
-    });
-
-    if (!response.ok) throw new Error("");
+    const response = await postRequest(
+      `${uri}/Account/favorite`,
+      { movieId, desiredBool },
+      token
+    );
+    return response;
   } catch (ex) {
-    throw new Error(connectionFailString);
+    throw ex;
   }
 };
 
 export const getIsFavorite = async (movieId: string, token: string) => {
   try {
-    const response: Response = await fetch(
+    const response = await getRequest(
       `${uri}/Account/favorite/${movieId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
+      token
     );
-    if (!response.ok) throw new Error("");
-
-    const data = await response.json();
-    return data;
+    return response;
   } catch (ex) {
-    throw new Error(connectionFailString);
+    throw ex;
   }
 };
 
