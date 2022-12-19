@@ -12,7 +12,7 @@ import { connectionFailString, getRequest, postRequest } from "./CreateRequest";
 
 export const getMoviesAtPage = async (page: number) => {
   try {
-    const response: MoviePageType = await getRequest(`${uri}/Movies/${page}`);
+    const response: MoviePageType = await getRequest(`${uri}/Movies/page/${page}`);
     return response;
   } catch (ex) {
     throw ex;
@@ -21,7 +21,7 @@ export const getMoviesAtPage = async (page: number) => {
 
 export const addMovie = async (movie: AllMovieInfoType, token: string) => {
   try {
-    const response = await postRequest(`${uri}/Create/movie`, movie, token);
+    const response = await postRequest(`${uri}/Movies/create`, movie, token);
 
     return response.json();
   } catch (ex: any) {
@@ -31,7 +31,7 @@ export const addMovie = async (movie: AllMovieInfoType, token: string) => {
 
 export const updateMovie = async (movie: AllMovieInfoType, token: string) => {
   try {
-    const response: Response = await fetch(`${uri}/Update/movie`, {
+    const response: Response = await fetch(`${uri}/Movies/update`, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
@@ -53,7 +53,7 @@ export const updateMovie = async (movie: AllMovieInfoType, token: string) => {
 
 export const addTag = async (tag: string, token: string) => {
   try {
-    const response = await postRequest(`${uri}/Create/tag`, tag, token);
+    const response = await postRequest(`${uri}/Tags/create`, tag, token);
     return response;
   } catch (ex: any) {
     if (ex.message === "500") throw new Error("Invalid name! Try again.");
@@ -64,7 +64,7 @@ export const addTag = async (tag: string, token: string) => {
 export const addPerson = async (person: PersonType, token: string) => {
   try {
     const response: any = await postRequest(
-      `${uri}/Create/person`,
+      `${uri}/Cast/create`,
       person,
       token
     );
@@ -79,7 +79,7 @@ export const addPerson = async (person: PersonType, token: string) => {
 
 export const getMovie = async (id: string) => {
   try {
-    const response: AllMovieInfoType = await getRequest(`${uri}/Movie/${id}`);
+    const response: AllMovieInfoType = await getRequest(`${uri}/Movies/${id}`);
     return response;
   } catch (ex) {
     console.error(ex);
@@ -90,7 +90,7 @@ export const getMovie = async (id: string) => {
 export const getMoviesFromTagAtPage = async (page: number, id: string) => {
   try {
     const response: MoviePageType = await getRequest(
-      `${uri}/Tag/${id}/movies/${page}`
+      `${uri}/Tags/${id}/movies/${page}`
     );
     return response;
   } catch (ex) {
@@ -101,7 +101,7 @@ export const getMoviesFromTagAtPage = async (page: number, id: string) => {
 export const getMoviesFromPersonAtPage = async (page: number, id: string) => {
   try {
     const response: MoviePageType = await getRequest(
-      `${uri}/Person/${id}/movies/${page}`
+      `${uri}/Cast/${id}/movies/${page}`
     );
     return response;
   } catch (ex) {
@@ -125,7 +125,7 @@ export const getMoviesFromSearchAtPage = async (
 
 export const getPerson = async (id: string) => {
   try {
-    const response: PersonType = await getRequest(`${uri}/Person/${id}`);
+    const response: PersonType = await getRequest(`${uri}/Cast/person/${id}`);
     return response;
   } catch (ex: any) {
     throw ex;
@@ -134,7 +134,7 @@ export const getPerson = async (id: string) => {
 
 export const getTag = async (id: string) => {
   try {
-    const response: TagType = await getRequest(`${uri}/Tag/${id}`);
+    const response: TagType = await getRequest(`${uri}/Tags/${id}`);
     return response;
   } catch (ex) {
     throw ex;
@@ -153,7 +153,7 @@ export const getTags = async () => {
 export const getMissingTags = async (id: string) => {
   try {
     const response: TagEntriesType[] = await getRequest(
-      `${uri}/Movies/${id}/missingTags`
+      `${uri}/Movies/${id}/tags/missing`
     );
     return response;
   } catch (ex) {

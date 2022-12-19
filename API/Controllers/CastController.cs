@@ -11,10 +11,10 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PersonController : ControllerInit
+    public class CastController : ControllerInit
     {
         private readonly TokenService _tokenService;
-        public PersonController(DataContext context) : base(context) { }
+        public CastController(DataContext context) : base(context) { }
 
         //Lists all the cast people that are registered in the database
         [HttpGet]

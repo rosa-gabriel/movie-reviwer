@@ -15,7 +15,7 @@ namespace API.Controllers
         public MoviesController(DataContext context) : base(context) { }
 
         //Gets the a list of Movies at the given page.
-        [HttpGet("{page}")]
+        [HttpGet("page/{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
         {
             try
@@ -28,7 +28,7 @@ namespace API.Controllers
             }
         }
         //Gets all the TagNames that the movie with the current id doesn't have.
-        [HttpGet("{id}/missingTags")]
+        [HttpGet("{id}/tags/missing")]
         public async Task<ActionResult<List<TagResponse>>> GetMissingTags(Guid id)
         {
             try
@@ -56,7 +56,7 @@ namespace API.Controllers
         }
         //Adds the given movie to the database.
         [Authorize]
-        [HttpPost("/Create/movie")]
+        [HttpPost("create")]
         public async Task<ActionResult> PostMovie(MovieResponse newMovie)
         {
             try
