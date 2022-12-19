@@ -150,17 +150,6 @@ export const getTags = async () => {
   }
 };
 
-export const getMissingTags = async (id: string) => {
-  try {
-    const response: TagEntriesType[] = await getRequest(
-      `${uri}/Movies/${id}/tags/missing`
-    );
-    return response;
-  } catch (ex) {
-    throw ex;
-  }
-};
-
 export const deleteMovie = async (movieId: string, token: string) => {
   try {
     const response: Response = await fetch(`${uri}/Movies/${movieId}`, {
