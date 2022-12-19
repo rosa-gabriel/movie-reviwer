@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
+using Application;
 using Domain;
 using Domain.Responses;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +21,7 @@ namespace API.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly TokenService _tokenService;
 
-        public AccountController(DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, TokenService tokenService) : base(context)
+        public AccountController(DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, TokenService tokenService, IMediator mediator) : base(context, mediator)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
@@ -117,7 +119,7 @@ namespace API.Controllers
                 User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
                 if (user == null) return BadRequest("Invalid user token");
 
-                await this.movieLogic.FavoriteMovie(user, responseDto.movieId, responseDto.desiredBool);
+                await this._mediator.Send(new FavoriteMovie.Query { user = user, MovieId = responseDto.movieId, DesiredBool = responseDto.desiredBool });
                 return Ok();
             }
             catch (Exception ex)
@@ -135,7 +137,7 @@ namespace API.Controllers
                 User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
                 if (user == null) return BadRequest("Invalid user token");
 
-                bool isFavorite = await this.movieLogic.isFavorite(user, id);
+                bool isFavorite = await this._mediator.Send(new IsFavorite.Query { user = user, MovieId = id });
                 return Ok(isFavorite);
             }
             catch (Exception ex)
@@ -151,7 +153,7 @@ namespace API.Controllers
             try
             {
                 string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return await movieLogic.ListFavorites(id, page);
+                return await this._mediator.Send(new ListFavoritesAtPage.Query { UserId = id, Page = page });
             }
             catch (Exception ex)
             {
@@ -171,7 +173,7 @@ namespace API.Controllers
                 if (user == null) return BadRequest("User not found!");
                 profile = new ProfileResponse(user);
 
-                profile.RecentFavorites = await movieLogic.ListRecentFavorites(user);
+                profile.RecentFavorites = await this._mediator.Send(new ListRecentFavorites.Query{user = user});
                 profile.IsLogedIn = id.Equals(userId);
 
                 return Ok(profile);

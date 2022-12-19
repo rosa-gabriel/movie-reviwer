@@ -1,12 +1,9 @@
-using System.Security.Claims;
-using API.DTOs;
 using API.Extensions;
+using Application;
 using Domain;
-using Domain.Responses;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace API.Controllers
@@ -16,7 +13,7 @@ namespace API.Controllers
     public class TagsController : ControllerInit
     {
         private readonly TokenService _tokenService;
-        public TagsController(DataContext context) : base(context) { }
+        public TagsController(DataContext context, IMediator mediator) : base(context, mediator) { }
 
         //Lists all the tags that are registered in the database.
         [HttpGet]
@@ -24,7 +21,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.ListTags());
+                return Ok(await this._mediator.Send(new ListTags.Query()));
             }
             catch (Exception ex)
             {
@@ -37,7 +34,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.FindTag(id));
+                return Ok(await this._mediator.Send(new FindTag.Query { Id = id }));
             }
             catch (Exception ex)
             {
@@ -50,7 +47,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.ListMoviesFromTagAtPage(id, page));
+                return Ok(await this._mediator.Send(new ListMoviesWithTagAtPage.Query { Id = id, Page = page }));
             }
             catch (Exception ex)
             {
@@ -64,8 +61,8 @@ namespace API.Controllers
         {
             try
             {
-                TagName responseTag = await movieLogic.AddTag(newTag);
-                return Ok(responseTag);
+                await this._mediator.Send(new AddTag.Query { NewTag = newTag });
+                return Ok();
             }
             catch (Exception ex)
             {

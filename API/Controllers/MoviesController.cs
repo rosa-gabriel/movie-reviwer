@@ -3,6 +3,7 @@ using Domain;
 using Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Responses;
+using MediatR;
 using Application;
 
 namespace API.Controllers
@@ -12,28 +13,27 @@ namespace API.Controllers
 
     public class MoviesController : ControllerInit
     {
-        public MoviesController(DataContext context) : base(context) { }
+        public MoviesController(DataContext context, IMediator mediator) : base(context, mediator) { }
 
         //Gets the a list of Movies at the given page.
+        //[HttpGet("page/{page}")]
+        //public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
+        //{
+        //try
+        //{
+        //return await this.movieLogic.ListMoviesAtPage(page);
+        //}
+        //catch (Exception ex)
+        //{
+        //return BadRequest(ex);
+        //}
+        //}
         [HttpGet("page/{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
         {
             try
             {
-                return await this.movieLogic.ListMoviesAtPage(page);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-        //Gets all the TagNames that the movie with the current id doesn't have.
-        [HttpGet("{id}/tags/missing")]
-        public async Task<ActionResult<List<TagResponse>>> GetMissingTags(Guid id)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListMissingTags(id));
+                return await this._mediator.Send(new ListMoviesAtPage.Query { Page = page });
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace API.Controllers
             try
             {
                 bool isLogged = User.Identity.IsAuthenticated;
-                return Ok(await this.movieLogic.FindMoviesInfo(id));
+                return Ok(await this._mediator.Send(new FindMovieInfo.Query { Id = id, Mediator = this._mediator }));
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace API.Controllers
         {
             try
             {
-                await this.movieLogic.AddMovie(newMovie);
+                await this._mediator.Send(new AddMovie.Query { NewMovie = newMovie });
                 return Ok();
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace API.Controllers
         {
             try
             {
-                await this.movieLogic.UpdateMovie(newMovie);
+                await this._mediator.Send(new UpdateMovie.Query { NewMovie = newMovie });
                 return Ok();
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace API.Controllers
         {
             try
             {
-                await this.movieLogic.RemoveMovie(id);
+                await this._mediator.Send(new RemoveMovie.Query { Id = id });
                 return Ok();
             }
             catch (Exception ex)
@@ -104,7 +104,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.ListMoviesSearchAtPage(filter, page));
+                return Ok(await this._mediator.Send(new ListMoviesSearchAtPage.Query { Filter = filter, Page = page }));
             }
             catch (Exception ex)
             {

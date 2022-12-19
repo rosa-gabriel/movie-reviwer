@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
+using Application;
 using Domain;
 using Domain.Responses;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence;
@@ -14,7 +16,7 @@ namespace API.Controllers
     public class CastController : ControllerInit
     {
         private readonly TokenService _tokenService;
-        public CastController(DataContext context) : base(context) { }
+        public CastController(DataContext context, IMediator mediator) : base(context, mediator) { }
 
         //Lists all the cast people that are registered in the database
         [HttpGet]
@@ -22,7 +24,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.ListCast());
+                return Ok(await this._mediator.Send(new ListCast.Query()));
             }
             catch (Exception ex)
             {
@@ -35,7 +37,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.FindPerson(id));
+                return Ok(await this._mediator.Send(new FindPerson.Query { Id = id }));
             }
             catch (Exception ex)
             {
@@ -48,7 +50,7 @@ namespace API.Controllers
         {
             try
             {
-                return Ok(await this.movieLogic.ListMoviesFromPersonAtPage(id, page));
+                return Ok(await this._mediator.Send(new ListMoviesWithPersonAtPage.Query { Id = id, Page = page }));
             }
             catch (Exception ex)
             {
@@ -62,8 +64,8 @@ namespace API.Controllers
         {
             try
             {
-                Person responsePerson = await movieLogic.AddPerson(newPerson);
-                return Ok(responsePerson);
+                await this._mediator.Send(new AddPerson.Query { NewPerson = newPerson });
+                return Ok();
             }
             catch (Exception ex)
             {
