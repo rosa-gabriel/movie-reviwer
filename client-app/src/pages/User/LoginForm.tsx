@@ -1,11 +1,11 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
-import { login } from "../../functions/AccouontRequests";
-import { UserLoginType } from "../../Type/Types";
-import { UserContext } from "../../Context/UserContext";
+import { login } from "../../functions/requests/AccouontRequests";
+import { UserLoginType } from "../../types/Types";
+import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
-import { NotificationContext } from "../../Context/NotificationContext";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 const LoginForm = () => {
   //States

@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
-import { addTag } from "../../functions/MovieRequests";
+import { addTag } from "../../functions/requests/MovieRequests";
 import { useNavigate } from "react-router";
 import SubmitButton from "../../components/UI/SubmitButton";
-import { UserContext } from "../../Context/UserContext";
-import { NotificationContext } from "../../Context/NotificationContext";
+import { UserContext } from "../../contexts/UserContext";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 const AddTagForm = () => {
   //States

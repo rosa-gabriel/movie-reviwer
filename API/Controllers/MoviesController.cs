@@ -13,133 +13,8 @@ namespace API.Controllers
     public class MoviesController : ControllerInit
     {
         public MoviesController(DataContext context) : base(context) { }
-        //Tags Requests
-        [HttpGet("/Tags")]
-        public async Task<ActionResult<List<TagResponse>>> GetTags()
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListTags());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
 
-        [HttpGet("{id}/missingTags")]
-        public async Task<ActionResult<List<TagResponse>>> GetMissingTags(Guid id)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListMissingTags(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpGet("/Tag/{id}")]
-        public async Task<ActionResult<TagName>> GetTag(Guid id)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.FindTag(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [Authorize]
-        [HttpPost("/Create/tag")]
-        public async Task<ActionResult> PostTag(TagName newTag)
-        {
-            try
-            {
-                TagName responseTag = await movieLogic.AddTag(newTag);
-                return Ok(responseTag);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-
-        [HttpGet("/Tag/{id}/movies/{page}")]
-        public async Task<ActionResult<Movie>> GetMoviesFromTag(Guid id, int page)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListMoviesFromTagAtPage(id, page));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        //Cast Requests
-
-        [HttpGet("/Cast")]
-        public async Task<ActionResult<List<Person>>> GetCast()
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListCast());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpGet("/Person/{id}")]
-        public async Task<ActionResult<Person>> GetPerson(Guid id)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.FindPerson(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpGet("/Person/{id}/movies/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetMoviesFromPerson(Guid id, int page)
-        {
-            try
-            {
-                return Ok(await this.movieLogic.ListMoviesFromPersonAtPage(id, page));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [Authorize]
-        [HttpPost("/Create/person")]
-        public async Task<ActionResult<Person>> PostPerson(Person newPerson)
-        {
-            try
-            {
-                Person responsePerson = await movieLogic.AddPerson(newPerson);
-                return Ok(responsePerson);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        //Movie Requests
-
+        //Gets the a list of Movies at the given page.
         [HttpGet("{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
         {
@@ -152,9 +27,22 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
-        [HttpGet("/Movie/{id}")]
-        public async Task<ActionResult<MovieResponse>> getMovie(Guid id)
+        //Gets all the TagNames that the movie with the current id doesn't have.
+        [HttpGet("{id}/missingTags")]
+        public async Task<ActionResult<List<TagResponse>>> GetMissingTags(Guid id)
+        {
+            try
+            {
+                return Ok(await this.movieLogic.ListMissingTags(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        //Gets the full info in form of a MovieResponse of the movie with the given id.
+        [HttpGet("{id}")]
+        public async Task<ActionResult<MovieResponse>> GetMovie(Guid id)
         {
             try
             {
@@ -166,7 +54,7 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Adds the given movie to the database.
         [Authorize]
         [HttpPost("/Create/movie")]
         public async Task<ActionResult> PostMovie(MovieResponse newMovie)
@@ -181,9 +69,9 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Changes info from a given movie in the database.
         [Authorize]
-        [HttpPut("/Update/movie")]
+        [HttpPut("update")]
         public async Task<ActionResult> PutMovie(MovieResponse newMovie)
         {
             try
@@ -196,7 +84,7 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Deletes a movie from the database with the given id.
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteMovie(Guid id)
         {
@@ -210,8 +98,8 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
-        [HttpGet("/Movies/search/{filter}/{page}")]
+        //Return a list of Movies with containing the given filter in the name at the given page.
+        [HttpGet("search/{filter}/{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetMovieSearch(string filter, int page)
         {
             try

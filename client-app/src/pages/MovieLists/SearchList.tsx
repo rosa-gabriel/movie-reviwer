@@ -1,5 +1,5 @@
 import GenericMovielist from "../../components/UI/GenericMovieList";
-import { getMoviesFromSearchAtPage } from "../../functions/MovieRequests";
+import { getMoviesFromSearchAtPage } from "../../functions/requests/MovieRequests";
 import { useParams } from "react-router";
 import Container from "../../components/UI/Container";
 

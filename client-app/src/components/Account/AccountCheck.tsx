@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Navigate } from "react-router";
-import { UserContext } from "../../Context/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const AccountCheck = () => {
   const context = useContext(UserContext);

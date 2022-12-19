@@ -1,7 +1,7 @@
-import { useContext, useEffect, useState } from "react";
-import { getUserFavorites } from "../../functions/MovieRequests";
-import AccountCheck from "../../components/Account/AccountCheck";
-import { UserContext } from "../../Context/UserContext";
+import { useContext } from "react";
+import { getUserFavorites } from "../../functions/requests/MovieRequests";
+import AccountCheck from "../../components/account/AccountCheck";
+import { UserContext } from "../../contexts/UserContext";
 import ErrorContainer from "../../components/UI/ErrorContainer";
 import Container from "../../components/UI/Container";
 import GenericMovielist from "../../components/UI/GenericMovieList";

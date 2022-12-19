@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { MovieType } from "../../Type/Types";
+import { MovieType } from "../../types/Types";
 
 type MovieProps = {
-  movie: MovieType,
-}
+  movie: MovieType;
+};
 
 const Movie = (props: MovieProps) => {
   return (

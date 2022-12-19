@@ -16,5 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "src/Development/DataBaseSeeding.ts"]
+  "include": ["src", "src/development/DataBaseSeeding.ts"]
 }

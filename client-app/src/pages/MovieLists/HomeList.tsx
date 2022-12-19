@@ -1,4 +1,4 @@
-import { getMoviesAtPage } from "../../functions/MovieRequests";
+import { getMoviesAtPage } from "../../functions/requests/MovieRequests";
 import Container from "../../components/UI/Container";
 import GenericMovielist from "../../components/UI/GenericMovieList";
 

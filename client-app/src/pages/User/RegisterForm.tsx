@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
-import { register } from "../../functions/AccouontRequests";
-import { UserRegisterType } from "../../Type/Types";
-import { UserContext } from "../../Context/UserContext";
+import { register } from "../../functions/requests/AccouontRequests";
+import { UserRegisterType } from "../../types/Types";
+import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
-import { NotificationContext } from "../../Context/NotificationContext";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 const RegisterForm = () => {
   //States

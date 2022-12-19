@@ -1,4 +1,4 @@
-import { uri } from "../App";
+import { uri } from "../../App";
 import {
   AllMovieInfoType,
   CastType,
@@ -7,77 +7,8 @@ import {
   ProfileType,
   TagEntriesType,
   TagType,
-} from "../Type/Types";
-
-const connectionFailString: string =
-  "Failed to connect to the database! Try again later.";
-
-const createRequest = (method: string, body?: any, token?: string) => {
-  let requestBody: any = {};
-
-  requestBody.method = method;
-
-  if (token) {
-    requestBody.headers = {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    };
-  }
-
-  switch (method) {
-    case "GET":
-      return requestBody;
-    case "POST":
-      requestBody.body = JSON.stringify(body);
-      return requestBody;
-    case "PUT":
-      break;
-    case "DELETE":
-      break;
-  }
-};
-
-const getRequest = async (url: string, token?: string) => {
-  const request: any = createRequest("GET", undefined, token);
-
-  try {
-    const response = await fetch(url, request);
-
-    if (!response.ok) {
-      if (response.status === 401) throw new Error("User unauthorized");
-      throw new Error(String(response.status));
-    }
-
-    try {
-      return await response.json();
-    } catch (ex) {}
-  } catch (ex: any) {
-    console.error(ex);
-    if (ex.message === "Failed to fetch") throw new Error(connectionFailString);
-    throw ex;
-  }
-};
-
-const postRequest = async (url: string, body: any, token?: string) => {
-  const request = createRequest("POST", body, token);
-
-  try {
-    const response = await fetch(url, request);
-
-    if (!response.ok) {
-      if (response.status === 401) throw new Error("User unauthorized");
-      throw new Error(String(response.status));
-    }
-
-    try {
-      return await response.json();
-    } catch (ex) {}
-  } catch (ex: any) {
-    console.error(ex);
-    if (ex.message === "Failed to fetch") throw new Error(connectionFailString);
-    throw ex;
-  }
-};
+} from "../../types/Types";
+import { connectionFailString, getRequest, postRequest } from "./CreateRequest";
 
 export const getMoviesAtPage = async (page: number) => {
   try {

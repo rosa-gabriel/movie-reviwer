@@ -1,5 +1,9 @@
-import { uri } from "../App";
-import { UserInfoType, UserLoginType, UserRegisterType } from "../Type/Types";
+import { uri } from "../../App";
+import {
+  UserInfoType,
+  UserLoginType,
+  UserRegisterType,
+} from "../../types/Types";
 
 export const login = async (userInfo: UserLoginType): Promise<UserInfoType> => {
   try {

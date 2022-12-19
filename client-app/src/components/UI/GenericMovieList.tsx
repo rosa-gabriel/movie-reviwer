@@ -1,7 +1,7 @@
 import Movie from "./Movie";
 import LoadingCircle from "./LoadingCircle";
 import { useEffect, useState } from "react";
-import { MoviePageType, MovieType } from "../../Type/Types";
+import { MoviePageType, MovieType } from "../../types/Types";
 import ErrorContainer from "./ErrorContainer";
 
 type GenericMovielistProps = {
@@ -19,7 +19,6 @@ const GenericMovielist = (props: GenericMovielistProps) => {
   const [error, setError] = useState<string | null>(null);
 
   const isAtEnd = nextPage > maxPage;
-
   //Load next page
   const loadNext = () => {
     (async () => {

@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { getProfile } from "../../functions/MovieRequests";
-import { ProfileType } from "../../Type/Types";
-import { UserContext } from "../../Context/UserContext";
+import { getProfile } from "../../functions/requests/MovieRequests";
+import { ProfileType } from "../../types/Types";
+import { UserContext } from "../../contexts/UserContext";
 import ErrorContainer from "../../components/UI/ErrorContainer";
 import Container from "../../components/UI/Container";
 import LoadingCircle from "../../components/UI/LoadingCircle";

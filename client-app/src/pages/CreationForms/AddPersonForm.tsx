@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
-import { addPerson } from "../../functions/MovieRequests";
-import { NotificationContext } from "../../Context/NotificationContext";
-import { UserContext } from "../../Context/UserContext";
+import { addPerson } from "../../functions/requests/MovieRequests";
+import { NotificationContext } from "../../contexts/NotificationContext";
+import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 
 const AddPersonForm = () => {

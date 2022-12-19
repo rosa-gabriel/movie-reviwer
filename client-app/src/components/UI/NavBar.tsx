@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { ModalContext } from "../../Context/ModalContext";
-import { UserContext } from "../../Context/UserContext";
-import { active } from "../../pages/CreationForms/CreationOptions";
+import { ModalContext } from "../../contexts/ModalContext";
+import { UserContext } from "../../contexts/UserContext";
+import { active } from "../../pages/creationForms/CreationOptions";
 
 const NavBar = () => {
   //States

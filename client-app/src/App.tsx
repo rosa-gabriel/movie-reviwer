@@ -1,20 +1,20 @@
 import { Route, Routes } from "react-router-dom";
-import Details from "./pages/Details/Details";
-import Favorites from "./pages/User/Favorites";
+import Details from "./pages/details/Details";
+import Favorites from "./pages/user/Favorites";
 import Error from "./components/UI/Error";
 import NavBar from "./components/UI/NavBar";
-import CreationOptions from "./pages/CreationForms/CreationOptions";
-import HomeList from "./pages/MovieLists/HomeList";
-import TagList from "./pages/MovieLists/TagList";
-import PersonInfo from "./pages/Details/PersonInfo";
-import LoginForm from "./pages/User/LoginForm";
-import { UserContextProvider } from "./Context/UserContext";
-import RegisterForm from "./pages/User/RegisterForm";
-import Profile from "./pages/User/Profile";
-import SearchList from "./pages/MovieLists/SearchList";
-import EditDetails from "./pages/Details/EditDetails";
-import { ModalContextProvider } from "./Context/ModalContext";
-import { NotificationContextProvider } from "./Context/NotificationContext";
+import CreationOptions from "./pages/creationForms/CreationOptions";
+import HomeList from "./pages/movieLists/HomeList";
+import TagList from "./pages/movieLists/TagList";
+import PersonInfo from "./pages/details/PersonInfo";
+import LoginForm from "./pages/user/LoginForm";
+import { UserContextProvider } from "./contexts/UserContext";
+import RegisterForm from "./pages/user/RegisterForm";
+import Profile from "./pages/user/Profile";
+import SearchList from "./pages/movieLists/SearchList";
+import EditDetails from "./pages/details/EditDetails";
+import { ModalContextProvider } from "./contexts/ModalContext";
+import { NotificationContextProvider } from "./contexts/NotificationContext";
 
 export const uri = "http://localhost:5000";
 

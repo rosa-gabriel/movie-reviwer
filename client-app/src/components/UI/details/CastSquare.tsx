@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CastEntryType } from "../../../Type/Types";
+import { CastEntryType } from "../../../types/Types";
 
 type CastSquareProps = {
   person: CastEntryType;

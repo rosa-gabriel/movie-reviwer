@@ -4,7 +4,7 @@ import AddPersonForm from "./AddPersonForm";
 import AddMovieForm from "./AddMovieForm";
 import AddTagForm from "./AddTagForm";
 import Container from "../../components/UI/Container";
-import AccountCheck from "../../components/Account/AccountCheck";
+import AccountCheck from "../../components/account/AccountCheck";
 
 export const active = ({ isActive }: any) => {
   return "nav-link " + (isActive ? "nav-link-selected" : "");

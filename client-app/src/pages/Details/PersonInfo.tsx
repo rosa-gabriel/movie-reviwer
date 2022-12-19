@@ -2,8 +2,8 @@ import GenericMovielist from "../../components/UI/GenericMovieList";
 import {
   getMoviesFromPersonAtPage,
   getPerson,
-} from "../../functions/MovieRequests";
-import { PersonType } from "../../Type/Types";
+} from "../../functions/requests/MovieRequests";
+import { PersonType } from "../../types/Types";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import LoadingCircle from "../../components/UI/LoadingCircle";

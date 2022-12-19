@@ -26,6 +26,7 @@ namespace API.Controllers
             this._tokenService = tokenService;
         }
 
+        //Return a token if the give LoginDto data given matches a real user, else returns a Unauthorized(401) response.
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -54,7 +55,7 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Checks if the given token in a valid, returning a OK if yes or Unauthorized if not. 
         [Authorize]
         [HttpGet("check")]
         public ActionResult CheckLogin()
@@ -68,7 +69,7 @@ namespace API.Controllers
                 return Unauthorized(ex);
             }
         }
-
+        //Registers a new user to the databae if the registerDto Email and username are unique, and the password matches the prerequisites.
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
@@ -106,7 +107,7 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Changes the favorite state for a given movie on the database.
         [Authorize]
         [HttpPost("favorite")]
         public async Task<ActionResult> PutFavorite(FavoriteResponse responseDto)
@@ -124,7 +125,7 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Returns if the given movie is favorited by the current user, or BadRequest(500) if false.
         [Authorize]
         [HttpGet("favorite/{id}")]
         public async Task<ActionResult<Boolean>> GetIsFavorite(Guid id)
@@ -142,7 +143,7 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Returns a list of Movies at the current page for the current user.
         [Authorize]
         [HttpGet("favorites/{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetFavorites(int page)
@@ -157,7 +158,7 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
-
+        //Returns the profile info for a user with the given id.
         [HttpGet("profile/{id}")]
         public async Task<ActionResult<ProfileResponse>> GetProfile(string id)
         {

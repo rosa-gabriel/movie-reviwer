@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createContext } from "react";
-import { MessageType } from "../Type/Types";
+import { MessageType } from "../types/Types";
 import Notification from "../components/UI/Notification";
 
 type NotificationContextType = {

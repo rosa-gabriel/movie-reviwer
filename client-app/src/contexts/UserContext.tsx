@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createContext } from "react";
-import { checkUser, logOut } from "../functions/AccouontRequests";
-import { UserInfoType } from "../Type/Types";
+import { checkUser, logOut } from "../functions/requests/AccouontRequests";
+import { UserInfoType } from "../types/Types";
 
 type UserContextType = {
   isLogedIn: boolean;

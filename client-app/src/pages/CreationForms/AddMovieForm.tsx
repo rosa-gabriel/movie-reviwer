@@ -1,16 +1,20 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addMovie, getCast, getTags } from "../../functions/MovieRequests";
+import {
+  addMovie,
+  getCast,
+  getTags,
+} from "../../functions/requests/MovieRequests";
 import {
   AllMovieInfoType,
   CastEntryType,
   CastType,
   TagEntriesType,
-} from "../../Type/Types";
+} from "../../types/Types";
 import ItemInput from "../../components/UI/inputs/ItemInput";
 import SubmitButton from "../../components/UI/SubmitButton";
-import { UserContext } from "../../Context/UserContext";
-import { NotificationContext } from "../../Context/NotificationContext";
+import { UserContext } from "../../contexts/UserContext";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 const AddMovieForm = () => {
   //States

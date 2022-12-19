@@ -19,9 +19,13 @@ These are the versions used in the site development. Older versions may not work
 # Future updates
 
 1. Responsivity for mobile.
-2. Add better response messages so the user understands why errors occurred.
-3. Remove repetitive fetch code.
-4. Fix timezone issues when changing dates.
+2. Let the user be able to change profile information.
+3. Comment Section to movies.
+4. Friend other profiles.
+5. Bether Search functionality, search from the movie tags also.
+6. Add better response messages so the user understands why errors occurred.
+7. Remove repetitive fetch code.
+8. Fix timezone issues when changing dates.
 
 # Instalation
 

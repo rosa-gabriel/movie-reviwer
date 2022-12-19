@@ -1,5 +1,9 @@
-import { addMovie, addPerson, addTag } from "../functions/MovieRequests";
-import { AllMovieInfoType } from "../Type/Types";
+import {
+  addMovie,
+  addPerson,
+  addTag,
+} from "../functions/requests/MovieRequests";
+import { AllMovieInfoType } from "../types/Types";
 
 export const seedTags = async () => {
   const response = await fetch(

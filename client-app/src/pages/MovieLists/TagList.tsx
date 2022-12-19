@@ -1,6 +1,9 @@
 import GenericMovielist from "../../components/UI/GenericMovieList";
-import { getMoviesFromTagAtPage, getTag } from "../../functions/MovieRequests";
-import { TagType } from "../../Type/Types";
+import {
+  getMoviesFromTagAtPage,
+  getTag,
+} from "../../functions/requests/MovieRequests";
+import { TagType } from "../../types/Types";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import LoadingCircle from "../../components/UI/LoadingCircle";

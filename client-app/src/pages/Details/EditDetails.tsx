@@ -6,20 +6,20 @@ import {
   getMovie,
   getTags,
   updateMovie,
-} from "../../functions/MovieRequests";
+} from "../../functions/requests/MovieRequests";
 import LoadingCircle from "../../components/UI/LoadingCircle";
 import {
   AllMovieInfoType,
   CastEntryType,
   CastType,
   TagEntriesType,
-} from "../../Type/Types";
+} from "../../types/Types";
 import Container from "../../components/UI/Container";
-import { UserContext } from "../../Context/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import ItemInput from "../../components/UI/inputs/ItemInput";
-import AccountCheck from "../../components/Account/AccountCheck";
-import { ModalContext } from "../../Context/ModalContext";
-import { NotificationContext } from "../../Context/NotificationContext";
+import AccountCheck from "../../components/account/AccountCheck";
+import { ModalContext } from "../../contexts/ModalContext";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 const EditDetails = () => {
   //States

@@ -5,14 +5,14 @@ import {
   getIsFavorite,
   getMovie,
   addFavorite,
-} from "../../functions/MovieRequests";
+} from "../../functions/requests/MovieRequests";
 import CastSquare from "../../components/UI/details/CastSquare";
 import LoadingCircle from "../../components/UI/LoadingCircle";
-import { AllMovieInfoType } from "../../Type/Types";
+import { AllMovieInfoType } from "../../types/Types";
 import Container from "../../components/UI/Container";
-import { UserContext } from "../../Context/UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import ErrorContainer from "../../components/UI/ErrorContainer";
-import { NotificationContext } from "../../Context/NotificationContext";
+import { NotificationContext } from "../../contexts/NotificationContext";
 
 const Details = (props: any) => {
   //States
