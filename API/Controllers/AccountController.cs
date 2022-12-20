@@ -20,9 +20,11 @@ namespace API.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly TokenService _tokenService;
+        protected readonly DataContext _context;
 
-        public AccountController(DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, TokenService tokenService, IMediator mediator) : base(context, mediator)
+        public AccountController(DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, TokenService tokenService, IMediator mediator) : base(mediator)
         {
+            this._context = context;
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._tokenService = tokenService;
@@ -173,7 +175,7 @@ namespace API.Controllers
                 if (user == null) return BadRequest("User not found!");
                 profile = new ProfileResponse(user);
 
-                profile.RecentFavorites = await this._mediator.Send(new ListRecentFavorites.Query{user = user});
+                profile.RecentFavorites = await this._mediator.Send(new ListRecentFavorites.Query { user = user });
                 profile.IsLogedIn = id.Equals(userId);
 
                 return Ok(profile);

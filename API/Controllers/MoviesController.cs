@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Domain;
-using Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Domain.Responses;
 using MediatR;
@@ -13,21 +12,9 @@ namespace API.Controllers
 
     public class MoviesController : ControllerInit
     {
-        public MoviesController(DataContext context, IMediator mediator) : base(context, mediator) { }
+        public MoviesController(IMediator mediator) : base(mediator) { }
 
         //Gets the a list of Movies at the given page.
-        //[HttpGet("page/{page}")]
-        //public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
-        //{
-        //try
-        //{
-        //return await this.movieLogic.ListMoviesAtPage(page);
-        //}
-        //catch (Exception ex)
-        //{
-        //return BadRequest(ex);
-        //}
-        //}
         [HttpGet("page/{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
         {

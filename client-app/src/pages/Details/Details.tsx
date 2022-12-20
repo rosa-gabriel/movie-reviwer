@@ -109,7 +109,7 @@ const Details = (props: any) => {
           )}
           {!isLoading && movieInfo != null && (
             <div className="details_container">
-              <div>
+              <div className="details-img-container">
                 <img
                   src={movieInfo.movie.coverUrl}
                   className="details_cover"

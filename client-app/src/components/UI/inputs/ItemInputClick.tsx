@@ -19,7 +19,7 @@ const ItemInputClick = (props: ItemInputClickProps) => {
       <div>
         <span>{content}</span>
         <span>
-          <button onClick={deleteItem} type="button">
+          <button onClick={deleteItem} className={"button"} type="button">
             X
           </button>
         </span>

@@ -6,6 +6,7 @@ import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
 import { NotificationContext } from "../../contexts/NotificationContext";
+import { Link } from "react-router-dom";
 
 const RegisterForm = () => {
   //States
@@ -114,6 +115,7 @@ const RegisterForm = () => {
         </div>
 
         <SubmitButton loading={isLoading} buttonText={"Register"} />
+        <p className="account-form-option">Already have an account? <Link className="link" to={"/Account/login"}>sign up</Link>.</p>
       </form>
     </Container>
   );

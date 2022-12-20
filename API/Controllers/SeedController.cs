@@ -2,7 +2,6 @@ using Application;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Persistence;
 
 namespace API.Controllers
 {
@@ -10,9 +9,7 @@ namespace API.Controllers
     [Route("[controller]")]
     public class SeedController : ControllerInit
     {
-        public SeedController(DataContext context, IMediator mediator) : base(context, mediator)
-        {
-        }
+        public SeedController(IMediator mediator) : base(mediator) { }
 
         [HttpPost("movies")]
         public async Task<ActionResult> PostMovie(List<MovieResponse> newMovies)

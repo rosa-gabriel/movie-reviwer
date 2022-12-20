@@ -1,10 +1,8 @@
-using API.Extensions;
 using Application;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Persistence;
 
 namespace API.Controllers
 {
@@ -12,8 +10,7 @@ namespace API.Controllers
     [Route("[controller]")]
     public class TagsController : ControllerInit
     {
-        private readonly TokenService _tokenService;
-        public TagsController(DataContext context, IMediator mediator) : base(context, mediator) { }
+        public TagsController(IMediator mediator) : base(mediator) { }
 
         //Lists all the tags that are registered in the database.
         [HttpGet]

@@ -1,13 +1,9 @@
-using System.Security.Claims;
-using API.DTOs;
-using API.Extensions;
 using Application;
 using Domain;
 using Domain.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Persistence;
 
 namespace API.Controllers
 {
@@ -15,8 +11,7 @@ namespace API.Controllers
     [Route("[controller]")]
     public class CastController : ControllerInit
     {
-        private readonly TokenService _tokenService;
-        public CastController(DataContext context, IMediator mediator) : base(context, mediator) { }
+        public CastController(IMediator mediator) : base(mediator) { }
 
         //Lists all the cast people that are registered in the database
         [HttpGet]

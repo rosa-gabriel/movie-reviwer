@@ -1,7 +1,5 @@
 using Domain;
-using Domain.Responses;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application

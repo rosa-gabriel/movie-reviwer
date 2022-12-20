@@ -6,6 +6,7 @@ import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
 import { NotificationContext } from "../../contexts/NotificationContext";
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
   //States
@@ -80,6 +81,13 @@ const LoginForm = () => {
           />
         </div>
         <SubmitButton loading={isLoading} buttonText={"Login"}></SubmitButton>
+        <p className="account-form-option">
+          Doesn't have an account?{" "}
+          <Link className="link" to={"/Account/register"}>
+            sign up
+          </Link>
+          .
+        </p>
       </form>
     </Container>
   );

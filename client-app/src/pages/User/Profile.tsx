@@ -44,11 +44,13 @@ const Profile = () => {
             <div style={{ padding: "30px" }}>
               <div>
                 <div className="details_container">
-                  <img
-                    src={user.imageUrl}
-                    className="details_cover"
-                    alt={"Profile picture for" + user.name}
-                  />
+                  <div className="details-img-container">
+                    <img
+                      src={user.imageUrl}
+                      className="details_cover"
+                      alt={"Profile picture for" + user.name}
+                    />
+                  </div>
                   <div className="details_info">
                     <h1>{user.name}</h1>
                     <p className="profile-info">Bio: {user.bio}</p>
