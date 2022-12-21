@@ -1,4 +1,5 @@
 using Application;
+using Application.Core;
 using Domain;
 using Domain.Responses;
 using MediatR;
@@ -17,55 +18,30 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Person>>> GetCast()
         {
-            try
-            {
-                return Ok(await this._mediator.Send(new ListCast.Query()));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            Result<List<Person>> result = await this._mediator.Send(new ListCast.Query());
+            return this.ResultHandler(result);
         }
         //Gets one Person with the given id.
         [HttpGet("person/{id}")]
         public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
-            try
-            {
-                return Ok(await this._mediator.Send(new FindPerson.Query { Id = id }));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            Result<Person> result = await this._mediator.Send(new FindPerson.Query { Id = id });
+            return this.ResultHandler(result);
         }
         //Gets the movies that the person with the given id at the given page.
         [HttpGet("{id}/movies/{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetMoviesFromPerson(Guid id, int page)
         {
-            try
-            {
-                return Ok(await this._mediator.Send(new ListMoviesWithPersonAtPage.Query { Id = id, Page = page }));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            Result<MoviePageResponse> result = await this._mediator.Send(new ListMoviesWithPersonAtPage.Query { Id = id, Page = page });
+            return this.ResultHandler(result);
         }
         //Creates a new Person with the person object given.
         [Authorize]
         [HttpPost("create")]
-        public async Task<ActionResult<Person>> PostPerson(Person newPerson)
+        public async Task<ActionResult> PostPerson(Person newPerson)
         {
-            try
-            {
-                await this._mediator.Send(new AddPerson.Query { NewPerson = newPerson });
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            Result<Unit> result = await this._mediator.Send(new AddPerson.Query { NewPerson = newPerson });
+            return this.ResultHandler(result);
         }
     }
 }

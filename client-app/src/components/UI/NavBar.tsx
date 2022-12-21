@@ -23,7 +23,7 @@ const NavBar = () => {
   };
 
   //Side Menu Handler
-  const hamburgerClickHandler = () => {
+  const hamburgerClickHandler = (e: any) => {
     setShowSideMenu((prevS: boolean) => !prevS);
   };
 

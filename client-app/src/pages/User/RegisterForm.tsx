@@ -42,6 +42,26 @@ const RegisterForm = () => {
   const submitHandler = async (event: any) => {
     event.preventDefault();
 
+    if (username.trim() === "") {
+      setError("Username field is required.");
+      return;
+    }
+
+    if (email.trim() === "") {
+      setError("Email field is required.");
+      return;
+    }
+
+    if (password.trim() === "") {
+      setError("Password field is required.");
+      return;
+    }
+
+    if (confirmPassword !== password) {
+      setError("Passowords must match.");
+      return;
+    }
+
     try {
       setIsLoading(true);
       if (password !== confirmPassword) {
@@ -115,7 +135,13 @@ const RegisterForm = () => {
         </div>
 
         <SubmitButton loading={isLoading} buttonText={"Register"} />
-        <p className="account-form-option">Already have an account? <Link className="link" to={"/Account/login"}>sign up</Link>.</p>
+        <p className="account-form-option">
+          Already have an account?{" "}
+          <Link className="link" to={"/Account/login"}>
+            sign up
+          </Link>
+          .
+        </p>
       </form>
     </Container>
   );

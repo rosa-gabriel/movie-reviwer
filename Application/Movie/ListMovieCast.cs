@@ -1,5 +1,5 @@
+using Application.Core;
 using Domain;
-using Domain.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -8,12 +8,12 @@ namespace Application
 {
     public class ListMovieCast
     {
-        public class Query : IRequest<List<CastResponse>>
+        public class Query : IRequest<Result<List<CastResponse>>>
         {
             public Movie movie { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, List<CastResponse>>
+        public class Handler : IRequestHandler<Query, Result<List<CastResponse>>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -21,10 +21,8 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<List<CastResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<CastResponse>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                if (request.movie == null) throw new Exception();
-
                 List<CastEntry> cast = await _context.CastEntries.Include(ce => ce.Person).Where(ce => ce.Film == request.movie).ToListAsync();
                 List<CastResponse> castResponses = new List<CastResponse>();
                 foreach (CastEntry c in cast)
@@ -36,7 +34,7 @@ namespace Application
                         Role = c.Role
                     });
                 }
-                return castResponses;
+                return Result<List<CastResponse>>.Success(castResponses);
             }
         }
     }

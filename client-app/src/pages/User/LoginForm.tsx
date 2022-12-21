@@ -34,6 +34,16 @@ const LoginForm = () => {
   const submitHandler = async (event: any) => {
     event.preventDefault();
 
+    if (username.trim() === "") {
+      setError("Username or email field is required.");
+      return;
+    }
+
+    if (password.trim() === "") {
+      setError("Password field is required.");
+      return;
+    }
+
     try {
       setIsLoading(true);
       const userInfo: UserLoginType = {

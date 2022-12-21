@@ -26,7 +26,11 @@ const AddTagForm = () => {
   //Submit Handler
   const submitHandler = async (event: any) => {
     event.preventDefault();
-    console.log("submit");
+
+    if (tagName.trim() === "") {
+      setError("Name field is required.");
+      return;
+    }
 
     setIsLoading(true);
     try {

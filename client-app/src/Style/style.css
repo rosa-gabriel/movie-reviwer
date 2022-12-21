@@ -10,15 +10,22 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap");
 
 :root {
-  --back: #0d0d0d;
+  --black: #0d0d0d;
   --container: #1f1f1f;
   --red: #ed2553;
-  --nav-heigth: 50px;
+  --red-hover: #991030;
+  --error: red;
+  --super-light-grey: #888;
+  --light-grey: #5a5a5a;
+  --notification: #008cff;
+  --background-blur: rgba(136, 136, 136, 0.603);
+  --white: white;
+  --red-blur: #ed265580;
 }
 
 /* Body and Scrollbar */
 body {
-  background-color: var(--back);
+  background-color: var(--black);
   min-height: 100vh;
 }
 
@@ -27,12 +34,12 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #575757;
+  background: var(--light-grey);
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: var(--super-light-grey);
   border-radius: 20px;
 }
 
@@ -62,7 +69,7 @@ body {
 }
 
 .faded {
-  color: #686868;
+  color: var(--light-grey);
 }
 
 .link {
@@ -70,7 +77,7 @@ body {
 }
 
 .error {
-  color: red;
+  color: var(--error);
   margin-bottom: 10px;
 }
 
@@ -80,7 +87,7 @@ body {
 
 .input-dark {
   border: none;
-  background-color: rgb(90, 90, 90);
+  background-color: var(--light-grey);
 }
 
 .button {
@@ -90,11 +97,11 @@ body {
 }
 
 .button:hover {
-  background-color: #991030;
+  background-color: var(--red-hover);
 }
 
 .button:disabled {
-  background-color: #8f6666;
+  background-color: var(--light-grey);
 }
 
 .favorite-button {
@@ -115,7 +122,7 @@ body {
   color: var(--red);
 }
 .show-more:hover {
-  color: #c0022e;
+  color: var(--red-hover);
 }
 
 .side-menu {
@@ -154,7 +161,7 @@ body {
 }
 
 .side-menu ul li:hover {
-  background-color: red;
+  background-color: var(--red-hover);
 }
 
 /* Notification */
@@ -165,7 +172,7 @@ body {
   right: 30px;
   bottom: 50px;
   border-radius: 10px;
-  background-color: rgb(0, 140, 255);
+  background-color: var(--notification);
   width: 300px;
   transition: right 1s;
 }
@@ -184,7 +191,7 @@ body {
   position: fixed;
   height: 150vh;
   width: 100%;
-  background-color: rgba(163, 163, 163, 0.459);
+  background-color: var(--background-blur);
   z-index: 1;
   display: flex;
   justify-content: center;
@@ -244,11 +251,11 @@ nav {
   width: 20px;
   height: 2px;
   bottom: 0;
-  background-color: white;
+  background-color: var(--white);
 }
 
 .nav-link:hover {
-  background-color: #3a3a3a;
+  background-color: var(--light-grey);
   border: 0px;
 }
 
@@ -288,7 +295,6 @@ nav {
 .nav-profile-container {
   width: 40px;
   height: 40px;
-  background-color: rgb(134, 133, 133);
   border-radius: 100%;
   position: relative;
   display: flex;
@@ -376,7 +382,7 @@ nav {
 }
 
 .movie-container p {
-  background-color: rgb(87, 86, 86);
+  background-color: var(--light-grey);
   padding: 2px 7px;
   text-align: center;
   max-height: 40px;
@@ -390,11 +396,11 @@ nav {
 
 /* Creation forms */
 .creation_nav {
-  background-color: #991030;
+  background-color: var(--red);
 }
 
 .creation_nav .nav-link:hover {
-  background-color: #70071f;
+  background-color: var(--red-hover);
 }
 
 .input-add {
@@ -464,7 +470,7 @@ nav {
 
 .details-releaseDate {
   margin-top: 20px;
-  color: rgb(163, 163, 163);
+  color: var(--super-light-grey);
 }
 
 /* Tags and Cast box*/
@@ -529,7 +535,7 @@ nav {
 .form-tag button {
   border-radius: 100%;
   border: none;
-  background-color: #ed2553;
+  background-color: var(--red);
   width: 17px;
   height: 17px;
   font-size: 10px;
@@ -580,7 +586,7 @@ nav {
 /* Profile page */
 .profile-info {
   margin-top: 10px;
-  color: #8b8b8b;
+  color: var(--super-light-grey);
 }
 
 .selected-text i {
@@ -599,7 +605,7 @@ nav {
 }
 
 .edit-image div {
-  background-color: #70071f85;
+  background-color: var(--red-blur);
   position: absolute;
   top: 0;
   right: 0;
@@ -661,18 +667,21 @@ nav {
     display: none;
     padding: 0 10px;
   }
+  .creation_nav .nav-link{
+    display: flex;
+  }
   .hamburger {
     display: inherit;
     height: 40px;
     width: 40px;
-    background-color: grey;
+    background-color: var(--super-light-grey);
     border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .hamburger:hover {
-    background-color: #535353;
+    background-color: var(--light-grey);
   }
   .home-link {
     display: flex;

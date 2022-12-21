@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using Domain.Responses;
 using MediatR;
@@ -8,9 +9,9 @@ namespace Application
 {
     public class ListCast
     {
-        public class Query : IRequest<List<Person>> { }
+        public class Query : IRequest<Result<List<Person>>> { }
 
-        public class Handler : IRequestHandler<Query, List<Person>>
+        public class Handler : IRequestHandler<Query, Result<List<Person>>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -18,17 +19,10 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<List<Person>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<Person>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                try
-                {
-                    List<Person> response = await this._context.People.ToListAsync();
-                    return response;
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                List<Person> response = await this._context.People.ToListAsync();
+                return Result<List<Person>>.Success(response);
             }
         }
     }

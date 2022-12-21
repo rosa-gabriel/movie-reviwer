@@ -12,7 +12,9 @@ import { connectionFailString, getRequest, postRequest } from "./CreateRequest";
 
 export const getMoviesAtPage = async (page: number) => {
   try {
-    const response: MoviePageType = await getRequest(`${uri}/Movies/page/${page}`);
+    const response: MoviePageType = await getRequest(
+      `${uri}/Movies/page/${page}`
+    );
     return response;
   } catch (ex) {
     throw ex;
@@ -22,8 +24,8 @@ export const getMoviesAtPage = async (page: number) => {
 export const addMovie = async (movie: AllMovieInfoType, token: string) => {
   try {
     const response = await postRequest(`${uri}/Movies/create`, movie, token);
-
-    return response.json();
+    console.log(response);
+    return response;
   } catch (ex: any) {
     throw ex;
   }
@@ -53,10 +55,13 @@ export const updateMovie = async (movie: AllMovieInfoType, token: string) => {
 
 export const addTag = async (tag: string, token: string) => {
   try {
-    const response = await postRequest(`${uri}/Tags/create`, tag, token);
+    const response = await postRequest(
+      `${uri}/Tags/create`,
+      { name: tag },
+      token
+    );
     return response;
   } catch (ex: any) {
-    if (ex.message === "500") throw new Error("Invalid name! Try again.");
     throw ex;
   }
 };

@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using Domain.Responses;
 using MediatR;
@@ -8,12 +9,12 @@ namespace Application
 {
     public class UpdateMovie
     {
-        public class Query : IRequest<Unit>
+        public class Query : IRequest<Result<Unit>>
         {
             public MovieResponse NewMovie { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Unit>
+        public class Handler : IRequestHandler<Query, Result<Unit>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -21,28 +22,20 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Unit> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
-                if (string.IsNullOrWhiteSpace(request.NewMovie.movie.Name)) throw new Exception();
-                if (string.IsNullOrWhiteSpace(request.NewMovie.movie.CoverUrl)) request.NewMovie.movie.CoverUrl = "";
+                Movie movie = this._context.Movies.FirstOrDefault(m => m.Id == request.NewMovie.movie.Id);
+                if (movie == null) return null;
 
-                try
-                {
-                    Movie movie = this._context.Movies.FirstOrDefault(m => m.Id == request.NewMovie.movie.Id);
-                    if (movie == null) throw new Exception("Movie not found!");
+                movie.CoverUrl = request.NewMovie.movie.CoverUrl;
+                movie.Name = request.NewMovie.movie.Name;
+                movie.ReleaseDate = request.NewMovie.movie.ReleaseDate;
 
-                    movie.CoverUrl = request.NewMovie.movie.CoverUrl;
-                    movie.Name = request.NewMovie.movie.Name;
-                    movie.ReleaseDate = request.NewMovie.movie.ReleaseDate;
+                bool success = await _context.SaveChangesAsync() > 0;
 
-                    await _context.SaveChangesAsync();
+                if (!success) return Result<Unit>.Failure("Failed to update the movie.");
 
-                    return new Unit();
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

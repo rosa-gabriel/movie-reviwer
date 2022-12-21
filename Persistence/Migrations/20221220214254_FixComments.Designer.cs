@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,10 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221220214254_FixComments")]
+    partial class FixComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -414,7 +416,7 @@ namespace Persistence.Migrations
                         .HasForeignKey("CreatorId");
 
                     b.HasOne("Domain.Movie", "Movie")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("MovieId");
 
                     b.Navigation("Creator");
@@ -501,11 +503,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Movie", b =>
-                {
-                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

@@ -2,8 +2,10 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
 using Application;
+using Application.Core;
 using Domain;
 using Domain.Responses;
+using Domain.Views;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -59,6 +61,22 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [Authorize]
+        [HttpPost("comment/{movieId}")]
+        public async Task<ActionResult> PostComment(Guid movieId, Comment comment)
+        {
+            try
+            {
+                await this._mediator.Send(new AddComment.Query { Comment = comment, movieId = movieId });
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         //Checks if the given token in a valid, returning a OK if yes or Unauthorized if not. 
         [Authorize]
         [HttpGet("check")]
@@ -72,6 +90,14 @@ namespace API.Controllers
             {
                 return Unauthorized(ex);
             }
+        }
+
+        [Authorize]
+        [HttpGet("comments")]
+        public async Task<ActionResult<List<CommentView>>> GetUserComments()
+        {
+            Result<List<CommentView>> result = await this._mediator.Send(new ListUserComments.Query());
+            return this.ResultHandler(result);
         }
         //Registers a new user to the databae if the registerDto Email and username are unique, and the password matches the prerequisites.
         [HttpPost("register")]
@@ -134,33 +160,20 @@ namespace API.Controllers
         [HttpGet("favorite/{id}")]
         public async Task<ActionResult<Boolean>> GetIsFavorite(Guid id)
         {
-            try
-            {
-                User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
-                if (user == null) return BadRequest("Invalid user token");
+            User user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            if (user == null) return BadRequest("Invalid user token");
 
-                bool isFavorite = await this._mediator.Send(new IsFavorite.Query { user = user, MovieId = id });
-                return Ok(isFavorite);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            Result<bool> result = await this._mediator.Send(new IsFavorite.Query { user = user, MovieId = id });
+            return this.ResultHandler(result);
         }
         //Returns a list of Movies at the current page for the current user.
         [Authorize]
         [HttpGet("favorites/{page}")]
         public async Task<ActionResult<MoviePageResponse>> GetFavorites(int page)
         {
-            try
-            {
-                string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                return await this._mediator.Send(new ListFavoritesAtPage.Query { UserId = id, Page = page });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Result<MoviePageResponse> result = await this._mediator.Send(new ListFavoritesAtPage.Query { UserId = id, Page = page });
+            return this.ResultHandler(result);
         }
         //Returns the profile info for a user with the given id.
         [HttpGet("profile/{id}")]
@@ -175,7 +188,7 @@ namespace API.Controllers
                 if (user == null) return BadRequest("User not found!");
                 profile = new ProfileResponse(user);
 
-                profile.RecentFavorites = await this._mediator.Send(new ListRecentFavorites.Query { user = user });
+                profile.RecentFavorites = (await this._mediator.Send(new ListRecentFavorites.Query { user = user })).Value;
                 profile.IsLogedIn = id.Equals(userId);
 
                 return Ok(profile);

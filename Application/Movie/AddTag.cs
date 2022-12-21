@@ -1,19 +1,18 @@
+using Application.Core;
 using Domain;
-using Domain.Responses;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application
 {
     public class AddTag
     {
-        public class Query : IRequest<Unit>
+        public class Query : IRequest<Result<Unit>>
         {
             public TagName NewTag { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Unit>
+        public class Handler : IRequestHandler<Query, Result<Unit>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -21,21 +20,14 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Unit> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
-                if (string.IsNullOrWhiteSpace(request.NewTag.Name)) throw new Exception();
+                _context.TagNames.Add(request.NewTag);
+                bool success = await _context.SaveChangesAsync() > 0;
 
-                try
-                {
-                    _context.TagNames.Add(request.NewTag);
-                    await _context.SaveChangesAsync();
+                if (!success) return Result<Unit>.Failure("Failed to add tag.");
 
-                    return new Unit();
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

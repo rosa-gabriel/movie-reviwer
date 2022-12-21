@@ -84,5 +84,17 @@ export type MoviePageType = {
 export type MessageType = {
   code: string;
   text: string;
-  error: boolean
+  error: boolean;
+};
+
+export type Comment = {
+  creator: Creator;
+  message: string;
+  postDate: Date;
+};
+
+export type Creator = {
+  id: string;
+  name: string;
+  profileImageUrl: string;
 };

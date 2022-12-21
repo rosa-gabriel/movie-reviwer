@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using Domain.Responses;
 using MediatR;
@@ -8,13 +9,13 @@ namespace Application
 {
     public class IsFavorite
     {
-        public class Query : IRequest<bool>
+        public class Query : IRequest<Result<bool>>
         {
             public Guid MovieId { get; set; }
             public User user { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, bool>
+        public class Handler : IRequestHandler<Query, Result<bool>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -22,17 +23,10 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<bool> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<bool>> Handle(Query request, CancellationToken cancellationToken)
             {
-                try
-                {
-                    FavoriteEntry favoriteEntry = await _context.FavoriteEntries.FirstOrDefaultAsync(fe => fe.Film.Id == request.MovieId && fe.Fan == request.user);
-                    return favoriteEntry != null;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                FavoriteEntry favoriteEntry = await _context.FavoriteEntries.FirstOrDefaultAsync(fe => fe.Film.Id == request.MovieId && fe.Fan == request.user);
+                return Result<bool>.Success(favoriteEntry != null);
             }
         }
     }

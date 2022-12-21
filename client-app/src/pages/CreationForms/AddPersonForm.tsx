@@ -31,6 +31,16 @@ const AddPersonForm = () => {
   const submitHandler = async (event: any) => {
     event.preventDefault();
 
+    if (name.trim() === "") {
+      setError("Name field is required.");
+      return;
+    }
+
+    if (url.trim() === "") {
+      setError("Url field is required.");
+      return;
+    }
+
     setIsLoading(true);
     try {
       await addPerson(

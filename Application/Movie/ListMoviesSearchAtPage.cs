@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using Domain.Responses;
 using MediatR;
@@ -8,13 +9,13 @@ namespace Application
 {
     public class ListMoviesSearchAtPage
     {
-        public class Query : IRequest<MoviePageResponse>
+        public class Query : IRequest<Result<MoviePageResponse>>
         {
             public string Filter { get; set; }
             public int Page { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, MoviePageResponse>
+        public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -22,22 +23,15 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<MoviePageResponse> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                try
+                IQueryable<Movie> search = _context.Movies.Where(m => m.Name.ToLower().Contains(request.Filter.ToLower()));
+                List<Movie> response = await search.OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((request.Page - 1) * 25).ToListAsync();
+                return Result<MoviePageResponse>.Success(new MoviePageResponse
                 {
-                    IQueryable<Movie> search = _context.Movies.Where(m => m.Name.ToLower().Contains(request.Filter.ToLower()));
-                    List<Movie> response = await search.OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((request.Page - 1) * 25).ToListAsync();
-                    return new MoviePageResponse
-                    {
-                        movies = response,
-                        count = (int)Math.Ceiling(((double)search.Count()) / 25),
-                    };
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                    movies = response,
+                    count = (int)Math.Ceiling(((double)search.Count()) / 25),
+                });
             }
         }
     }

@@ -8,5 +8,16 @@ namespace Domain
         public string ProfileImageUrl { get; set; }
         public string Bio { get; set; }
         public DateTime CreationDate { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+
+        public UserView ToUserView()
+        {
+            UserView uv = new UserView();
+            uv.Id = Id;
+            uv.Name = UserName;
+            uv.ProfileImageUrl = ProfileImageUrl;
+
+            return uv;
+        }
     }
 }

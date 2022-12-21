@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using Domain.Responses;
 using MediatR;
@@ -8,31 +9,24 @@ namespace Application
 {
     public class FindPerson
     {
-        public class Query : IRequest<Person>
+        public class Query : IRequest<Result<Person>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Person>
+        public class Handler : IRequestHandler<Query, Result<Person>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
             {
                 this._context = context;
             }
-
-            public async Task<Person> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Person>> Handle(Query request, CancellationToken cancellationToken)
             {
-                try
-                {
-                    Person person = await this._context.People.Where(c => c.Id == request.Id).FirstOrDefaultAsync();
-                    if (person == null) throw new Exception("Id not found");
-                    return person;
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                Person person = await this._context.People.Where(c => c.Id == request.Id).FirstOrDefaultAsync();
+                if (person == null) return null;
+
+                return Result<Person>.Success(person);
             }
         }
     }

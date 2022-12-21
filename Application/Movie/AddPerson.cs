@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using MediatR;
 using Persistence;
@@ -6,12 +7,12 @@ namespace Application
 {
     public class AddPerson
     {
-        public class Query : IRequest<Unit>
+        public class Query : IRequest<Result<Unit>>
         {
             public Person NewPerson { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Unit>
+        public class Handler : IRequestHandler<Query, Result<Unit>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -19,22 +20,14 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Unit> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
-                if (string.IsNullOrWhiteSpace(request.NewPerson.Name)) throw new Exception();
-                if (string.IsNullOrWhiteSpace(request.NewPerson.ProfileImageUrl)) request.NewPerson.ProfileImageUrl = "";
+                _context.People.Add(request.NewPerson);
+                bool success = await _context.SaveChangesAsync() > 0;
 
-                try
-                {
-                    _context.People.Add(request.NewPerson);
-                    await _context.SaveChangesAsync();
+                if (!success) return Result<Unit>.Failure("Failed to add person.");
 
-                    return new Unit();
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                return Result<Unit>.Success(Unit.Value);
             }
         }
     }

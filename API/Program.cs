@@ -1,7 +1,9 @@
 using System.Text;
 using API.Extensions;
 using Application;
+using Application.Interfaces;
 using Domain;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -33,8 +34,10 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddMediatR(typeof(ListMoviesAtPage.Handler));
-
 builder.Services.AddScoped<TokenService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 builder.Services.AddIdentityCore<User>(opt =>
 {

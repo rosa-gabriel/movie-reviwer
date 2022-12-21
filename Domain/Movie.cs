@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class Movie 
+    public class Movie
     {
         [Key]
-        public Guid Id{get; set;}
-        public string Name {get; set;}
+        public Guid Id { get; set; }
+        public string Name { get; set; }
         public string CoverUrl { get; set; }
         public DateTime ReleaseDate { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

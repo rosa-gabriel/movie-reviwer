@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using Domain.Responses;
 using MediatR;
@@ -8,13 +9,13 @@ namespace Application
 {
     public class FindMovieInfo
     {
-        public class Query : IRequest<MovieResponse>
+        public class Query : IRequest<Result<MovieResponse>>
         {
             public Guid Id { get; set; }
             public IMediator Mediator { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, MovieResponse>
+        public class Handler : IRequestHandler<Query, Result<MovieResponse>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -22,24 +23,18 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<MovieResponse> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MovieResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 Movie dataMovie = await _context.Movies.FindAsync(request.Id);
-                if (dataMovie == null) throw new Exception();
+                if (dataMovie == null) return null;
 
-                try
-                {
-                    MovieResponse movieResponse = new MovieResponse();
-                    movieResponse.movie = dataMovie;
-                    movieResponse.favorites = await request.Mediator.Send(new CountMovieFavites.Query { movie = dataMovie });
-                    movieResponse.tags = await request.Mediator.Send(new ListMovieTags.Query { movie = dataMovie });
-                    movieResponse.castMembers = await request.Mediator.Send(new ListMovieCast.Query { movie = dataMovie });
-                    return movieResponse;
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                MovieResponse movieResponse = new MovieResponse();
+                movieResponse.movie = dataMovie;
+                movieResponse.favorites = (await request.Mediator.Send(new CountMovieFavites.Query { movie = dataMovie }));
+                movieResponse.tags = (await request.Mediator.Send(new ListMovieTags.Query { movie = dataMovie })).Value;
+                movieResponse.castMembers = (await request.Mediator.Send(new ListMovieCast.Query { movie = dataMovie })).Value;
+
+                return Result<MovieResponse>.Success(movieResponse);
             }
         }
     }

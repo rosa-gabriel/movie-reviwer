@@ -11,22 +11,28 @@ const SideMenu = (props: SideMenuProps) => {
   const context = useContext(UserContext);
 
   return (
-    <div className="modal-background" onClick={props.onClick}>
+    <div className="modal-background" id="back" onClick={props.onClick}>
       <div className="side-menu">
         {context.isLogedIn && (
           <h1>
             Welcome{" "}
-            <NavLink to={"/favorites"}>{context.userInfo?.username}</NavLink>.
+            <NavLink className={"link"} to={"/favorites"}>
+              {context.userInfo?.username}
+            </NavLink>
+            .
           </h1>
         )}
         {!context.isLogedIn && (
           <h1>
-            <NavLink to={"/Account/login"}>Sign in</NavLink>, for more options.
+            <NavLink className={"link"} to={"/Account/login"}>
+              Sign in
+            </NavLink>
+            , for more options.
           </h1>
         )}
         <ul>
           {context.isLogedIn && (
-            <NavLink to={"/favorites"}>
+            <NavLink to={"/add/movie"}>
               <li>Add</li>
             </NavLink>
           )}

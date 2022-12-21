@@ -17,5 +17,6 @@ namespace Persistence
         public DbSet<FavoriteEntry> FavoriteEntries { get; set; }
         public DbSet<TagName> TagNames { get; set; }
         public DbSet<TagEntry> TagEntries { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }
