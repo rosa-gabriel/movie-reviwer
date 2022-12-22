@@ -618,14 +618,30 @@ nav {
   flex-direction: row;
 }
 
+.comment-header h4{
+  transition: color .2;
+}
+
+.comment-header h4:hover{
+  color: var(--red);
+}
+
 .comment-header i {
   position: absolute;
   right: 0;
   color: var(--light-grey);
+  transition: color .2s;
+}
+.comment-header i:hover {
+  color: var(--white);
 }
 
 .comment p {
   color: var(--super-light-grey);
+}
+
+.comment-header a {
+  text-decoration: none;
 }
 
 .comment-header p {
@@ -633,7 +649,7 @@ nav {
   color: var(--light-grey);
 }
 
-.comment-create-container{
+.comment-create-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -641,7 +657,7 @@ nav {
 
 .comment-create-container input {
   width: 100%;
-  padding: 30px;
+  padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
 }

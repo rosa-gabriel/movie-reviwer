@@ -24,6 +24,7 @@ namespace Application
 
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
+                request.NewMovie.movie.Id = new Guid();
                 _context.Movies.Add(request.NewMovie.movie);
 
                 foreach (TagResponse tr in request.NewMovie.tags)
@@ -45,7 +46,7 @@ namespace Application
 
                 bool success = await _context.SaveChangesAsync() > 0;
 
-                if(!success) return Result<Unit>.Failure("Failed to add Movie.");
+                if (!success) return Result<Unit>.Failure("Failed to add Movie.");
 
                 return Result<Unit>.Success(Unit.Value);
             }

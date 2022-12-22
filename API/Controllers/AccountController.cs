@@ -68,8 +68,8 @@ namespace API.Controllers
         {
             try
             {
-                await this._mediator.Send(new AddComment.Query { Comment = comment, movieId = movieId });
-                return Ok();
+                Result<Unit> result = await this._mediator.Send(new AddComment.Query { Comment = comment, movieId = movieId });
+                return this.ResultHandler(result);
             }
             catch (Exception ex)
             {

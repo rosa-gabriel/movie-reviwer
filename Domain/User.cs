@@ -9,6 +9,7 @@ namespace Domain
         public string Bio { get; set; }
         public DateTime CreationDate { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public bool IsAdmin { get; set; }
 
         public UserView ToUserView()
         {

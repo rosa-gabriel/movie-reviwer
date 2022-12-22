@@ -39,6 +39,7 @@ namespace API.Controllers
             Result<List<CommentView>> result = await this._mediator.Send(new ListMovieComments.Query { MovieId = id });
             return this.ResultHandler(result);
         }
+
         //Adds the given movie to the database.
         [Authorize]
         [HttpPost("create")]
@@ -47,6 +48,7 @@ namespace API.Controllers
             Result<Unit> result = await this._mediator.Send(new AddMovie.Query { NewMovie = newMovie });
             return this.ResultHandler(result);
         }
+
         //Changes info from a given movie in the database.
         [Authorize]
         [HttpPut("update")]

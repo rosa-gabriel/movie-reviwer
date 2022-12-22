@@ -30,10 +30,12 @@ namespace Application
                 IQueryable<TagEntry> tags = this._context.TagEntries.Where(te => te.Film == movie);
                 IQueryable<CastEntry> cast = this._context.CastEntries.Where(ce => ce.Film == movie);
                 IQueryable<FavoriteEntry> favorites = this._context.FavoriteEntries.Where(f => f.Film == movie);
+                IQueryable<Comment> comments = this._context.Comments.Where(c => c.Movie == movie);
 
                 this._context.TagEntries.RemoveRange(tags);
                 this._context.CastEntries.RemoveRange(cast);
                 this._context.FavoriteEntries.RemoveRange(favorites);
+                this._context.Comments.RemoveRange(comments);
                 await _context.SaveChangesAsync();
 
                 this._context.Remove(movie);

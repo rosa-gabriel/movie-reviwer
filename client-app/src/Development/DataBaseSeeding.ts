@@ -79,6 +79,7 @@ export const seedMovies = async (tagJson: any) => {
           name: result.original_title,
           coverUrl: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
           releaseDate: result.release_date,
+          comments: [],
         },
         favorites: 0,
         tags: tags,

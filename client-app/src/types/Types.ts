@@ -10,12 +10,7 @@ export type Movie = {
   name: string;
   coverUrl: string;
   releaseDate: Date;
-};
-
-export type NewMovieType = {
-  name: string;
-  coverUrl: string;
-  releaseDate: string;
+  comments: CommentType[];
 };
 
 export type TagEntriesType = {
@@ -94,13 +89,13 @@ export type MessageType = {
   error: boolean;
 };
 
-export type Comment = {
-  creator: Creator;
+export type CommentType = {
+  creator: CreatorType;
   message: string;
   postDate: Date;
 };
 
-export type Creator = {
+export type CreatorType = {
   id: string;
   name: string;
   profileImageUrl: string;

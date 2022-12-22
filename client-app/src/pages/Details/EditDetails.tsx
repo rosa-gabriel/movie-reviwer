@@ -107,6 +107,7 @@ const EditDetails = () => {
         name: name,
         coverUrl: url,
         releaseDate: date,
+        comments: [],
       },
       favorites: 0,
       tags: tags,

@@ -83,10 +83,11 @@ const AddMovieForm = () => {
 
     const newMovie: AllMovieInfoType = {
       movie: {
-        id: "",
+        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         name: name,
         coverUrl: url,
         releaseDate: date,
+        comments: [],
       },
       favorites: 0,
       tags: tags,

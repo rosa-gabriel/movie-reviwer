@@ -6,7 +6,7 @@ namespace Domain
     {
         public Movie movie { get; set; }
         public int favorites { get; set; }
-        public bool? isFavorite { get; set; }
+        public bool isFavorite { get; set; }
         public List<TagResponse> tags { get; set; }
         public List<CastResponse> castMembers { get; set; }
     }

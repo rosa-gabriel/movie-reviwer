@@ -2,6 +2,7 @@ import { uri } from "../../App";
 import {
   AllMovieInfoType,
   CastType,
+  CommentType,
   MoviePageType,
   PersonType,
   ProfileType,
@@ -32,8 +33,13 @@ export const addMovie = async (movie: AllMovieInfoType, token: string) => {
 
 export const listMovieComments = async (movieId: string) => {
   try {
-    const response = await getRequest(`${uri}/Movies/${movieId}/comments`);
-    return response;
+    const response: CommentType[] = await getRequest(
+      `${uri}/Movies/${movieId}/comments`
+    );
+    const data = response.map((ct) => {
+      return { ...ct, postDate: new Date(ct.postDate) };
+    });
+    return data;
   } catch (ex: any) {
     throw ex;
   }
