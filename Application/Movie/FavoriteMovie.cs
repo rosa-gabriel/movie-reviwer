@@ -29,17 +29,20 @@ namespace Application
                 Movie movie = await _context.Movies.FindAsync(request.MovieId);
                 if (movie == null) return null;
 
-                bool addFavorite = request.DesiredBool && !(await request.Mediator.Send(new IsFavorite.Query { user = request.user, MovieId = request.MovieId })).Value;
+                bool addFavorite = request.DesiredBool;
+
+                FavoriteEntry favoriteEntry = await _context.FavoriteEntries.Where(fe => fe.Fan == request.user).Where(fe => fe.Film.Id == request.MovieId).FirstOrDefaultAsync();
 
                 if (!addFavorite)
                 {
-                    FavoriteEntry favoriteEntry = await _context.FavoriteEntries.Where(fe => fe.Fan == request.user).Where(fe => fe.Film.Id == request.MovieId).FirstOrDefaultAsync();
                     if (favoriteEntry == null) return Result<Unit>.Success(Unit.Value);
 
                     _context.FavoriteEntries.Remove(favoriteEntry);
                 }
                 else
                 {
+                    if (favoriteEntry != null) return Result<Unit>.Success(Unit.Value);
+
                     FavoriteEntry newFavoriteEntry = new FavoriteEntry
                     {
                         Id = new Guid(),

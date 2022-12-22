@@ -5,6 +5,13 @@ export type MovieType = {
   releaseDate: Date;
 };
 
+export type Movie = {
+  id: string;
+  name: string;
+  coverUrl: string;
+  releaseDate: Date;
+};
+
 export type NewMovieType = {
   name: string;
   coverUrl: string;
@@ -41,7 +48,7 @@ export type PersonType = {
 };
 
 export type AllMovieInfoType = {
-  movie: MovieType;
+  movie: Movie;
   favorites: number;
   tags: TagEntriesType[];
   castMembers: CastEntryType[];

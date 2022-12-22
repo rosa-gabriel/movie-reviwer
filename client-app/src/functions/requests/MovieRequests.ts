@@ -24,7 +24,32 @@ export const getMoviesAtPage = async (page: number) => {
 export const addMovie = async (movie: AllMovieInfoType, token: string) => {
   try {
     const response = await postRequest(`${uri}/Movies/create`, movie, token);
-    console.log(response);
+    return response;
+  } catch (ex: any) {
+    throw ex;
+  }
+};
+
+export const listMovieComments = async (movieId: string) => {
+  try {
+    const response = await getRequest(`${uri}/Movies/${movieId}/comments`);
+    return response;
+  } catch (ex: any) {
+    throw ex;
+  }
+};
+
+export const addComment = async (
+  message: string,
+  movieId: string,
+  token: string
+) => {
+  try {
+    const response = await postRequest(
+      `${uri}/Account/comment/${movieId}`,
+      { message: message },
+      token
+    );
     return response;
   } catch (ex: any) {
     throw ex;

@@ -29,7 +29,7 @@ namespace Application
                 Movie movie = await this._context.Movies.Include(m => m.Comments).ThenInclude(c => c.Creator).FirstOrDefaultAsync(m => m.Id == request.MovieId);
                 if (movie == null) return null;
 
-                List<Comment> comments = movie.Comments.ToList();
+                List<Comment> comments = movie.Comments.OrderByDescending(c => c.PostDate).ToList();
                 List<CommentView> commentViews = new List<CommentView>();
                 foreach (Comment c in comments)
                 {

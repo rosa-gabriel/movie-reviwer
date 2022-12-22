@@ -13,6 +13,7 @@ import Container from "../../components/UI/Container";
 import { UserContext } from "../../contexts/UserContext";
 import ErrorContainer from "../../components/UI/ErrorContainer";
 import { NotificationContext } from "../../contexts/NotificationContext";
+import CommentSection from "../../components/UI/CommentSection";
 
 const Details = (props: any) => {
   //States
@@ -95,110 +96,119 @@ const Details = (props: any) => {
   }, [params.movieId, seed, context.userInfo, context.isLogedIn]);
 
   return (
-    <Container>
-      <ErrorContainer error={error}>
+    <>
+      <Container>
         <>
-          {context.isLogedIn && (
-            <button
-              className="button edit-button"
-              type="button"
-              onClick={editClickHandler}
-            >
-              <i className="fa-solid fa-pen-to-square"></i>
-            </button>
-          )}
-          {!isLoading && movieInfo != null && (
-            <div className="details_container">
-              <div className="details-img-container">
-                <img
-                  src={movieInfo.movie.coverUrl}
-                  className="details_cover"
-                  alt={"Cover for " + movieInfo.movie.name}
-                />
-              </div>
-
-              <div className="details_info">
-                <h1>{movieInfo.movie.name}</h1>
-
-                <p className="info_container_title">TAGS</p>
-                {movieInfo.tags.length > 0 && (
-                  <div className="info_container">
-                    {movieInfo.tags.map((tag) => (
-                      <Tag key={tag.name} tagItem={tag} />
-                    ))}
+          <ErrorContainer error={error}>
+            <>
+              {context.isLogedIn && (
+                <button
+                  className="button edit-button"
+                  type="button"
+                  onClick={editClickHandler}
+                >
+                  <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+              )}
+              {!isLoading && movieInfo != null && (
+                <div className="details_container">
+                  <div className="details-img-container">
+                    <img
+                      src={movieInfo.movie.coverUrl}
+                      className="details_cover"
+                      alt={"Cover for " + movieInfo.movie.name}
+                    />
                   </div>
-                )}
-                {movieInfo.tags.length === 0 && (
-                  <p className="faded">0 Tags.</p>
-                )}
 
-                <p className="info_container_title">CAST</p>
-                {movieInfo.castMembers.length > 0 && showAllTags && (
-                  <div className="info_container">
-                    {movieInfo.castMembers.map((person) => (
-                      <CastSquare key={person.name} person={person} />
-                    ))}
-                  </div>
-                )}
+                  <div className="details_info">
+                    <h1>{movieInfo.movie.name}</h1>
 
-                {movieInfo.castMembers.length > 0 && !showAllTags && (
-                  <div className="info_container">
-                    {movieInfo.castMembers
-                      .filter((item, i) => {
-                        return i < 15;
-                      })
-                      .map((person) => (
-                        <CastSquare key={person.name} person={person} />
-                      ))}
-                    {movieInfo.castMembers.length > 20 && (
+                    <p className="info_container_title">TAGS</p>
+                    {movieInfo.tags.length > 0 && (
+                      <div className="info_container">
+                        {movieInfo.tags.map((tag) => (
+                          <Tag key={tag.name} tagItem={tag} />
+                        ))}
+                      </div>
+                    )}
+                    {movieInfo.tags.length === 0 && (
+                      <p className="faded">No Tags.</p>
+                    )}
+
+                    <p className="info_container_title">CAST</p>
+                    {movieInfo.castMembers.length > 0 && showAllTags && (
+                      <div className="info_container">
+                        {movieInfo.castMembers.map((person) => (
+                          <CastSquare key={person.name} person={person} />
+                        ))}
+                      </div>
+                    )}
+
+                    {movieInfo.castMembers.length > 0 && !showAllTags && (
+                      <div className="info_container">
+                        {movieInfo.castMembers
+                          .filter((item, i) => {
+                            return i < 15;
+                          })
+                          .map((person) => (
+                            <CastSquare key={person.name} person={person} />
+                          ))}
+                        {movieInfo.castMembers.length > 20 && (
+                          <button
+                            onClick={showAllHandler}
+                            className="show-more"
+                            style={{ marginTop: 0 }}
+                          >
+                            Show all...
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {movieInfo.castMembers.length === 0 && (
+                      <p className="faded">No cast members.</p>
+                    )}
+
+                    <p className="details-releaseDate">
+                      Release date: {movieInfo.movie.releaseDate.toDateString()}
+                    </p>
+
+                    {context.isLogedIn && (
                       <button
-                        onClick={showAllHandler}
-                        className="show-more"
-                        style={{ marginTop: 0 }}
+                        className={
+                          "favorite-button" + (isLiked ? " selected-text" : "")
+                        }
+                        onClick={favoriteHandler}
                       >
-                        Show all...
+                        <i
+                          className={
+                            !isLiked
+                              ? "fa-regular fa-heart"
+                              : "fa-solid fa-heart"
+                          }
+                        />
+                        {movieInfo.favorites}
+                      </button>
+                    )}
+
+                    {!context.isLogedIn && (
+                      <button className="favorite-button" disabled>
+                        <i className="fa-regular fa-heart" />
+                        {movieInfo.favorites}
                       </button>
                     )}
                   </div>
-                )}
-
-                {movieInfo.castMembers.length === 0 && (
-                  <p className="faded">No cast members.</p>
-                )}
-
-                <p className="details-releaseDate">
-                  Release date: {movieInfo.movie.releaseDate.toDateString()}
-                </p>
-
-                {context.isLogedIn && (
-                  <button
-                    className={
-                      "favorite-button" + (isLiked ? " selected-text" : "")
-                    }
-                    onClick={favoriteHandler}
-                  >
-                    <i
-                      className={
-                        !isLiked ? "fa-regular fa-heart" : "fa-solid fa-heart"
-                      }
-                    />
-                    {movieInfo.favorites}
-                  </button>
-                )}
-
-                {!context.isLogedIn && (
-                  <button className="favorite-button" disabled>
-                    <i className="fa-regular fa-heart" />
-                    {movieInfo.favorites}
-                  </button>
-                )}
-              </div>
-            </div>
+                </div>
+              )}
+              {isLoading && <LoadingCircle />}
+            </>
+          </ErrorContainer>
+          {movieInfo && (
+            <CommentSection movieId={movieInfo.movie.id}></CommentSection>
           )}
-          {isLoading && <LoadingCircle />}
         </>
-      </ErrorContainer>
-    </Container>
+      </Container>
+    </>
   );
 };
 export default Details;

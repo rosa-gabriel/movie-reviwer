@@ -75,6 +75,7 @@ export const seedMovies = async (tagJson: any) => {
     setTimeout(async () => {
       const newMovie: AllMovieInfoType = {
         movie: {
+          id: "",
           name: result.original_title,
           coverUrl: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
           releaseDate: result.release_date,

@@ -32,7 +32,6 @@ const createRequest = async (
 
   try {
     const response = await fetch(url, requestBody);
-    console.log(response);
     if (!response.ok) {
       if (response.status === 401)
         throw new Error(
@@ -51,7 +50,6 @@ const createRequest = async (
     }
 
   } catch (ex: any) {
-    console.error(ex);
     if (ex.message === "Failed to fetch") throw new Error(connectionFailString);
     throw ex;
   }
