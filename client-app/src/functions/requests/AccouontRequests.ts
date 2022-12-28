@@ -1,58 +1,26 @@
 import { uri } from "../../App";
 import {
-  UserInfoType,
-  UserLoginType,
-  UserRegisterType,
+  UserSettings,
+  UserInfoContext,
+  UserLogin,
+  UserRegister,
 } from "../../types/Types";
+import { getRequest, postRequest, putRequest } from "./CreateRequest";
 
-export const login = async (userInfo: UserLoginType): Promise<UserInfoType> => {
-  try {
-    const response: Response = await fetch(`${uri}/Account/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userInfo),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem("token", JSON.stringify(data));
-      return data;
-    }
-
-    throw new Error("");
-  } catch (ex: any) {
-    throw new Error("Failed to login");
-  }
+export const login = async (userInfo: UserLogin) => {
+  const response = await postRequest(`${uri}/Account/login`, userInfo);
+  return response;
 };
 
 export const logOut = () => {
   localStorage.removeItem("token");
 };
 
-export const register = async (
-  userInfo: UserRegisterType
-): Promise<UserInfoType> => {
-  try {
-    const response: Response = await fetch(`${uri}/Account/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userInfo),
-    });
+export const register = async (userInfo: UserRegister) => {
+  const response = await postRequest(`${uri}/Account/register`, userInfo);
 
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem("token", JSON.stringify(data));
-      return data;
-    }
-
-    throw new Error("");
-  } catch (ex: any) {
-    throw new Error("Failed to register");
-  }
+  localStorage.setItem("token", JSON.stringify(response));
+  return response;
 };
 
 export const checkUser = async (token: string): Promise<boolean> => {
@@ -66,12 +34,32 @@ export const checkUser = async (token: string): Promise<boolean> => {
     });
     return response.ok;
   } catch (ex: any) {
-    const res = checkResponseException(ex);
-    if (res) {
-      throw new Error(res);
+    const responseException = checkResponseException(ex);
+    if (responseException) {
+      throw new Error(responseException);
     }
     throw ex;
   }
+};
+
+export const getSettings = async (token: string) => {
+  const response: UserSettings = await getRequest(
+    `${uri}/Account/settings`,
+    token
+  );
+  return response;
+};
+
+export const changeSettings = async (
+  newSettings: UserSettings,
+  token: string
+) => {
+  const response = await putRequest(
+    `${uri}/Account/settings/update`,
+    newSettings,
+    token
+  );
+  return response;
 };
 
 const checkResponseException = (ex: Error): string | null => {

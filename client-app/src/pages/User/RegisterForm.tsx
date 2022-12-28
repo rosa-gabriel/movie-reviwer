@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import { register } from "../../functions/requests/AccouontRequests";
-import { UserRegisterType } from "../../types/Types";
+import { UserRegister } from "../../types/Types";
 import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
@@ -67,7 +67,7 @@ const RegisterForm = () => {
       if (password !== confirmPassword) {
         setError("Passwords need to match!");
       }
-      const userInfo: UserRegisterType = {
+      const userInfo: UserRegister = {
         email: email,
         username: username,
         password: password,

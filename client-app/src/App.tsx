@@ -15,6 +15,8 @@ import SearchList from "./pages/movieLists/SearchList";
 import EditDetails from "./pages/details/EditDetails";
 import { ModalContextProvider } from "./contexts/ModalContext";
 import { NotificationContextProvider } from "./contexts/NotificationContext";
+import DataBaseSeeding from "./development/DatabaseSeedingO";
+import Settings from "./pages/user/Settings";
 
 export const uri = "http://localhost:5000";
 
@@ -34,9 +36,11 @@ function App() {
               <Route path="/person/:id" element={<PersonInfo />} />
               <Route path="/account/login" element={<LoginForm />} />
               <Route path="/account/register" element={<RegisterForm />} />
+              <Route path="/account/settings" element={<Settings />} />
 
               <Route path="/account/profile/:id" element={<Profile />} />
-              <Route path="/favorites" element={<Favorites />} />
+              <Route path="/favorites/" element={<Favorites />} />
+              <Route path="/favorites/:userId" element={<Favorites />} />
               <Route path="/add/*" element={<CreationOptions />} />
 
               <Route path="/error" element={<Error />} />

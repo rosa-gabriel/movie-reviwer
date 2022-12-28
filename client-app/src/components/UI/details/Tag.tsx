@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { TagEntriesType } from "../../../types/Types";
+import { TagInfo } from "../../../types/Types";
 
 type TagProps = {
-  tagItem: TagEntriesType;
+  tagItem: TagInfo;
 };
 
 const Tag = (props: TagProps) => {

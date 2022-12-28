@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddMediatR(typeof(ListMoviesAtPage.Handler));
-builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
@@ -42,7 +42,7 @@ builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddIdentityCore<User>(opt =>
 {
     opt.Password.RequireNonAlphanumeric = false;
-}).AddEntityFrameworkStores<DataContext>().AddSignInManager<SignInManager<User>>();
+}).AddEntityFrameworkStores<DataContext>().AddSignInManager<SignInManager<User>>().AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {

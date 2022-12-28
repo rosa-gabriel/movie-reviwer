@@ -3,7 +3,7 @@ import {
   getMoviesFromTagAtPage,
   getTag,
 } from "../../functions/requests/MovieRequests";
-import { TagType } from "../../types/Types";
+import { Tag } from "../../types/Types";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import LoadingCircle from "../../components/UI/LoadingCircle";
@@ -12,7 +12,7 @@ import ErrorContainer from "../../components/UI/ErrorContainer";
 
 const TagList = () => {
   //States
-  const [tag, setTag] = useState<TagType | null>(null);
+  const [tag, setTag] = useState<Tag | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   //Hooks
@@ -23,7 +23,7 @@ const TagList = () => {
       try {
         if (params.id === undefined) return;
 
-        const data: TagType = await getTag(String(params.id));
+        const data: Tag = await getTag(String(params.id));
         setTag(data);
         setError(null);
       } catch (ex: any) {

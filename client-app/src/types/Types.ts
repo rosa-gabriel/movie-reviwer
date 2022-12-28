@@ -1,11 +1,15 @@
-export type MovieType = {
-  id?: string;
-  name: string;
-  coverUrl: string;
-  releaseDate: Date;
+export type NewMovieInfo = {
+  movie: {
+    id?: string;
+    name: string;
+    coverUrl: string;
+    releaseDate: Date;
+  };
+  tags: Tag[];
+  castMembers: CastInfo[];
 };
 
-export type Movie = {
+export type MovieResponse = {
   id: string;
   name: string;
   coverUrl: string;
@@ -13,77 +17,87 @@ export type Movie = {
   comments: CommentType[];
 };
 
-export type TagEntriesType = {
-  tagId: number;
+export type TagInfo = {
+  tagId: string;
   name: string;
-  entries?: number;
+  entries: number;
 };
 
-export type TagType = {
+export type Tag = {
   id: string;
   name: string;
 };
 
-export type CastType = {
-  id?: string;
+export type NewTag = {
+  name: string;
+};
+
+export type NewPerson = {
+  name: string;
+  profileImageUrl: string;
+};
+
+export type Cast = {
+  id: string;
   name: string;
   role: string;
 };
 
-export type CastEntryType = {
+export type CastInfo = {
   personId: string;
   name: string;
   role: string;
 };
 
-export type PersonType = {
-  id?: string;
+export type PersonResponse = {
+  id: string;
   name: string;
   profileImageUrl: string;
 };
 
 export type AllMovieInfoType = {
-  movie: Movie;
+  movie: MovieResponse;
   favorites: number;
-  tags: TagEntriesType[];
-  castMembers: CastEntryType[];
+  tags: TagInfo[];
+  castMembers: CastInfo[];
 };
 
 //Account types
-export type UserLoginType = {
-  email: string;
+export type UserLogin = {
+  login: string;
   password: string;
 };
 
-export type UserInfoType = {
+export type UserInfoContext = {
   id: string;
   email: string;
   token: string;
   username: string;
   profileImageUrl: string;
 };
-export type UserRegisterType = {
+
+export type UserRegister = {
   password: string;
   username: string;
   email: string;
 };
 
-export type ProfileType = {
+export type ProfileInfo = {
   id: string;
   isLogedIn: boolean;
   imageUrl: string;
   name: string;
   creationDate: Date;
-  recentFavorites: MovieType[];
-  bio?: string;
+  recentFavorites: MovieResponse[];
+  bio: string;
 };
 
-export type MoviePageType = {
-  movies: MovieType[];
+export type MoviePage = {
+  movies: MovieResponse[];
   count: number;
 };
 
-export type MessageType = {
+export type NotificationMessage = {
   code: string;
   text: string;
   error: boolean;
@@ -99,4 +113,13 @@ export type CreatorType = {
   id: string;
   name: string;
   profileImageUrl: string;
+};
+
+export type UserSettings= {
+  username: string;
+  email: string;
+  profileImageUrl: string;
+  bio: string;
+  newPassword?: string;
+  oldPassword?: string;
 };

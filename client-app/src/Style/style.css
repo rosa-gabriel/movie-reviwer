@@ -593,6 +593,15 @@ nav {
   color: var(--red);
 }
 
+.profile-buttons{
+  margin-top: 10px;
+}
+
+.profile-buttons button{
+  padding: 10px;
+  margin-right: 7px;
+}
+
 /* Comments */
 
 .comment-section {

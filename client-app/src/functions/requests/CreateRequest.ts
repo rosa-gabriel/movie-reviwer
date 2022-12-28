@@ -23,32 +23,51 @@ const createRequest = async (
       break;
     case "POST":
       requestBody.body = JSON.stringify(body);
+      requestBody.headers = {
+        ...requestBody.headers,
+        Accept: "application/json, text/plain",
+        "Content-Type": "application/json;charset=UTF-8",
+      };
       break;
     case "PUT":
+      requestBody.body = JSON.stringify(body);
       break;
     case "DELETE":
+      requestBody.body = JSON.stringify(body);
       break;
   }
 
   try {
     const response = await fetch(url, requestBody);
     if (!response.ok) {
-      if (response.status === 401)
-        throw new Error(
-          "Current user doesn't have authorization to access this page."
-        );
-      if (response.status === 400) {
-        throw new Error(response.statusText);
+      switch (response.status) {
+        case 401:
+          throw new Error(
+            "Current user doesn't have authorization to access this page."
+          );
+        case 400:
+          let errorText = "Bad request";
+
+          try {
+            errorText = await response.text();
+          } catch (ex: any) {}
+
+          try {
+            const json = await response.json();
+            errorText = json.error[0];
+          } catch (ex: any) {}
+
+          throw new Error(errorText);
+        case 500:
+          throw new Error("Internal server error!");
+        default:
+          throw new Error(String(response.status));
       }
-      throw new Error(String(response.status));
     }
 
     try {
       return await response.json();
-    } catch (ex) {
-      console.log('amog');
-    }
-
+    } catch (ex) {}
   } catch (ex: any) {
     if (ex.message === "Failed to fetch") throw new Error(connectionFailString);
     throw ex;
@@ -56,17 +75,13 @@ const createRequest = async (
 };
 
 export const getRequest = async (url: string, token?: string) => {
-  try {
-    return await createRequest(url, "GET", undefined, token);
-  } catch (ex: any) {
-    throw ex;
-  }
+  return await createRequest(url, "GET", undefined, token);
 };
 
 export const postRequest = async (url: string, body: any, token?: string) => {
-  try {
-    return createRequest(url, "POST", body, token);
-  } catch (ex: any) {
-    throw ex;
-  }
+  return createRequest(url, "POST", body, token);
+};
+
+export const putRequest = async (url: string, body: any, token?: string) => {
+  return createRequest(url, "PUT", body, token);
 };

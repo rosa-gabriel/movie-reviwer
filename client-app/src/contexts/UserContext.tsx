@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { createContext } from "react";
+import { useNavigate } from "react-router";
 import { checkUser, logOut } from "../functions/requests/AccouontRequests";
-import { UserInfoType } from "../types/Types";
+import { UserInfoContext } from "../types/Types";
 
 type UserContextType = {
   isLogedIn: boolean;
-  userInfo: null | UserInfoType;
-  logIn(newUser: UserInfoType): any;
+  userInfo: null | UserInfoContext;
+  logIn(newUser: UserInfoContext): any;
   logOut(): any;
 };
 
@@ -23,22 +24,25 @@ type UserContextProviderProps = {
 
 export const UserContextProvider = (props: UserContextProviderProps) => {
   //States
-  const [userInfo, setUserInfo] = useState<UserInfoType | null>(() => {
+  const [userInfo, setUserInfo] = useState<UserInfoContext | null>(() => {
     const localUserInfoString = localStorage.getItem("token");
     if (localUserInfoString) {
-      let parsedInfo: UserInfoType | null = JSON.parse(localUserInfoString);
+      let parsedInfo: UserInfoContext | null = JSON.parse(localUserInfoString);
       return parsedInfo;
     }
     return null;
   });
   const [isLoged, setIsLoged] = useState<boolean>(true);
 
+  const navigate = useNavigate();
+
   //Effect
   useEffect(() => {
     (async () => {
       const localUserInfoString: string | null = localStorage.getItem("token");
       if (localUserInfoString) {
-        let parsedInfo: UserInfoType | null = JSON.parse(localUserInfoString);
+        let parsedInfo: UserInfoContext | null =
+          JSON.parse(localUserInfoString);
         try {
           const response: boolean = await checkUser(String(parsedInfo?.token));
           if (response) {
@@ -63,8 +67,9 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
       value={{
         isLogedIn: isLoged,
         userInfo: userInfo,
-        logIn: (newUser: UserInfoType) => {
+        logIn: (newUser: UserInfoContext) => {
           if (!!newUser) {
+            localStorage.setItem("token", JSON.stringify(newUser));
             setUserInfo(newUser);
             setIsLoged(true);
           }
@@ -73,6 +78,7 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
           logOut();
           setUserInfo(null);
           setIsLoged(false);
+          navigate("/");
         },
       }}
     >

@@ -1,28 +1,28 @@
 import { uri } from "../../App";
 import {
   AllMovieInfoType,
-  CastType,
+  Cast,
   CommentType,
-  MoviePageType,
-  PersonType,
-  ProfileType,
-  TagEntriesType,
-  TagType,
+  MoviePage,
+  NewMovieInfo,
+  NewPerson,
+  PersonResponse,
+  ProfileInfo,
+  Tag,
+  TagInfo,
 } from "../../types/Types";
 import { connectionFailString, getRequest, postRequest } from "./CreateRequest";
 
 export const getMoviesAtPage = async (page: number) => {
   try {
-    const response: MoviePageType = await getRequest(
-      `${uri}/Movies/page/${page}`
-    );
+    const response: MoviePage = await getRequest(`${uri}/Movies/page/${page}`);
     return response;
   } catch (ex) {
     throw ex;
   }
 };
 
-export const addMovie = async (movie: AllMovieInfoType, token: string) => {
+export const addMovie = async (movie: NewMovieInfo, token: string) => {
   try {
     const response = await postRequest(`${uri}/Movies/create`, movie, token);
     return response;
@@ -62,7 +62,7 @@ export const addComment = async (
   }
 };
 
-export const updateMovie = async (movie: AllMovieInfoType, token: string) => {
+export const updateMovie = async (movie: NewMovieInfo, token: string) => {
   try {
     const response: Response = await fetch(`${uri}/Movies/update`, {
       method: "PUT",
@@ -97,7 +97,7 @@ export const addTag = async (tag: string, token: string) => {
   }
 };
 
-export const addPerson = async (person: PersonType, token: string) => {
+export const addPerson = async (person: NewPerson, token: string) => {
   try {
     const response: any = await postRequest(
       `${uri}/Cast/create`,
@@ -125,7 +125,7 @@ export const getMovie = async (id: string) => {
 
 export const getMoviesFromTagAtPage = async (page: number, id: string) => {
   try {
-    const response: MoviePageType = await getRequest(
+    const response: MoviePage = await getRequest(
       `${uri}/Tags/${id}/movies/${page}`
     );
     return response;
@@ -136,7 +136,7 @@ export const getMoviesFromTagAtPage = async (page: number, id: string) => {
 
 export const getMoviesFromPersonAtPage = async (page: number, id: string) => {
   try {
-    const response: MoviePageType = await getRequest(
+    const response: MoviePage = await getRequest(
       `${uri}/Cast/${id}/movies/${page}`
     );
     return response;
@@ -150,7 +150,7 @@ export const getMoviesFromSearchAtPage = async (
   search: string
 ) => {
   try {
-    const response: MoviePageType = await getRequest(
+    const response: MoviePage = await getRequest(
       `${uri}/Movies/search/${search}/${page}`
     );
     return response;
@@ -161,7 +161,9 @@ export const getMoviesFromSearchAtPage = async (
 
 export const getPerson = async (id: string) => {
   try {
-    const response: PersonType = await getRequest(`${uri}/Cast/person/${id}`);
+    const response: PersonResponse = await getRequest(
+      `${uri}/Cast/person/${id}`
+    );
     return response;
   } catch (ex: any) {
     throw ex;
@@ -170,7 +172,7 @@ export const getPerson = async (id: string) => {
 
 export const getTag = async (id: string) => {
   try {
-    const response: TagType = await getRequest(`${uri}/Tags/${id}`);
+    const response: Tag = await getRequest(`${uri}/Tags/${id}`);
     return response;
   } catch (ex) {
     throw ex;
@@ -179,7 +181,7 @@ export const getTag = async (id: string) => {
 
 export const getTags = async () => {
   try {
-    const response: TagEntriesType[] = await getRequest(`${uri}/Tags`);
+    const response: TagInfo[] = await getRequest(`${uri}/Tags`);
     return response;
   } catch (ex) {
     throw ex;
@@ -204,7 +206,7 @@ export const deleteMovie = async (movieId: string, token: string) => {
 
 export const getCast = async () => {
   try {
-    const response: CastType[] = await getRequest(`${uri}/Cast`);
+    const response: Cast[] = await getRequest(`${uri}/Cast`);
     return response;
   } catch (ex) {
     throw ex;
@@ -254,7 +256,7 @@ export const getUserFavorites = async (page: number, token: string) => {
 
 export const getProfile = async (userId: string, token?: string) => {
   try {
-    let response: ProfileType = await getRequest(
+    let response: ProfileInfo = await getRequest(
       `${uri}/Account/profile/${userId}`,
       token
     );

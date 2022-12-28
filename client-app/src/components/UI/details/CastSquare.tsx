@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { CastEntryType } from "../../../types/Types";
+import { CastInfo } from "../../../types/Types";
 
 type CastSquareProps = {
-  person: CastEntryType;
+  person: CastInfo;
 };
 
 const CastSquare = (props: CastSquareProps) => {

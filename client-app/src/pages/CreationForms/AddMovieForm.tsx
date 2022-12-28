@@ -5,16 +5,12 @@ import {
   getCast,
   getTags,
 } from "../../functions/requests/MovieRequests";
-import {
-  AllMovieInfoType,
-  CastEntryType,
-  CastType,
-  TagEntriesType,
-} from "../../types/Types";
+import { CastInfo, Cast, NewMovieInfo, Tag } from "../../types/Types";
 import ItemInput from "../../components/UI/inputs/ItemInput";
 import SubmitButton from "../../components/UI/SubmitButton";
 import { UserContext } from "../../contexts/UserContext";
 import { NotificationContext } from "../../contexts/NotificationContext";
+import { TagInfoToTag } from "../../functions/Conversion/Convertions";
 
 const AddMovieForm = () => {
   //States
@@ -24,10 +20,10 @@ const AddMovieForm = () => {
   const [url, setUrl] = useState<string>("");
   const [role, setRole] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
-  const [dataTags, setDataTags] = useState<TagEntriesType[]>([]);
-  const [tags, setTags] = useState<TagEntriesType[]>([]);
-  const [dataCast, setDataCast] = useState<CastType[]>([]);
-  const [cast, setCast] = useState<CastEntryType[]>([]);
+  const [dataTags, setDataTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [dataCast, setDataCast] = useState<Cast[]>([]);
+  const [cast, setCast] = useState<CastInfo[]>([]);
 
   //Contexts
   const context = useContext(UserContext);
@@ -46,16 +42,13 @@ const AddMovieForm = () => {
   const roleChangeHandler = (event: any) => {
     setRole(event.target.value);
   };
-  const tagsChangeHandler = (
-    inputTags: TagEntriesType[],
-    inputDataTags: TagEntriesType[]
-  ) => {
+  const tagsChangeHandler = (inputTags: Tag[], inputDataTags: Tag[]) => {
     setDataTags([...inputDataTags]);
     setTags([...inputTags]);
   };
   const castChangeHandler = (
-    inputCast: CastEntryType[],
-    inputDataCast: CastType[]
+    inputCast: CastInfo[],
+    inputDataCast: Cast[]
   ) => {
     setDataCast([...inputDataCast]);
     setCast([...inputCast]);
@@ -81,15 +74,12 @@ const AddMovieForm = () => {
       return;
     }
 
-    const newMovie: AllMovieInfoType = {
+    const newMovie: NewMovieInfo = {
       movie: {
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         name: name,
         coverUrl: url,
         releaseDate: date,
-        comments: [],
       },
-      favorites: 0,
       tags: tags,
       castMembers: cast,
     };
@@ -117,7 +107,10 @@ const AddMovieForm = () => {
       try {
         const CastResponse = await getCast();
         const tagsResponse = await getTags();
-        setDataTags([...tagsResponse]);
+
+        const dTags = tagsResponse.map((tr) => TagInfoToTag(tr));
+
+        setDataTags([...dTags]);
         setDataCast([...CastResponse]);
       } catch (ex: any) {
         setError(ex.message);
@@ -165,8 +158,8 @@ const AddMovieForm = () => {
           dataItems={dataTags}
           items={tags}
           placeHolder={"Choose a person"}
-          itemId={"tagId"}
-          dataItemId={"tagId"}
+          itemId={"id"}
+          dataItemId={"id"}
         />
       </div>
 

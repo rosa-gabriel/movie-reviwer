@@ -10,9 +10,10 @@ import {
 import LoadingCircle from "../../components/UI/LoadingCircle";
 import {
   AllMovieInfoType,
-  CastEntryType,
-  CastType,
-  TagEntriesType,
+  CastInfo,
+  Cast,
+  NewMovieInfo,
+  Tag,
 } from "../../types/Types";
 import Container from "../../components/UI/Container";
 import { UserContext } from "../../contexts/UserContext";
@@ -20,18 +21,19 @@ import ItemInput from "../../components/UI/inputs/ItemInput";
 import AccountCheck from "../../components/account/AccountCheck";
 import { ModalContext } from "../../contexts/ModalContext";
 import { NotificationContext } from "../../contexts/NotificationContext";
+import { TagInfoToTag } from "../../functions/Conversion/Convertions";
 
 const EditDetails = () => {
   //States
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [dataTags, setDataTags] = useState<TagEntriesType[]>([]);
-  const [tags, setTags] = useState<TagEntriesType[]>([]);
+  const [dataTags, setDataTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [url, setUrl] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [role, setRole] = useState<string>("");
-  const [dataCast, setDataCast] = useState<CastType[]>([]);
-  const [cast, setCast] = useState<CastEntryType[]>([]);
+  const [dataCast, setDataCast] = useState<Cast[]>([]);
+  const [cast, setCast] = useState<CastInfo[]>([]);
 
   //Contexts
   const context = useContext(UserContext);
@@ -55,18 +57,12 @@ const EditDetails = () => {
   const roleChangeHandler = (event: any) => {
     setRole(event.target.value);
   };
-  const castChangeHandler = (
-    inputCast: CastEntryType[],
-    inputDataCast: CastType[]
-  ) => {
+  const castChangeHandler = (inputCast: CastInfo[], inputDataCast: Cast[]) => {
     setDataCast([...inputDataCast]);
     setCast([...inputCast]);
     setRole("");
   };
-  const tagsChangeHandler = (
-    inputTags: TagEntriesType[],
-    inputDataTags: TagEntriesType[]
-  ) => {
+  const tagsChangeHandler = (inputTags: Tag[], inputDataTags: Tag[]) => {
     setDataTags([...inputDataTags]);
     setTags([...inputTags]);
   };
@@ -101,15 +97,13 @@ const EditDetails = () => {
 
   //Submit
   const editConfirmHandler = async () => {
-    const movie: AllMovieInfoType = {
+    const movie: NewMovieInfo = {
       movie: {
         id: String(params.movieId),
         name: name,
         coverUrl: url,
         releaseDate: date,
-        comments: [],
       },
-      favorites: 0,
       tags: tags,
       castMembers: cast,
     };
@@ -142,19 +136,23 @@ const EditDetails = () => {
         const tagsResponse = await getTags();
         const castResponse = await getCast();
 
-        const missingTags: TagEntriesType[] = [];
+        const missingTags: Tag[] = [];
+
+        const usedTags: Tag[] = movieData.tags.map((uTag) =>
+          TagInfoToTag(uTag)
+        );
 
         tagsResponse.forEach((tag) => {
           let add = true;
           movieData.tags.forEach((usedTag, index) => {
             if (tag.tagId === usedTag.tagId) add = false;
             if (index === movieData.tags.length - 1 && add) {
-              missingTags.push(tag);
+              missingTags.push(TagInfoToTag(tag));
             }
           });
         });
 
-        const missingCast: CastType[] = [];
+        const missingCast: Cast[] = [];
 
         castResponse.forEach((person) => {
           let add = true;
@@ -171,7 +169,7 @@ const EditDetails = () => {
         });
 
         setDataTags([...missingTags]);
-        setTags(movieData.tags);
+        setTags(usedTags);
         setDataCast(missingCast);
         setCast(
           movieData.castMembers.map((p) => {
@@ -237,8 +235,8 @@ const EditDetails = () => {
                   dataItems={dataTags}
                   items={tags}
                   placeHolder={"Choose a person"}
-                  itemId={"tagId"}
-                  dataItemId={"tagId"}
+                  itemId={"id"}
+                  dataItemId={"id"}
                 />
 
                 <p className="info_container_title">CAST</p>

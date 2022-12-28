@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { MessageType } from "../../types/Types";
+import { NotificationMessage } from "../../types/Types";
 
 type NotificationProps = {
-  message: MessageType;
+  message: NotificationMessage;
   close: boolean;
 };
 

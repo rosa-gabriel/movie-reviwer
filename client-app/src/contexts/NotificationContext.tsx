@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { createContext } from "react";
-import { MessageType } from "../types/Types";
+import { NotificationMessage } from "../types/Types";
 import Notification from "../components/UI/Notification";
 
 type NotificationContextType = {
-  addNotification(message: MessageType): any;
+  addNotification(message: NotificationMessage): any;
   removeNotification(): any;
 };
 
@@ -21,7 +21,7 @@ export const NotificationContextProvider = (
   props: NotificationContextProviderProps
 ) => {
   //States
-  const [notification, setNotification] = useState<MessageType>();
+  const [notification, setNotification] = useState<NotificationMessage>();
   const [hide, setHide] = useState<boolean>(false);
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
@@ -37,7 +37,7 @@ export const NotificationContextProvider = (
   return (
     <NotificationContext.Provider
       value={{
-        addNotification: (message: MessageType) => {
+        addNotification: (message: NotificationMessage) => {
           setNotification(message);
           setShowNotification(true);
           setTimeout(remove, 2000);

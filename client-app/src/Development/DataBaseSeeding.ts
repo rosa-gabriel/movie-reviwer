@@ -3,23 +3,27 @@ import {
   addPerson,
   addTag,
 } from "../functions/requests/MovieRequests";
-import { AllMovieInfoType } from "../types/Types";
+import { AllMovieInfoType, NewMovieInfo } from "../types/Types";
 
-export const seedTags = async () => {
+export const seedTags = async (token: string) => {
   const response = await fetch(
     "https://api.themoviedb.org/3/genre/movie/list?api_key=c70c967bbc4fbb88330e678847fac7aa&language=en-US"
   );
   const data = await response.json();
   const tagJson: any[] = [];
   data.genres.forEach(async (tag: any) => {
-    const tagData = await addTag(tag.name, "sus");
+    const tagData = await addTag(tag.name, token);
     tagData.imdbId = tag.id;
     tagJson.push(tagData);
   });
   return tagJson;
 };
 
-export const seedCast = async (movieId: number, savesCast: any[]) => {
+export const seedCast = async (
+  movieId: number,
+  savesCast: any[],
+  token: string
+) => {
   const response = await fetch(
     "https://api.themoviedb.org/3/movie/" +
       movieId +
@@ -36,7 +40,7 @@ export const seedCast = async (movieId: number, savesCast: any[]) => {
           name: person.name,
           profileImageUrl: `https://image.tmdb.org/t/p/w500${person.profile_path}`,
         },
-        "sus"
+        token
       );
       castData.imdbId = person.id;
       castData.role = person.character;
@@ -48,7 +52,7 @@ export const seedCast = async (movieId: number, savesCast: any[]) => {
   return castJson;
 };
 
-export const seedMovies = async (tagJson: any) => {
+export const seedMovies = async (tagJson: any, token: string) => {
   let data: any = { results: [] };
   for (let i = 1; i <= 2; i++) {
     const response = await fetch(
@@ -69,24 +73,21 @@ export const seedMovies = async (tagJson: any) => {
       });
     });
 
-    const castMembers = await seedCast(result.id, allCast);
-    console.log(castMembers);
+    const castMembers = await seedCast(result.id, allCast, token);
     allCast = [...allCast, ...castMembers];
     setTimeout(async () => {
-      const newMovie: AllMovieInfoType = {
+      const newMovie: NewMovieInfo = {
         movie: {
-          id: "",
           name: result.original_title,
           coverUrl: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
           releaseDate: result.release_date,
-          comments: [],
         },
-        favorites: 0,
         tags: tags,
         castMembers: castMembers,
       };
 
-      await addMovie(newMovie, "sus");
+      console.log(newMovie);
+      await addMovie(newMovie, token);
     }, 10000);
   });
 };

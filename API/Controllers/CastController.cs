@@ -40,7 +40,7 @@ namespace API.Controllers
         [HttpPost("create")]
         public async Task<ActionResult> PostPerson(Person newPerson)
         {
-            Result<Unit> result = await this._mediator.Send(new AddPerson.Query { NewPerson = newPerson });
+            Result<Person> result = await this._mediator.Send(new AddPerson.Query { NewPerson = newPerson });
             return this.ResultHandler(result);
         }
     }

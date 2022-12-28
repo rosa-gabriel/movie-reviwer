@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using Domain.Views;
 using Microsoft.AspNetCore.Identity;
 
 namespace Domain
@@ -19,6 +19,18 @@ namespace Domain
             uv.ProfileImageUrl = ProfileImageUrl;
 
             return uv;
+        }
+
+        public SettingsView ToSettingsView()
+        {
+            SettingsView sv = new SettingsView
+            {
+                Username = this.UserName,
+                Email = this.Email,
+                Bio = this.Bio,
+                ProfileImageUrl = this.ProfileImageUrl,
+            };
+            return sv;
         }
     }
 }

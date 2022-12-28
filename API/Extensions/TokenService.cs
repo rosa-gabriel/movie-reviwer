@@ -3,10 +3,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Domain;
+using Application.Interfaces;
 
 namespace API.Extensions
 {
-    public class TokenService
+    public class TokenService : ITokenService 
     {
         public string CreateToken(User user)
         {

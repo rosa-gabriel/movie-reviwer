@@ -1,7 +1,7 @@
 import Movie from "./Movie";
 import LoadingCircle from "./LoadingCircle";
 import { useEffect, useState } from "react";
-import { MoviePageType, MovieType } from "../../types/Types";
+import { MoviePage, MovieResponse} from "../../types/Types";
 import ErrorContainer from "./ErrorContainer";
 
 type GenericMovielistProps = {
@@ -11,7 +11,7 @@ type GenericMovielistProps = {
 
 const GenericMovielist = (props: GenericMovielistProps) => {
   //States
-  const [movies, setMovies] = useState<MovieType[]>([]);
+  const [movies, setMovies] = useState<MovieResponse[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [nextPage, setNextPage] = useState<number>(1);
   const [nextPageLoading, setNextPageLoading] = useState<boolean>(true);
@@ -24,7 +24,7 @@ const GenericMovielist = (props: GenericMovielistProps) => {
     (async () => {
       setIsLoading(true);
       try {
-        const data: MoviePageType = await props.fetchFunction(
+        const data: MoviePage= await props.fetchFunction(
           nextPage,
           props.filterId
         );

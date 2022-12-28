@@ -1,16 +1,17 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { getProfile } from "../../functions/requests/MovieRequests";
-import { ProfileType } from "../../types/Types";
+import { ProfileInfo } from "../../types/Types";
 import { UserContext } from "../../contexts/UserContext";
 import ErrorContainer from "../../components/UI/ErrorContainer";
 import Container from "../../components/UI/Container";
 import LoadingCircle from "../../components/UI/LoadingCircle";
 import Movie from "../../components/UI/Movie";
+import ProfileButtons from "../../components/UI/ProfileButtons";
 
 const Profile = () => {
   //States
-  const [user, setUser] = useState<ProfileType | null>(null);
+  const [user, setUser] = useState<ProfileInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -23,7 +24,7 @@ const Profile = () => {
       if (params.id === undefined) return;
       setIsLoading(true);
       try {
-        const userData: ProfileType = await getProfile(
+        const userData: ProfileInfo = await getProfile(
           params.id,
           context.userInfo?.token
         );
@@ -58,6 +59,7 @@ const Profile = () => {
                     <p className="profile-info">
                       <>Creation date: {user.creationDate.toDateString()}</>
                     </p>
+                    <ProfileButtons userId={user.id} />
                   </div>
                 </div>
               </div>

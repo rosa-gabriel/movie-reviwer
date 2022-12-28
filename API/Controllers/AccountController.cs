@@ -3,6 +3,8 @@ using API.DTOs;
 using API.Extensions;
 using Application;
 using Application.Core;
+using Application.Interfaces;
+using Application.temp;
 using Domain;
 using Domain.Responses;
 using Domain.Views;
@@ -21,10 +23,10 @@ namespace API.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly TokenService _tokenService;
+        private readonly ITokenService _tokenService;
         protected readonly DataContext _context;
 
-        public AccountController(DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, TokenService tokenService, IMediator mediator) : base(mediator)
+        public AccountController(DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IMediator mediator) : base(mediator)
         {
             this._context = context;
             this._userManager = userManager;
@@ -38,8 +40,12 @@ namespace API.Controllers
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(loginDto.Email);
-                if (user == null) return Unauthorized();
+                var user = await _userManager.FindByEmailAsync(loginDto.login);
+                if (user == null)
+                {
+                    user = await _userManager.FindByNameAsync(loginDto.login);
+                    if (user == null) return Unauthorized();
+                }
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
@@ -114,6 +120,7 @@ namespace API.Controllers
                     Email = registerDto.Email,
                     ProfileImageUrl = "https://i.imgur.com/mggfJH8.png",
                     CreationDate = DateTime.Now,
+                    Bio = "",
                 };
 
                 var response = await _userManager.CreateAsync(user, registerDto.Password);
@@ -155,6 +162,23 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [Authorize]
+        [HttpPut("settings/update")]
+        public async Task<ActionResult<UserDto>> PutSettings(SettingsView newSettings)
+        {
+            Result<UserDto> result = await this._mediator.Send(new UpdateUserInfo.Query { NewSettings = newSettings });
+            return this.ResultHandler(result);
+        }
+
+        [Authorize]
+        [HttpGet("settings")]
+        public async Task<ActionResult> GetSettings(string id)
+        {
+            Result<SettingsView> result = await this._mediator.Send(new FindUserSettings.Query());
+            return this.ResultHandler(result);
+        }
+
         //Returns if the given movie is favorited by the current user, or BadRequest(500) if false.
         [Authorize]
         [HttpGet("favorite/{id}")]

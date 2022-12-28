@@ -38,9 +38,9 @@ namespace API.Controllers
         //Adds a new Tag to the database with the TagName object given info.
         [Authorize]
         [HttpPost("create")]
-        public async Task<ActionResult> PostTag(TagName newTag)
+        public async Task<ActionResult<TagName>> PostTag(TagName newTag)
         {
-            Result<Unit> result = await this._mediator.Send(new AddTag.Query { NewTag = newTag });
+            Result<TagName> result = await this._mediator.Send(new AddTag.Query { NewTag = newTag });
             return this.ResultHandler(result);
         }
     }

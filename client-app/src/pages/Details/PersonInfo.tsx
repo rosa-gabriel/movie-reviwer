@@ -3,7 +3,7 @@ import {
   getMoviesFromPersonAtPage,
   getPerson,
 } from "../../functions/requests/MovieRequests";
-import { PersonType } from "../../types/Types";
+import { PersonResponse } from "../../types/Types";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import LoadingCircle from "../../components/UI/LoadingCircle";
@@ -12,7 +12,7 @@ import ErrorContainer from "../../components/UI/ErrorContainer";
 
 const TagList = () => {
   //States
-  const [person, setPerson] = useState<PersonType | null>(null);
+  const [person, setPerson] = useState<PersonResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   //Hooks
@@ -22,7 +22,7 @@ const TagList = () => {
     (async () => {
       if (params.id === undefined) return;
       try {
-        const data: PersonType = await getPerson(String(params.id));
+        const data: PersonResponse= await getPerson(String(params.id));
         setPerson(data);
         setError(null);
       } catch (ex: any) {
