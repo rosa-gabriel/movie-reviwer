@@ -1,11 +1,15 @@
 import { uri } from "../../App";
 import {
   UserSettings,
-  UserInfoContext,
   UserLogin,
   UserRegister,
 } from "../../types/Types";
-import { getRequest, postRequest, putRequest } from "./CreateRequest";
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from "./CreateRequest";
 
 export const login = async (userInfo: UserLogin) => {
   const response = await postRequest(`${uri}/Account/login`, userInfo);
@@ -47,6 +51,49 @@ export const getSettings = async (token: string) => {
     `${uri}/Account/settings`,
     token
   );
+  return response;
+};
+
+export const postFriendRequest = async (userId: string, token: string) => {
+  const response: UserSettings = await postRequest(
+    `${uri}/Account/friend/${userId}`,
+    undefined,
+    token
+  );
+  return response;
+};
+
+export const deleteFriend = async (friendId: string, token: string) => {
+  const response: UserSettings = await deleteRequest(
+    `${uri}/Account/remove/friend/${friendId}`,
+    undefined,
+    token
+  );
+  return response;
+};
+
+export const putFriendRequest = async (friendId: string, token: string) => {
+  const response: UserSettings = await putRequest(
+    `${uri}/Account/confirm/friend/${friendId}`,
+    undefined,
+    token
+  );
+  return response;
+};
+
+export const confirmFriendRequest = async (userId: string, token: string) => {
+  const response: UserSettings = await postRequest(
+    `${uri}/Account/friend/${userId}`,
+    undefined,
+    token
+  );
+  return response;
+};
+
+export const getUserFriends = async (token: string) => {
+  const response = await getRequest(`${uri}/Account/friends`, token);
+  console.log(response);
+
   return response;
 };
 

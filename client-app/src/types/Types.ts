@@ -84,12 +84,13 @@ export type UserRegister = {
 
 export type ProfileInfo = {
   id: string;
-  isLogedIn: boolean;
   imageUrl: string;
   name: string;
   creationDate: Date;
   recentFavorites: MovieResponse[];
   bio: string;
+  isFriend: boolean;
+  hasRequested: boolean;
 };
 
 export type MoviePage = {
@@ -115,11 +116,22 @@ export type CreatorType = {
   profileImageUrl: string;
 };
 
-export type UserSettings= {
+export type UserSettings = {
   username: string;
   email: string;
   profileImageUrl: string;
   bio: string;
   newPassword?: string;
   oldPassword?: string;
+};
+
+export type NewFriend = {
+  receiverId: string;
+  senderId: string;
+};
+
+export type Friend = {
+  id: string;
+  friend: CreatorType;
+  sent: boolean;
 };

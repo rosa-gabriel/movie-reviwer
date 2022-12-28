@@ -17,6 +17,7 @@ import { ModalContextProvider } from "./contexts/ModalContext";
 import { NotificationContextProvider } from "./contexts/NotificationContext";
 import DataBaseSeeding from "./development/DatabaseSeedingO";
 import Settings from "./pages/user/Settings";
+import FriendsList from "./pages/user/FriendsList";
 
 export const uri = "http://localhost:5000";
 
@@ -39,6 +40,7 @@ function App() {
               <Route path="/account/settings" element={<Settings />} />
 
               <Route path="/account/profile/:id" element={<Profile />} />
+              <Route path="/account/friends/" element={<FriendsList />} />
               <Route path="/favorites/" element={<Favorites />} />
               <Route path="/favorites/:userId" element={<Favorites />} />
               <Route path="/add/*" element={<CreationOptions />} />

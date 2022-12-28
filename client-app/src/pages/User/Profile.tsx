@@ -8,16 +8,27 @@ import Container from "../../components/UI/Container";
 import LoadingCircle from "../../components/UI/LoadingCircle";
 import Movie from "../../components/UI/Movie";
 import ProfileButtons from "../../components/UI/ProfileButtons";
+import { NotificationContext } from "../../contexts/NotificationContext";
+import {
+  deleteFriend,
+  postFriendRequest,
+} from "../../functions/requests/AccouontRequests";
 
 const Profile = () => {
   //States
   const [user, setUser] = useState<ProfileInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [seed, setSeed] = useState<number>(1);
+
+  const reset = () => {
+    setSeed(Math.random());
+  };
 
   //Contexts
   const params = useParams();
   const context = useContext(UserContext);
+  const notification = useContext(NotificationContext);
 
   useEffect(() => {
     (async () => {
@@ -35,12 +46,77 @@ const Profile = () => {
         setIsLoading(false);
       }
     })();
-  }, [context.userInfo, params.id]);
+  }, [context.userInfo, params.id, seed]);
+
+  const friendRequestHandler = async () => {
+    try {
+      await postFriendRequest(
+        String(params.id),
+        String(context.userInfo?.token)
+      );
+      notification.addNotification({
+        code: "SENT",
+        text: "Friend request sent.",
+        error: false,
+      });
+    } catch (ex: any) {
+      notification.addNotification({
+        code: "FAILED",
+        text: "Failed to make friend request",
+        error: true,
+      });
+    } finally {
+      reset();
+    }
+  };
+
+  const removeFriendHandler = async () => {
+    try {
+      await deleteFriend(String(user?.id), String(context.userInfo?.token));
+      notification.addNotification({
+        code: "REMOVED",
+        text: "Friend removed.",
+        error: false,
+      });
+    } catch (ex: any) {
+      notification.addNotification({
+        code: "FAILED",
+        text: "Failed to remove friend friend",
+        error: true,
+      });
+    } finally {
+      reset();
+    }
+  };
 
   return (
     <Container>
       <ErrorContainer error={error}>
         <>
+          {context.isLogedIn && (
+            <>
+              {user !== null &&
+                !user?.hasRequested &&
+                user?.id !== context.userInfo?.id && (
+                  <button
+                    className="button edit-button"
+                    type="button"
+                    onClick={friendRequestHandler}
+                  >
+                    <i className="fa-solid fa-user-plus"></i>
+                  </button>
+                )}
+              {user?.hasRequested && (
+                <button
+                  className="button edit-button"
+                  type="button"
+                  onClick={removeFriendHandler}
+                >
+                  <i className="fa-solid fa-user-minus"></i>
+                </button>
+              )}
+            </>
+          )}
           {user !== null && (
             <div style={{ padding: "30px" }}>
               <div>
@@ -59,7 +135,7 @@ const Profile = () => {
                     <p className="profile-info">
                       <>Creation date: {user.creationDate.toDateString()}</>
                     </p>
-                    <ProfileButtons userId={user.id} />
+                    <ProfileButtons isFriend={user.isFriend} userId={user.id} />
                   </div>
                 </div>
               </div>

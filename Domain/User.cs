@@ -9,8 +9,9 @@ namespace Domain
         public string Bio { get; set; }
         public DateTime CreationDate { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<Friend> ReceivedRequests { get; set; }
+        public ICollection<Friend> SentRequests { get; set; }
         public bool IsAdmin { get; set; }
-
         public UserView ToUserView()
         {
             UserView uv = new UserView();
@@ -20,7 +21,6 @@ namespace Domain
 
             return uv;
         }
-
         public SettingsView ToSettingsView()
         {
             SettingsView sv = new SettingsView

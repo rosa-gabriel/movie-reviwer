@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using API.DTOs;
-using API.Extensions;
 using Application;
 using Application.Core;
 using Application.Interfaces;
@@ -25,13 +24,15 @@ namespace API.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
         protected readonly DataContext _context;
+        protected readonly IUserAccessor _userAccessor;
 
-        public AccountController(DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IMediator mediator) : base(mediator)
+        public AccountController(IUserAccessor userAccessor, DataContext context, UserManager<User> userManager, SignInManager<User> signInManager, ITokenService tokenService, IMediator mediator) : base(mediator)
         {
             this._context = context;
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._tokenService = tokenService;
+            this._userAccessor = userAccessor;
         }
 
         //Return a token if the give LoginDto data given matches a real user, else returns a Unauthorized(401) response.
@@ -165,9 +166,41 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPut("settings/update")]
-        public async Task<ActionResult<UserDto>> PutSettings(SettingsView newSettings)
+        public async Task<ActionResult<FriendsListView>> PutSettings(SettingsView newSettings)
         {
             Result<UserDto> result = await this._mediator.Send(new UpdateUserInfo.Query { NewSettings = newSettings });
+            return this.ResultHandler(result);
+        }
+
+        [Authorize]
+        [HttpGet("friends")]
+        public async Task<ActionResult<UserDto>> GetFriends()
+        {
+            Result<FriendsListView> result = await this._mediator.Send(new ListProfileFriends.Query());
+            return this.ResultHandler(result);
+        }
+
+        [Authorize]
+        [HttpPost("friend/{id}")]
+        public async Task<ActionResult<Unit>> PostFriend(string Id)
+        {
+            Result<Unit> result = await this._mediator.Send(new AddFriendRequest.Query { Id = Id });
+            return this.ResultHandler(result);
+        }
+
+        [Authorize]
+        [HttpDelete("remove/friend/{id}")]
+        public async Task<ActionResult<Unit>> DeleteFriend(string Id)
+        {
+            Result<Unit> result = await this._mediator.Send(new RemoveFriend.Query { UserId = Id });
+            return this.ResultHandler(result);
+        }
+
+        [Authorize]
+        [HttpPut("confirm/friend/{id}")]
+        public async Task<ActionResult<Unit>> PutFriend(Guid Id)
+        {
+            Result<Unit> result = await this._mediator.Send(new ConfirmFriendRequest.Query { FriendshipId = Id });
             return this.ResultHandler(result);
         }
 
@@ -205,6 +238,7 @@ namespace API.Controllers
         {
             try
             {
+                User self = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 ProfileResponse profile;
                 User user = await _userManager.FindByIdAsync(id);
@@ -214,6 +248,18 @@ namespace API.Controllers
 
                 profile.RecentFavorites = (await this._mediator.Send(new ListRecentFavorites.Query { user = user })).Value;
                 profile.IsLogedIn = id.Equals(userId);
+                Friend friend = _context.Friends.Where(f => (f.Receiver == self && f.Sender == user && f.Accepted) || (f.Receiver == user && f.Sender == self)).FirstOrDefault();
+
+                if (friend == null)
+                {
+                    profile.IsLogedIn = false;
+                    profile.HasRequested = false;
+                }
+                else
+                {
+                    profile.IsFriend = friend.Accepted;
+                    profile.HasRequested = true;
+                }
 
                 return Ok(profile);
             }

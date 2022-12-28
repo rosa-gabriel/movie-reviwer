@@ -22,5 +22,7 @@ namespace Domain
         public string Bio { get; set; }
         public DateTime CreationDate { get; set; }
         public List<Movie> RecentFavorites { get; set; }
+        public bool IsFriend { get; set; }
+        public bool HasRequested { get; set; }
     }
 }

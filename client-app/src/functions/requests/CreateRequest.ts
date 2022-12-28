@@ -85,3 +85,7 @@ export const postRequest = async (url: string, body: any, token?: string) => {
 export const putRequest = async (url: string, body: any, token?: string) => {
   return createRequest(url, "PUT", body, token);
 };
+
+export const deleteRequest = async (url: string, body: any, token?: string) => {
+  return createRequest(url, "DELETE", body, token);
+};

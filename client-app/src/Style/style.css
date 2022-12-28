@@ -593,13 +593,52 @@ nav {
   color: var(--red);
 }
 
-.profile-buttons{
+.profile-buttons {
   margin-top: 10px;
 }
 
-.profile-buttons button{
+.profile-buttons button {
   padding: 10px;
   margin-right: 7px;
+}
+
+/* Friends */
+
+.friends-container {
+  position: relative;
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.friends-container .friend {
+  margin-bottom: 10px;
+}
+
+.friend {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.friend a {
+  text-decoration: none;
+}
+
+.friend h4 {
+  font-size: 20px;
+  margin-right: 20px;
+}
+
+.friend h4:hover {
+  color: var(--red);
+}
+
+.friend button {
+  padding: 5px;
+  margin-left: 10px;
 }
 
 /* Comments */
@@ -627,11 +666,11 @@ nav {
   flex-direction: row;
 }
 
-.comment-header h4{
-  transition: color .2;
+.comment-header h4 {
+  transition: color 0.2;
 }
 
-.comment-header h4:hover{
+.comment-header h4:hover {
   color: var(--red);
 }
 
@@ -639,7 +678,7 @@ nav {
   position: absolute;
   right: 0;
   color: var(--light-grey);
-  transition: color .2s;
+  transition: color 0.2s;
 }
 .comment-header i:hover {
   color: var(--white);

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Domain.Views;
 
 namespace Persistence
 {
@@ -18,5 +19,14 @@ namespace Persistence
         public DbSet<TagName> TagNames { get; set; }
         public DbSet<TagEntry> TagEntries { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Friend> Friends { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<User>().HasMany<Friend>(u => u.SentRequests).WithOne(fr => fr.Sender);
+            builder.Entity<User>().HasMany<Friend>(u => u.ReceivedRequests).WithOne(fr => fr.Receiver);
+        }
     }
 }
