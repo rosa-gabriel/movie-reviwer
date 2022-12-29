@@ -4,6 +4,7 @@ import { addPerson } from "../../functions/requests/MovieRequests";
 import { NotificationContext } from "../../contexts/NotificationContext";
 import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
+import FormPair from "../../components/UI/FormPair";
 
 const AddPersonForm = () => {
   //States
@@ -11,6 +12,9 @@ const AddPersonForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [url, setUrl] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [gender, setGender] = useState<number>(0);
 
   //Contexts
   const notification = useContext(NotificationContext);
@@ -26,6 +30,15 @@ const AddPersonForm = () => {
   const urlChangeHandler = (event: any) => {
     setUrl(event.target.value);
   };
+  const bioChangeHandler = (event: any) => {
+    setBio(event.target.value);
+  };
+  const genderChangeHandler = (event: any) => {
+    setGender(event.target.value);
+  };
+  const dateChangeHandler = (event: any) => {
+    setDate(new Date(event.target.value));
+  };
 
   //Submit Handler
   const submitHandler = async (event: any) => {
@@ -40,13 +53,19 @@ const AddPersonForm = () => {
       setError("Url field is required.");
       return;
     }
-
+    if (gender == 0) {
+      setError("You need to choose a gender!");
+      return;
+    }
     setIsLoading(true);
     try {
       await addPerson(
         {
           name: name,
           profileImageUrl: url,
+          birthday: date,
+          biography: bio,
+          gender: gender,
         },
         String(context.userInfo?.token)
       );
@@ -86,6 +105,35 @@ const AddPersonForm = () => {
           className="input-dark input-add"
           type={"text"}
         />
+      </div>
+
+      <FormPair
+        title={"BIOGRAPHY"}
+        value={bio}
+        type={"text"}
+        onChange={bioChangeHandler}
+      ></FormPair>
+
+      <FormPair
+        title={"BIRTHDAY"}
+        value={date.toISOString()}
+        type={"date"}
+        onChange={dateChangeHandler}
+      ></FormPair>
+
+      <div className="form-pair">
+        <label>GENDER</label>
+        <select
+          onChange={genderChangeHandler}
+          className="input-dark input-add"
+          placeholder="Gender"
+          value={gender}
+        >
+          <option value={0}>-- Choose a Gender --</option>
+          <option value={1}>Male</option>
+          <option value={2}>Female</option>
+          <option value={3}>Different</option>
+        </select>
       </div>
 
       <SubmitButton loading={isLoading} buttonText={"Add"}></SubmitButton>

@@ -164,6 +164,7 @@ export const getPerson = async (id: string) => {
     const response: PersonResponse = await getRequest(
       `${uri}/Cast/person/${id}`
     );
+    response.birthday = new Date(response.birthday);
     return response;
   } catch (ex: any) {
     throw ex;

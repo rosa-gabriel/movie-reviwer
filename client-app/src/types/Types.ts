@@ -35,6 +35,9 @@ export type NewTag = {
 export type NewPerson = {
   name: string;
   profileImageUrl: string;
+  birthday: Date;
+  biography: string;
+  gender: number;
 };
 
 export type Cast = {
@@ -53,6 +56,9 @@ export type PersonResponse = {
   id: string;
   name: string;
   profileImageUrl: string;
+  birthday: Date;
+  biography: string;
+  gender: number;
 };
 
 export type AllMovieInfoType = {

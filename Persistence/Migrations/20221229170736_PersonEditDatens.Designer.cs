@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221221131400_MovieComments")]
-    partial class MovieComments
+    [Migration("20221229170736_PersonEditDatens")]
+    partial class PersonEditDatens
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -141,6 +141,15 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("Biography")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
@@ -212,6 +221,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
 
@@ -258,6 +270,30 @@ namespace Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Views.Friend", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("Accepted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -454,6 +490,21 @@ namespace Persistence.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("Domain.Views.Friend", b =>
+                {
+                    b.HasOne("Domain.User", "Receiver")
+                        .WithMany("ReceivedRequests")
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("Domain.User", "Sender")
+                        .WithMany("SentRequests")
+                        .HasForeignKey("SenderId");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -513,6 +564,10 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("ReceivedRequests");
+
+                    b.Navigation("SentRequests");
                 });
 #pragma warning restore 612, 618
         }

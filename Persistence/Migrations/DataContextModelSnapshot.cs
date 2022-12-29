@@ -139,6 +139,15 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<string>("Biography")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 

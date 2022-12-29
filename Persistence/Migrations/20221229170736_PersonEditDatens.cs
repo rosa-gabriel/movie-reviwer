@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class sus : Migration
+    public partial class PersonEditDatens : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,6 +43,7 @@ namespace Persistence.Migrations
                     Bio = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     CreationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true)
@@ -111,7 +112,11 @@ namespace Persistence.Migrations
                     Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ProfileImageUrl = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Birthday = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Biography = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Gender = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -261,6 +266,61 @@ namespace Persistence.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Friends",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    SenderId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ReceiverId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Accepted = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Friends", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Friends_AspNetUsers_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Friends_AspNetUsers_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CreatorId = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    MovieId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    PostDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Message = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Comments_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "FavoriteEntries",
                 columns: table => new
                 {
@@ -395,6 +455,16 @@ namespace Persistence.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_CreatorId",
+                table: "Comments",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_MovieId",
+                table: "Comments",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FavoriteEntries_FanId",
                 table: "FavoriteEntries",
                 column: "FanId");
@@ -403,6 +473,16 @@ namespace Persistence.Migrations
                 name: "IX_FavoriteEntries_FilmId",
                 table: "FavoriteEntries",
                 column: "FilmId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Friends_ReceiverId",
+                table: "Friends",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Friends_SenderId",
+                table: "Friends",
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TagEntries_FilmId",
@@ -436,7 +516,13 @@ namespace Persistence.Migrations
                 name: "CastEntries");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "FavoriteEntries");
+
+            migrationBuilder.DropTable(
+                name: "Friends");
 
             migrationBuilder.DropTable(
                 name: "TagEntries");

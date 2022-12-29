@@ -3,7 +3,7 @@ import {
   addPerson,
   addTag,
 } from "../functions/requests/MovieRequests";
-import { AllMovieInfoType, NewMovieInfo } from "../types/Types";
+import { NewMovieInfo } from "../types/Types";
 
 export const seedTags = async (token: string) => {
   const response = await fetch(
@@ -33,12 +33,21 @@ export const seedCast = async (
   let allCast = [...savesCast];
   const castJson: any[] = [];
   data.cast.forEach(async (person: any) => {
-    const test = allCast.find((cj) => cj.name == person.name);
+    const test = allCast.find((cj) => cj.name === person.name);
+    const responsePerson = await fetch(
+      "https://api.themoviedb.org/3/person/" +
+        person.id +
+        "?api_key=c70c967bbc4fbb88330e678847fac7aa&language=en-US"
+    );
+    const info = await responsePerson.json();
     if (!test) {
       const castData = await addPerson(
         {
           name: person.name,
           profileImageUrl: `https://image.tmdb.org/t/p/w500${person.profile_path}`,
+          birthday: new Date(info.birthday),
+          biography: info.biography,
+          gender: info.gender,
         },
         token
       );
@@ -91,5 +100,3 @@ export const seedMovies = async (tagJson: any, token: string) => {
     }, 10000);
   });
 };
-
-const addingMoviesInfo = () => {};
