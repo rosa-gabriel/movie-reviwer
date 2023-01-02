@@ -13,15 +13,17 @@ namespace Domain
         public Movie Movie { get; set; }
         public DateTime PostDate { get; set; }
         public string Message { get; set; }
+        public bool wasEdited { get; set; }
 
         public CommentView ToCommentView()
         {
             CommentView cv = new CommentView();
 
             cv.Creator = this.Creator.ToUserView();
-
+            cv.Id = Id;
             cv.Message = this.Message;
             cv.PostDate = this.PostDate;
+            cv.wasEdited = this.wasEdited;
             return cv;
         }
     }

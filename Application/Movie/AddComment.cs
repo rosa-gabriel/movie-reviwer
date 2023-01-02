@@ -37,6 +37,7 @@ namespace Application
                 if (movie == null) return null;
 
                 request.Comment.Id = new Guid();
+                request.Comment.wasEdited = false;
                 request.Comment.PostDate = DateTime.Now;
                 request.Comment.Creator = user;
                 request.Comment.Movie = movie;

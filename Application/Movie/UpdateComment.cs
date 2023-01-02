@@ -37,6 +37,9 @@ namespace Application
                 Comment comment = await this._context.Comments.Where(c => c.Creator == user).FirstOrDefaultAsync(u => u.Id == request.NewComment.Id);
                 if (comment == null) return null;
 
+                if (comment.Message == request.NewComment.Message) return Result<Unit>.Success(Unit.Value);
+
+                comment.wasEdited = true;
                 comment.Message = request.NewComment.Message;
 
                 bool success = await this._context.SaveChangesAsync() > 0;

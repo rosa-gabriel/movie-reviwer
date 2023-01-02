@@ -267,5 +267,20 @@ namespace API.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [Authorize]
+        [HttpDelete("comment/{id}")]
+        public async Task<ActionResult> DeletePerson(Guid id)
+        {
+            Result<Unit> result = await this._mediator.Send(new RemoveComment.Query { Id = id });
+            return this.ResultHandler(result);
+        }
+        [Authorize]
+        [HttpPut("comment")]
+        public async Task<ActionResult> PutPerson(Comment NewComment)
+        {
+            Result<Unit> result = await this._mediator.Send(new UpdateComment.Query { NewComment = NewComment });
+            return this.ResultHandler(result);
+        }
     }
 }

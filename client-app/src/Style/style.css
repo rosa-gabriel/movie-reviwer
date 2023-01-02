@@ -687,6 +687,7 @@ nav {
 .comment-header i {
   position: absolute;
   right: 0;
+  top: 0px;
   color: var(--light-grey);
   transition: color 0.2s;
 }
@@ -852,4 +853,46 @@ nav {
     width: 90%;
     margin: 20px 5% 0 5%;
   }
+  .comment-header p {
+    font-size: 12px;
+  }
+
+  .comment-header i {
+    top: -20px;
+  }
+}
+
+.comment-menu {
+  position: absolute;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--light-grey);
+  right: 0;
+  top: -85px;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.comment-menu li {
+  padding: 10px;
+  list-style: none;
+  transition: 0.2s;
+}
+.comment-menu li:hover {
+  background-color: var(--super-light-grey);
+}
+
+.comment-edit-input {
+  border-radius: 5px;
+  overflow: hidden;
+}
+.comment-edit-input input {
+  padding: 5px;
+  width: fit-content;
+}
+.comment-edit-input button {
+  padding: 5px 10px;
+  border-radius: 0;
 }

@@ -14,7 +14,7 @@ namespace Application
     {
         public class Query : IRequest<Result<Unit>>
         {
-            public Comment NewComment { get; set; }
+            public Guid Id { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>
@@ -36,7 +36,7 @@ namespace Application
                 User user = await this._userManager.FindByNameAsync(this._useAccessor.GetUsername());
                 if (user == null) return Result<Unit>.Failure("Invalid user! Try reloging in.");
 
-                Comment comment = await this._context.Comments.Where(c => c.Creator == user).FirstOrDefaultAsync(u => u.Id == request.NewComment.Id);
+                Comment comment = await this._context.Comments.Where(c => c.Creator == user).FirstOrDefaultAsync(c => c.Id == request.Id);
                 if (comment == null) return null;
 
                 this._context.Comments.Remove(comment);

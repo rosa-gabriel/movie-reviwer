@@ -37,6 +37,7 @@ const CommentSection = (props: CommentSectionProps) => {
           <Commentar
             key={comment.creator.id + comment.postDate}
             comment={comment}
+            reset={reloadComments}
           ></Commentar>
         );
       })}

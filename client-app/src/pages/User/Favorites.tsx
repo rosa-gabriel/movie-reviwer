@@ -25,7 +25,9 @@ const Favorites = () => {
         <AccountCheck />
         <ErrorContainer error={error}>
           <>
-            <h1 className="title">{(isSelf ? "Your" : name) + " Favorites"}</h1>
+            <h1 className="title">
+              {(isSelf ? "Your" : name + "'s") + " Favorites"}
+            </h1>
             <GenericMovielist
               fetchFunction={getUserFavorites}
               token={String(context.userInfo?.token)}

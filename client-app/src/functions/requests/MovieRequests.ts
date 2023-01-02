@@ -219,6 +219,23 @@ export const updatePerson = async (person: PersonResponse, token: string) => {
   return response;
 };
 
+export const deleteComment = async (commentId: string, token: string) => {
+  const response: Response = await deleteRequest(
+    `${uri}/Account/comment/${commentId}`,
+    token
+  );
+  return response;
+};
+
+export const updateComment = async (comment: CommentType, token: string) => {
+  const response: Response = await putRequest(
+    `${uri}/Account/comment`,
+    comment,
+    token
+  );
+  return response;
+};
+
 export const getCast = async () => {
   try {
     const response: Cast[] = await getRequest(`${uri}/Cast`);

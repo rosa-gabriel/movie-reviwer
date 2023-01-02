@@ -29,7 +29,6 @@ function App() {
       <ModalContextProvider>
         <NotificationContextProvider>
           <>
-            <CommentsMenu />
             <NavBar />
             <Routes>
               <Route path="/" element={<HomeList />} />

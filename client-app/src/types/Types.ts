@@ -111,9 +111,11 @@ export type NotificationMessage = {
 };
 
 export type CommentType = {
+  id: string;
   creator: CreatorType;
   message: string;
   postDate: Date;
+  wasEdited: boolean;
 };
 
 export type CreatorType = {
