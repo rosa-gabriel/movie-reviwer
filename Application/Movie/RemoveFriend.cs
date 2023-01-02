@@ -2,6 +2,7 @@ using Application.Core;
 using Application.Interfaces;
 using Domain;
 using Domain.Views;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -13,6 +14,13 @@ namespace Application
         public class Query : IRequest<Result<Unit>>
         {
             public string UserId { get; set; }
+        }
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.UserId).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>
@@ -30,14 +38,14 @@ namespace Application
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User self = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == this._userAccessor.GetUsername());
-                if (self == null) return Result<Unit>.Failure("Invalid User!");
+                if (self == null) return Result<Unit>.Unauthorize();
 
                 User user = await this._context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
-                if (user == null) return Result<Unit>.Failure("Invalid friend User!");
+                if (user == null) return null;
 
                 Friend friendship = await this._context.Friends.Where(f => (f.Receiver == self && f.Sender == user) || (f.Sender == self && f.Receiver == user)).FirstOrDefaultAsync();
                 if (friendship == null) return Result<Unit>.Failure("Users don't have a friend request!");
-                if (friendship.Receiver != self && friendship.Sender != self) return Result<Unit>.Failure("User doesn't have permition to do this!");
+                if (friendship.Receiver != self && friendship.Sender != self) return Result<Unit>.Unauthorize();
 
                 this._context.Friends.Remove(friendship);
 

@@ -1,9 +1,9 @@
 using Application.Core;
 using Application.Interfaces;
+using Application.Validators;
 using Domain;
-using Domain.Responses;
+using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application
@@ -14,6 +14,15 @@ namespace Application
         {
             public Comment Comment { get; set; }
             public Guid movieId { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Comment).SetValidator(new CommentValidator());
+                RuleFor(x => x.movieId).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>
@@ -28,12 +37,10 @@ namespace Application
 
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
-                if (String.IsNullOrWhiteSpace(request.Comment.Message)) return Result<Unit>.Failure("Empty comments are not valid.");
-
                 User user = this._context.Users.FirstOrDefault(u => u.UserName == _userAccessor.GetUsername());
                 Movie movie = this._context.Movies.FirstOrDefault(m => m.Id == request.movieId);
 
-                if (user == null) return null;
+                if (user == null) return Result<Unit>.Unauthorize();
                 if (movie == null) return null;
 
                 request.Comment.Id = new Guid();

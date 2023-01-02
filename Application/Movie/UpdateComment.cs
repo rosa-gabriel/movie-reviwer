@@ -7,6 +7,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using FluentValidation;
+using Application.Validators;
 
 namespace Application
 {
@@ -15,6 +17,13 @@ namespace Application
         public class Query : IRequest<Result<Unit>>
         {
             public Comment NewComment { get; set; }
+        }
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.NewComment).SetValidator(new CommentValidator());
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>
@@ -32,7 +41,7 @@ namespace Application
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User user = await this._userManager.FindByNameAsync(this._useAccessor.GetUsername());
-                if (user == null) return Result<Unit>.Failure("Invalid user! Try reloging in.");
+                if (user == null) return Result<Unit>.Unauthorize();
 
                 Comment comment = await this._context.Comments.Where(c => c.Creator == user).FirstOrDefaultAsync(u => u.Id == request.NewComment.Id);
                 if (comment == null) return null;

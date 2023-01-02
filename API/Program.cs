@@ -3,6 +3,8 @@ using API.Extensions;
 using Application;
 using Application.Interfaces;
 using Domain;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,6 +40,9 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<AddComment>();
 
 builder.Services.AddIdentityCore<User>(opt =>
 {

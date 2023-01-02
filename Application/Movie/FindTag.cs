@@ -1,6 +1,7 @@
 using Application.Core;
 using Domain;
 using Domain.Responses;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -12,6 +13,14 @@ namespace Application
         public class Query : IRequest<Result<TagName>>
         {
             public Guid Id { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Id).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<TagName>>

@@ -1,6 +1,7 @@
 using Application.Core;
 using Domain;
 using Domain.Responses;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -13,6 +14,15 @@ namespace Application
         {
             public string Filter { get; set; }
             public int Page { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Filter).NotEmpty();
+                RuleFor(x => x.Page).NotEmpty().GreaterThanOrEqualTo(1);
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>

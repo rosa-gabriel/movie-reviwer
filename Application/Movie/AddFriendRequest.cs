@@ -2,6 +2,7 @@ using Application.Core;
 using Application.Interfaces;
 using Domain;
 using Domain.Views;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -13,6 +14,14 @@ namespace Application
         public class Query : IRequest<Result<Unit>>
         {
             public string Id { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Id).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>
@@ -30,7 +39,7 @@ namespace Application
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User sender = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == this._userAccessor.GetUsername());
-                if (sender == null) return Result<Unit>.Failure("Invalid User!");
+                if (sender == null) return Result<Unit>.Unauthorize();
                 User receiver = await this._context.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
                 if (receiver == null) return Result<Unit>.Failure("Invalid friend user!");
                 if (sender == receiver) return Result<Unit>.Failure("User cannot friend self!");

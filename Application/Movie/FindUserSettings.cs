@@ -25,7 +25,7 @@ namespace Application
             public async Task<Result<SettingsView>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User user = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == this._userAccessor.GetUsername());
-                if (user == null) return Result<SettingsView>.Failure("Invalid user! Try another one.");
+                if (user == null) return Result<SettingsView>.Unauthorize();
 
                 SettingsView settings = user.ToSettingsView();
 

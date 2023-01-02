@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain;
 using Domain.Responses;
 using Domain.Views;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -14,6 +15,14 @@ namespace Application
         public class Query : IRequest<Result<List<CommentView>>>
         {
             public Guid MovieId { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.MovieId).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<List<CommentView>>>

@@ -1,6 +1,7 @@
 using Application.Core;
 using Domain;
 using Domain.Responses;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -14,6 +15,14 @@ namespace Application
             public int Page { get; set; }
         }
 
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Page).NotEmpty().GreaterThanOrEqualTo(1);
+            }
+        }
+
         public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
         {
             public readonly DataContext _context;
@@ -25,7 +34,7 @@ namespace Application
             public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 List<Movie> movies = await this._context.Movies.OrderByDescending(m => m.ReleaseDate).Skip((request.Page - 1) * 25).Take(25).ToListAsync();
-                if (request.Page > 1 && movies.Count == 0) Result<MoviePageResponse>.Failure("Invalid Page");
+                if (movies.Count == 0) return null;
 
                 return Result<MoviePageResponse>.Success(new MoviePageResponse
                 {

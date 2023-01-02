@@ -87,8 +87,6 @@ export const confirmFriendRequest = async (userId: string, token: string) => {
 
 export const getUserFriends = async (token: string) => {
   const response = await getRequest(`${uri}/Account/friends`, token);
-  console.log(response);
-
   return response;
 };
 

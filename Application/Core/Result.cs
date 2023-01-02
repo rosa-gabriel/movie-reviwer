@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Application.Core
 {
     public class Result<T>
     {
         public bool IsSuccess { get; set; }
+        public bool Unauthorized { get; set; }
         public T Value { get; set; }
         public string Error { get; set; }
 
@@ -26,6 +22,14 @@ namespace Application.Core
             {
                 IsSuccess = false,
                 Error = error
+            };
+        }
+        public static Result<T> Unauthorize()
+        {
+            return new Result<T>
+            {
+                IsSuccess = false,
+                Unauthorized = true
             };
         }
     }

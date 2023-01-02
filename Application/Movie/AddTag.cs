@@ -1,5 +1,7 @@
 using Application.Core;
+using Application.Validators;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -10,6 +12,14 @@ namespace Application
         public class Query : IRequest<Result<TagName>>
         {
             public TagName NewTag { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.NewTag).SetValidator(new TagNameValidator());
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<TagName>>

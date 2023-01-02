@@ -26,7 +26,7 @@ namespace Application
             public async Task<Result<List<CommentView>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User user = await this._context.Users.Include(u => u.Comments).FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
-                if (user == null) return null;
+                if (user == null) return Result<List<CommentView>>.Unauthorize();
 
                 List<Comment> comments = user.Comments.ToList();
                 List<CommentView> commentViews = new List<CommentView>();

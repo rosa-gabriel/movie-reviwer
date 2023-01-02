@@ -7,6 +7,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Application.Validators;
+using FluentValidation;
 
 namespace Application
 {
@@ -15,6 +17,13 @@ namespace Application
         public class Query : IRequest<Result<Unit>>
         {
             public Person NewPerson { get; set; }
+        }
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.NewPerson).SetValidator(new PersonValidator());
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>

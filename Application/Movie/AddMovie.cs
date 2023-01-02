@@ -1,6 +1,8 @@
 using Application.Core;
+using Application.Validators;
 using Domain;
 using Domain.Responses;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -12,6 +14,14 @@ namespace Application
         public class Query : IRequest<Result<Unit>>
         {
             public MovieResponse NewMovie { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.NewMovie.movie).SetValidator(new MovieValidator());
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>

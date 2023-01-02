@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Domain;
 using Domain.Responses;
 using Domain.Views;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -15,6 +16,14 @@ namespace Application
         {
             public string Username { get; set; }
             public int Page { get; set; }
+        }
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Page).NotEmpty().GreaterThanOrEqualTo(1);
+                RuleFor(x => x.Username).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
@@ -30,11 +39,12 @@ namespace Application
             public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User curentUser = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == this._userAccessor.GetUsername());
+                if (curentUser == null) return Result<MoviePageResponse>.Unauthorize();
 
                 if (request.Username != curentUser.UserName)
                 {
                     User targetUser = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == request.Username);
-                    if (targetUser == null) return Result<MoviePageResponse>.Failure("User doesn't exist!");
+                    if (targetUser == null) return null;
 
                     Friend friend = await this._context.Friends.Where(f => (f.Receiver == curentUser && f.Sender == targetUser) || (f.Receiver == targetUser && f.Sender == curentUser)).FirstOrDefaultAsync();
                     if (friend == null || !friend.Accepted) return Result<MoviePageResponse>.Failure("The users are not friends!");

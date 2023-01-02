@@ -1,8 +1,7 @@
 using Application.Core;
-using Application.temp;
 using Application.Interfaces;
 using Domain;
-using Domain.Views;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +14,13 @@ namespace Application
         public class Query : IRequest<Result<Unit>>
         {
             public Guid Id { get; set; }
+        }
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Id).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<Unit>>
@@ -34,7 +40,7 @@ namespace Application
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User user = await this._userManager.FindByNameAsync(this._useAccessor.GetUsername());
-                if (user == null) return Result<Unit>.Failure("Invalid user! Try reloging in.");
+                if (user == null) return Result<Unit>.Unauthorize();
 
                 Comment comment = await this._context.Comments.Where(c => c.Creator == user).FirstOrDefaultAsync(c => c.Id == request.Id);
                 if (comment == null) return null;

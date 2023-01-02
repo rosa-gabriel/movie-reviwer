@@ -1,6 +1,8 @@
 using Application.Core;
+using Application.Validators;
 using Domain;
 using Domain.Responses;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -13,6 +15,14 @@ namespace Application
         {
             public Guid Id { get; set; }
             public IMediator Mediator { get; set; }
+        }
+
+        public class QueryValidation : AbstractValidator<Query>
+        {
+            public QueryValidation()
+            {
+                RuleFor(x => x.Id).NotEmpty();
+            }
         }
 
         public class Handler : IRequestHandler<Query, Result<MovieResponse>>

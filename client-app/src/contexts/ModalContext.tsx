@@ -37,7 +37,6 @@ export const ModalContextProvider = (props: ModalContextProviderProps) => {
     <ModalContext.Provider
       value={{
         showModal: (titleB: string, messageB: string, confirmB: any) => {
-          console.log("modalSet");
           setMessage(messageB);
           setTitle(titleB);
           setConfirmModal(() => confirmB);

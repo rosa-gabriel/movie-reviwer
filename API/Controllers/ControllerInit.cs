@@ -16,7 +16,8 @@ namespace API.Controllers
         {
             if (result == null) return NotFound();
             if (result.IsSuccess) return Ok(result.Value);
-            else return BadRequest(result.Error);
+            if (result.Unauthorized) return Unauthorized();
+            return BadRequest(result.Error);
         }
     }
 }

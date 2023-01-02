@@ -26,7 +26,7 @@ namespace Application
             public async Task<Result<FriendsListView>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User user = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
-                if (user == null) return Result<FriendsListView>.Failure("Invalid user!");
+                if (user == null) return Result<FriendsListView>.Unauthorize();
 
 
                 List<Friend> allFriends = await this._context.Friends.Where(f => f.Sender == user).Include(f => f.Receiver).Include(f => f.Sender).ToListAsync();
