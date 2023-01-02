@@ -18,6 +18,8 @@ import { NotificationContextProvider } from "./contexts/NotificationContext";
 import DataBaseSeeding from "./development/DatabaseSeedingO";
 import Settings from "./pages/user/Settings";
 import FriendsList from "./pages/user/FriendsList";
+import EditPersonInfo from "./pages/details/EditPersonInfo";
+import CommentsMenu from "./components/UI/CommentsMenu";
 
 export const uri = "http://localhost:5000";
 
@@ -27,6 +29,7 @@ function App() {
       <ModalContextProvider>
         <NotificationContextProvider>
           <>
+            <CommentsMenu />
             <NavBar />
             <Routes>
               <Route path="/" element={<HomeList />} />
@@ -35,6 +38,10 @@ function App() {
               <Route path="/tag/:id" element={<TagList />} />
               <Route path="/search/:search" element={<SearchList />} />
               <Route path="/person/:id" element={<PersonInfo />} />
+              <Route
+                path="/person/:personId/edit"
+                element={<EditPersonInfo />}
+              />
               <Route path="/account/login" element={<LoginForm />} />
               <Route path="/account/register" element={<RegisterForm />} />
               <Route path="/account/settings" element={<Settings />} />
@@ -42,7 +49,7 @@ function App() {
               <Route path="/account/profile/:id" element={<Profile />} />
               <Route path="/account/friends/" element={<FriendsList />} />
               <Route path="/favorites/" element={<Favorites />} />
-              <Route path="/favorites/:userId" element={<Favorites />} />
+              <Route path="/favorites/:Username" element={<Favorites />} />
               <Route path="/add/*" element={<CreationOptions />} />
 
               <Route path="/error" element={<Error />} />

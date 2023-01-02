@@ -4,17 +4,21 @@ import {
   getPerson,
 } from "../../functions/requests/MovieRequests";
 import { PersonResponse } from "../../types/Types";
-import { useParams } from "react-router";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { useContext, useEffect, useState } from "react";
 import LoadingCircle from "../../components/UI/LoadingCircle";
 import Container from "../../components/UI/Container";
 import ErrorContainer from "../../components/UI/ErrorContainer";
 import { IdToGender } from "../../functions/Conversion/Convertions";
+import { UserContext } from "../../contexts/UserContext";
 
 const TagList = () => {
   //States
   const [person, setPerson] = useState<PersonResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const context = useContext(UserContext);
+  const navigate = useNavigate();
 
   //Hooks
   const params = useParams();
@@ -32,12 +36,25 @@ const TagList = () => {
     })();
   }, [params.id]);
 
+  const editClickHandler = async () => {
+    navigate("edit");
+  };
+
   return (
     <Container>
       <ErrorContainer error={error}>
         <>
           {person !== null && (
             <>
+              {context.isLogedIn && (
+                <button
+                  className="button edit-button"
+                  type="button"
+                  onClick={editClickHandler}
+                >
+                  <i className="fa-solid fa-pen-to-square"></i>
+                </button>
+              )}
               <div className="person-info">
                 <div className="details_container">
                   <img

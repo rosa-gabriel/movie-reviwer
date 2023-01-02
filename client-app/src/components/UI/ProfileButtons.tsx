@@ -5,6 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 type ProfileButtonsProps = {
   userId: string;
   isFriend: boolean;
+  username: string;
 };
 const ProfileButtons = (props: ProfileButtonsProps) => {
   const navigate = useNavigate();
@@ -13,9 +14,15 @@ const ProfileButtons = (props: ProfileButtonsProps) => {
   const friendsClickHandler = () => {
     navigate("/account/friends");
   };
-  const favoritesClickHandler = () => {
-    navigate(`/favorites/${props.userId}`);
+
+  const otherFavoritesClickHandler = () => {
+    navigate(`/favorites/${props.username}`);
   };
+
+  const favoritesClickHandler = () => {
+    navigate(`/favorites/`);
+  };
+
   const settingsClickHandler = () => {
     navigate("/account/settings/");
   };
@@ -26,11 +33,19 @@ const ProfileButtons = (props: ProfileButtonsProps) => {
           Friends
         </button>
       )}
-      {(props.userId === context.userInfo?.id || props.isFriend) && (
+
+      {props.userId === context.userInfo?.id && (
         <button onClick={favoritesClickHandler} className="button">
           Favorites
         </button>
       )}
+
+      {props.userId !== context.userInfo?.id && props.isFriend && (
+        <button onClick={otherFavoritesClickHandler} className="button">
+          Favorites
+        </button>
+      )}
+
       {props.userId === context.userInfo?.id && (
         <button onClick={settingsClickHandler} className="button">
           Settings

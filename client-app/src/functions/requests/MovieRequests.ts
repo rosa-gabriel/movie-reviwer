@@ -11,7 +11,13 @@ import {
   Tag,
   TagInfo,
 } from "../../types/Types";
-import { connectionFailString, getRequest, postRequest } from "./CreateRequest";
+import {
+  connectionFailString,
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from "./CreateRequest";
 
 export const getMoviesAtPage = async (page: number) => {
   try {
@@ -190,19 +196,27 @@ export const getTags = async () => {
 };
 
 export const deleteMovie = async (movieId: string, token: string) => {
-  try {
-    const response: Response = await fetch(`${uri}/Movies/${movieId}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-    });
+  const response: Response = await deleteRequest(
+    `${uri}/Movies/${movieId}`,
+    undefined
+  );
+};
 
-    if (!response.ok) throw new Error("");
-  } catch (ex) {
-    throw new Error(connectionFailString);
-  }
+export const deletePerson = async (personId: string, token: string) => {
+  const response: Response = await deleteRequest(
+    `${uri}/Cast/${personId}`,
+    token
+  );
+  return response;
+};
+
+export const updatePerson = async (person: PersonResponse, token: string) => {
+  const response: Response = await putRequest(
+    `${uri}/Cast/update/`,
+    person,
+    token
+  );
+  return response;
 };
 
 export const getCast = async () => {
@@ -243,10 +257,14 @@ export const getIsFavorite = async (movieId: string, token: string) => {
   }
 };
 
-export const getUserFavorites = async (page: number, token: string) => {
+export const getUserFavorites = async (
+  page: number,
+  userId: string,
+  token: string
+) => {
   try {
     const response: Response = await getRequest(
-      `${uri}/Account/favorites/${page}`,
+      `${uri}/Account/favorites/${userId}/${page}`,
       token
     );
     return response;

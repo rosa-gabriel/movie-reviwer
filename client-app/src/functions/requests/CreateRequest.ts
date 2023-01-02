@@ -86,6 +86,6 @@ export const putRequest = async (url: string, body: any, token?: string) => {
   return createRequest(url, "PUT", body, token);
 };
 
-export const deleteRequest = async (url: string, body: any, token?: string) => {
-  return createRequest(url, "DELETE", body, token);
+export const deleteRequest = async (url: string, token?: string) => {
+  return createRequest(url, "DELETE", undefined, token);
 };

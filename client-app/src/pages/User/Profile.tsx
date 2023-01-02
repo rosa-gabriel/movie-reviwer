@@ -135,7 +135,7 @@ const Profile = () => {
                     <p className="profile-info">
                       <>Creation date: {user.creationDate.toDateString()}</>
                     </p>
-                    <ProfileButtons isFriend={user.isFriend} userId={user.id} />
+                    <ProfileButtons isFriend={user.isFriend} userId={user.id} username={user.name} />
                   </div>
                 </div>
               </div>

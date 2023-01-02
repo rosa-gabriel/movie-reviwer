@@ -1,11 +1,12 @@
 import Movie from "./Movie";
 import LoadingCircle from "./LoadingCircle";
 import { useEffect, useState } from "react";
-import { MoviePage, MovieResponse} from "../../types/Types";
+import { MoviePage, MovieResponse } from "../../types/Types";
 import ErrorContainer from "./ErrorContainer";
 
 type GenericMovielistProps = {
   filterId?: number | string;
+  token?: string;
   fetchFunction(...args: any[]): any;
 };
 
@@ -24,9 +25,10 @@ const GenericMovielist = (props: GenericMovielistProps) => {
     (async () => {
       setIsLoading(true);
       try {
-        const data: MoviePage= await props.fetchFunction(
+        const data: MoviePage = await props.fetchFunction(
           nextPage,
-          props.filterId
+          props.filterId,
+          props.token
         );
         setMovies((prevMovies) => [...prevMovies, ...data.movies]);
         setMaxPage(data.count);

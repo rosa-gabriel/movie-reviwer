@@ -43,5 +43,19 @@ namespace API.Controllers
             Result<Person> result = await this._mediator.Send(new AddPerson.Query { NewPerson = newPerson });
             return this.ResultHandler(result);
         }
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeletePerson(Guid id)
+        {
+            Result<Unit> result = await this._mediator.Send(new RemovePerson.Query { Id = id });
+            return this.ResultHandler(result);
+        }
+        [Authorize]
+        [HttpPut("update")]
+        public async Task<ActionResult> PutPerson(Person newPerson)
+        {
+            Result<Unit> result = await this._mediator.Send(new UpdatePerson.Query { NewPerson = newPerson });
+            return this.ResultHandler(result);
+        }
     }
 }

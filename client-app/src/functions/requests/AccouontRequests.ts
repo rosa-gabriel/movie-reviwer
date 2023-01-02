@@ -1,9 +1,5 @@
 import { uri } from "../../App";
-import {
-  UserSettings,
-  UserLogin,
-  UserRegister,
-} from "../../types/Types";
+import { UserSettings, UserLogin, UserRegister } from "../../types/Types";
 import {
   deleteRequest,
   getRequest,
@@ -66,7 +62,6 @@ export const postFriendRequest = async (userId: string, token: string) => {
 export const deleteFriend = async (friendId: string, token: string) => {
   const response: UserSettings = await deleteRequest(
     `${uri}/Account/remove/friend/${friendId}`,
-    undefined,
     token
   );
   return response;

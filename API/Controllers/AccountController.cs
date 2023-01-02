@@ -225,11 +225,10 @@ namespace API.Controllers
         }
         //Returns a list of Movies at the current page for the current user.
         [Authorize]
-        [HttpGet("favorites/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetFavorites(int page)
+        [HttpGet("favorites/{name}/{page}")]
+        public async Task<ActionResult<MoviePageResponse>> GetFavorites(string name, int page)
         {
-            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Result<MoviePageResponse> result = await this._mediator.Send(new ListFavoritesAtPage.Query { UserId = id, Page = page });
+            Result<MoviePageResponse> result = await this._mediator.Send(new ListFavoritesAtPage.Query { Username = name, Page = page });
             return this.ResultHandler(result);
         }
         //Returns the profile info for a user with the given id.
