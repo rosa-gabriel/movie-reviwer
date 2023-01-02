@@ -110,10 +110,13 @@ const Commentar = (props: CommentarProps) => {
           </Link>
           <p>{props.comment.postDate.toDateString()}</p>
           {props.comment.wasEdited && <p>(edited)</p>}
-          <i
-            onClick={ellipsisClickHandler}
-            className="fa-solid fa-ellipsis"
-          ></i>
+
+          {props.comment.creator.id == String(context.userInfo?.id) && (
+            <i
+              onClick={ellipsisClickHandler}
+              className="fa-solid fa-ellipsis"
+            />
+          )}
         </div>
         {isEditing && (
           <CommentEditInput

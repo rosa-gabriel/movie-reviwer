@@ -794,6 +794,15 @@ nav {
     justify-content: center;
     margin-top: 25px;
   }
+  .click-add-container {
+    flex-direction: column;
+  }
+  .click-add-container button {
+    width: 100%;
+  }
+  .click-add-container input {
+    padding: 7px;
+  }
 }
 
 @media (max-width: 850px) {
