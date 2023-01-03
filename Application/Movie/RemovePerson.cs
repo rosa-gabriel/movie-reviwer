@@ -35,8 +35,8 @@ namespace Application
                 Person person = await this._context.People.Where(p => p.Id == request.Id).FirstOrDefaultAsync();
                 if (person == null) return null;
 
-                IQueryable<CastEntry> cast = this._context.CastEntries.Where(ce => ce.Person == person);
-                this._context.CastEntries.RemoveRange(cast);
+                IQueryable<CastRole> cast = this._context.CastRoles.Where(ce => ce.Person == person);
+                this._context.CastRoles.RemoveRange(cast);
 
                 this._context.Remove(person);
 

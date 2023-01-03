@@ -10,7 +10,7 @@ namespace Application
 {
     public class FindTag
     {
-        public class Query : IRequest<Result<TagName>>
+        public class Query : IRequest<Result<Tag>>
         {
             public Guid Id { get; set; }
         }
@@ -23,7 +23,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<TagName>>
+        public class Handler : IRequestHandler<Query, Result<Tag>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -31,12 +31,12 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<TagName>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Tag>> Handle(Query request, CancellationToken cancellationToken)
             {
-                TagName tag = await this._context.TagNames.Where(tn => tn.Id == request.Id).FirstAsync();
+                Tag tag = await this._context.Tags.Where(tn => tn.Id == request.Id).FirstAsync();
                 if (tag == null) return null;
 
-                return Result<TagName>.Success(tag);
+                return Result<Tag>.Success(tag);
             }
         }
     }

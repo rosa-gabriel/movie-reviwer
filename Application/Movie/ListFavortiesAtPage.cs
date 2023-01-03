@@ -12,7 +12,7 @@ namespace Application
 {
     public class ListFavoritesAtPage
     {
-        public class Query : IRequest<Result<MoviePageResponse>>
+        public class Query : IRequest<Result<MoviePageView>>
         {
             public string Username { get; set; }
             public int Page { get; set; }
@@ -26,7 +26,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
+        public class Handler : IRequestHandler<Query, Result<MoviePageView>>
         {
             public readonly DataContext _context;
             public readonly IUserAccessor _userAccessor;
@@ -36,10 +36,10 @@ namespace Application
                 this._userAccessor = userAccessor;
             }
 
-            public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MoviePageView>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User curentUser = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == this._userAccessor.GetUsername());
-                if (curentUser == null) return Result<MoviePageResponse>.Unauthorize();
+                if (curentUser == null) return Result<MoviePageView>.Unauthorize();
 
                 if (request.Username != curentUser.UserName)
                 {
@@ -47,18 +47,14 @@ namespace Application
                     if (targetUser == null) return null;
 
                     Friend friend = await this._context.Friends.Where(f => (f.Receiver == curentUser && f.Sender == targetUser) || (f.Receiver == targetUser && f.Sender == curentUser)).FirstOrDefaultAsync();
-                    if (friend == null || !friend.Accepted) return Result<MoviePageResponse>.Failure("The users are not friends!");
+                    if (friend == null || !friend.Accepted) return Result<MoviePageView>.Failure("The users are not friends!");
                 }
 
-                IQueryable<FavoriteEntry> search = _context.FavoriteEntries.Include(fe => fe.Film).Where(fe => fe.Fan.UserName == request.Username);
-                List<Movie> response = await search.OrderByDescending(fe => fe.FavoriteDate).Take(25).Skip((request.Page - 1) * 25).Select(fe => fe.Film).ToListAsync();
-                MoviePageResponse moviePageResponse = new MoviePageResponse
-                {
-                    movies = response,
-                    count = (int)Math.Ceiling(((double)search.Count()) / 25),
-                };
+                IQueryable<Favorite> search = _context.Favorites.Include(fe => fe.Movie).Where(fe => fe.User.UserName == request.Username);
+                List<Movie> response = await search.OrderByDescending(fe => fe.FavoriteDate).Take(25).Skip((request.Page - 1) * 25).Select(fe => fe.Movie).ToListAsync();
+                MoviePageView moviePageView = new MoviePageView(response, (int)Math.Ceiling(((double)search.Count()) / 25));
 
-                return Result<MoviePageResponse>.Success(moviePageResponse);
+                return Result<MoviePageView>.Success(moviePageView);
             }
         }
     }

@@ -98,12 +98,10 @@ const EditDetails = () => {
   //Submit
   const editConfirmHandler = async () => {
     const movie: NewMovieInfo = {
-      movie: {
-        id: String(params.movieId),
-        name: name,
-        coverUrl: url,
-        releaseDate: date,
-      },
+      id: String(params.movieId),
+      name: name,
+      coverUrl: url,
+      releaseDate: date,
       tags: tags,
       castMembers: cast,
     };
@@ -146,10 +144,8 @@ const EditDetails = () => {
           let add = true;
           movieData.tags.forEach((usedTag, index) => {
             if (tag.tagId === usedTag.tagId) add = false;
-            if (index === movieData.tags.length - 1 && add) {
-              missingTags.push(TagInfoToTag(tag));
-            }
           });
+          if (add) missingTags.push(TagInfoToTag(tag));
         });
 
         const missingCast: Cast[] = [];
@@ -158,14 +154,14 @@ const EditDetails = () => {
           let add = true;
           movieData.castMembers.forEach((usedPerson, index) => {
             if (person.id === usedPerson.personId) add = false;
-            if (index === movieData.castMembers.length - 1 && add) {
-              missingCast.push({
-                id: person.id,
-                name: person.name,
-                role: person.role,
-              });
-            }
           });
+          if (add) {
+            missingCast.push({
+              id: person.id,
+              name: person.name,
+              role: person.role,
+            });
+          }
         });
 
         setDataTags([...missingTags]);
@@ -176,9 +172,9 @@ const EditDetails = () => {
             return { personId: p.personId, name: p.name, role: p.role };
           })
         );
-        setUrl(movieData.movie.coverUrl);
-        setDate(new Date(movieData.movie.releaseDate));
-        setName(movieData.movie.name);
+        setUrl(movieData.coverUrl);
+        setDate(new Date(movieData.releaseDate));
+        setName(movieData.name);
 
         setIsLoading(false);
       } catch (ex: any) {

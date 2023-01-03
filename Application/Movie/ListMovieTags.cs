@@ -10,7 +10,7 @@ namespace Application
 {
     public class ListMovieTags
     {
-        public class Query : IRequest<Result<List<TagResponse>>>
+        public class Query : IRequest<Result<List<TagView>>>
         {
             public Movie movie { get; set; }
         }
@@ -22,7 +22,7 @@ namespace Application
                 RuleFor(x => x.movie).SetValidator(new MovieValidator());
             }
         }
-        public class Handler : IRequestHandler<Query, Result<List<TagResponse>>>
+        public class Handler : IRequestHandler<Query, Result<List<TagView>>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -30,22 +30,21 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<List<TagResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<TagView>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                List<TagName> tags = await _context.TagEntries.Include(fe => fe.Tag).Where(fe => fe.Film == request.movie).Select(fe => fe.Tag).ToListAsync();
-                List<TagResponse> tagResponses = new List<TagResponse>();
-                foreach (TagName t in tags)
+                Movie movie = await this._context.Movies.FirstOrDefaultAsync(m => m.Id == request.movie.Id);
+                if (movie == null) return null;
+
+                List<Tag> tags = movie.Tags.ToList();
+                List<TagView> tagViews = new List<TagView>();
+                foreach (Tag t in tags)
                 {
-                    var count = (await _context.TagEntries.Where(te => te.Tag == t).ToListAsync()).Count();
-                    tagResponses.Add(new TagResponse()
-                    {
-                        TagId = t.Id,
-                        Name = t.Name,
-                        Entries = count
-                    });
+                    TagView tv = t.ToTagView();
+                    tv.Entries = tags.Count();
+                    tagViews.Add(tv);
                 }
 
-                return Result<List<TagResponse>>.Success(tagResponses);
+                return Result<List<TagView>>.Success(tagViews);
             }
         }
     }

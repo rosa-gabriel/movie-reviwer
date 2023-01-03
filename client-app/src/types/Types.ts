@@ -1,10 +1,8 @@
 export type NewMovieInfo = {
-  movie: {
-    id?: string;
-    name: string;
-    coverUrl: string;
-    releaseDate: Date;
-  };
+  id?: string;
+  name: string;
+  coverUrl: string;
+  releaseDate: Date;
   tags: Tag[];
   castMembers: CastInfo[];
 };
@@ -62,7 +60,10 @@ export type PersonResponse = {
 };
 
 export type AllMovieInfoType = {
-  movie: MovieResponse;
+  id: string;
+  name: string;
+  coverUrl: string;
+  releaseDate: Date;
   favorites: number;
   tags: TagInfo[];
   castMembers: CastInfo[];

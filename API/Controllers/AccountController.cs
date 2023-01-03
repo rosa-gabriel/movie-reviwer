@@ -148,7 +148,7 @@ namespace API.Controllers
         //Changes the favorite state for a given movie on the database.
         [Authorize]
         [HttpPost("favorite")]
-        public async Task<ActionResult> PutFavorite(FavoriteResponse responseDto)
+        public async Task<ActionResult> PutFavorite(FavoriteView responseDto)
         {
             try
             {
@@ -226,24 +226,24 @@ namespace API.Controllers
         //Returns a list of Movies at the current page for the current user.
         [Authorize]
         [HttpGet("favorites/{name}/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetFavorites(string name, int page)
+        public async Task<ActionResult<MoviePageView>> GetFavorites(string name, int page)
         {
-            Result<MoviePageResponse> result = await this._mediator.Send(new ListFavoritesAtPage.Query { Username = name, Page = page });
+            Result<MoviePageView> result = await this._mediator.Send(new ListFavoritesAtPage.Query { Username = name, Page = page });
             return this.ResultHandler(result);
         }
         //Returns the profile info for a user with the given id.
         [HttpGet("profile/{id}")]
-        public async Task<ActionResult<ProfileResponse>> GetProfile(string id)
+        public async Task<ActionResult<ProfileView>> GetProfile(string id)
         {
             try
             {
                 User self = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                ProfileResponse profile;
+                ProfileView profile;
                 User user = await _userManager.FindByIdAsync(id);
 
                 if (user == null) return BadRequest("User not found!");
-                profile = new ProfileResponse(user);
+                profile = user.ToProfileView();
 
                 profile.RecentFavorites = (await this._mediator.Send(new ListRecentFavorites.Query { user = user })).Value;
                 profile.IsLogedIn = id.Equals(userId);

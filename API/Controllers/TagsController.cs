@@ -16,31 +16,31 @@ namespace API.Controllers
 
         //Lists all the tags that are registered in the database.
         [HttpGet]
-        public async Task<ActionResult<List<TagResponse>>> GetTags()
+        public async Task<ActionResult<List<TagView>>> GetTags()
         {
-            Result<List<TagResponse>> result = await this._mediator.Send(new ListTags.Query());
+            Result<List<TagView>> result = await this._mediator.Send(new ListTags.Query());
             return this.ResultHandler(result);
         }
         //Gets one Tag with the given id.
         [HttpGet("{id}")]
-        public async Task<ActionResult<TagName>> GetTag(Guid id)
+        public async Task<ActionResult<Tag>> GetTag(Guid id)
         {
-            Result<TagName> result = await this._mediator.Send(new FindTag.Query { Id = id });
+            Result<Tag> result = await this._mediator.Send(new FindTag.Query { Id = id });
             return this.ResultHandler(result);
         }
         //Gets the movies with the given id at the given page.
         [HttpGet("{id}/movies/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetMoviesFromTag(Guid id, int page)
+        public async Task<ActionResult<MoviePageView>> GetMoviesFromTag(Guid id, int page)
         {
-            Result<MoviePageResponse> result = await this._mediator.Send(new ListMoviesWithTagAtPage.Query { Id = id, Page = page });
+            Result<MoviePageView> result = await this._mediator.Send(new ListMoviesWithTagAtPage.Query { Id = id, Page = page });
             return this.ResultHandler(result);
         }
-        //Adds a new Tag to the database with the TagName object given info.
+        //Adds a new Tag to the database with the Tag object given info.
         [Authorize]
         [HttpPost("create")]
-        public async Task<ActionResult<TagName>> PostTag(TagName newTag)
+        public async Task<ActionResult<Tag>> PostTag(Tag newTag)
         {
-            Result<TagName> result = await this._mediator.Send(new AddTag.Query { NewTag = newTag });
+            Result<Tag> result = await this._mediator.Send(new AddTag.Query { NewTag = newTag });
             return this.ResultHandler(result);
         }
     }

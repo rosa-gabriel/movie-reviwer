@@ -36,8 +36,8 @@ namespace Application
 
             public async Task<Result<bool>> Handle(Query request, CancellationToken cancellationToken)
             {
-                FavoriteEntry favoriteEntry = await _context.FavoriteEntries.FirstOrDefaultAsync(fe => fe.Film.Id == request.MovieId && fe.Fan == request.user);
-                return Result<bool>.Success(favoriteEntry != null);
+                Favorite favorite = await _context.Favorites.FirstOrDefaultAsync(fe => fe.Movie.Id == request.MovieId && fe.User == request.user);
+                return Result<bool>.Success(favorite != null);
             }
         }
     }

@@ -13,14 +13,13 @@ namespace Application
     {
         public class Query : IRequest<Result<Unit>>
         {
-            public MovieResponse NewMovie { get; set; }
+            public NewMovieView NewMovie { get; set; }
         }
 
         public class QueryValidation : AbstractValidator<Query>
         {
             public QueryValidation()
             {
-                RuleFor(x => x.NewMovie.movie).SetValidator(new MovieValidator());
             }
         }
 
@@ -34,24 +33,24 @@ namespace Application
 
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
-                request.NewMovie.movie.Id = new Guid();
-                _context.Movies.Add(request.NewMovie.movie);
+                Movie movie = request.NewMovie.ToMovie();
+                _context.Movies.Add(movie);
 
-                foreach (TagResponse tr in request.NewMovie.tags)
+                foreach (NewTag nt in request.NewMovie.tags)
                 {
-                    TagEntry newTagEntry = new TagEntry();
-                    newTagEntry.Tag = await this._context.TagNames.FindAsync(tr.TagId);
-                    newTagEntry.Film = request.NewMovie.movie;
-                    _context.TagEntries.Add(newTagEntry);
+                    Tag currentTag = await this._context.Tags.FirstOrDefaultAsync(nt => nt.Id == nt.Id);
+                    if (currentTag == null) return Result<Unit>.Failure("One of the given tags are not valid!");
+                    movie.Tags.Add(currentTag);
                 }
 
-                foreach (CastResponse cr in request.NewMovie.castMembers)
+
+                foreach (NewCastView ncv in request.NewMovie.castMembers)
                 {
-                    CastEntry newCastEntry = new CastEntry();
-                    newCastEntry.Person = await this._context.People.Where(p => p.Name == cr.Name).FirstAsync();
-                    newCastEntry.Role = cr.Role;
-                    newCastEntry.Film = request.NewMovie.movie;
-                    _context.CastEntries.Add(newCastEntry);
+                    CastRole newCastRole = new CastRole();
+                    newCastRole.Person = await this._context.People.Where(p => p.Name == ncv.Name).FirstAsync();
+                    newCastRole.Role = ncv.Role;
+                    newCastRole.Movie = movie;
+                    _context.CastRoles.Add(newCastRole);
                 }
 
                 bool success = await _context.SaveChangesAsync() > 0;

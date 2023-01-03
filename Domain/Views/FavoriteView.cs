@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class FavoriteResponse
+    public class FavoriteView
     {
         public Guid movieId { get; set; }
         public bool desiredBool { get; set; }

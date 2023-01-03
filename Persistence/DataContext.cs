@@ -13,11 +13,9 @@ namespace Persistence
         }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Person> People { get; set; }
-        public DbSet<CastEntry> CastEntries { get; set; }
-        public DbSet<CastType> CastTypes { get; set; }
-        public DbSet<FavoriteEntry> FavoriteEntries { get; set; }
-        public DbSet<TagName> TagNames { get; set; }
-        public DbSet<TagEntry> TagEntries { get; set; }
+        public DbSet<CastRole> CastRoles { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Tag> Tags { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Friend> Friends { get; set; }
 

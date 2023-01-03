@@ -8,9 +8,11 @@ namespace Domain
         public string ProfileImageUrl { get; set; }
         public string Bio { get; set; }
         public DateTime CreationDate { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<Friend> ReceivedRequests { get; set; }
-        public ICollection<Friend> SentRequests { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Friend> ReceivedRequests { get; set; } = new List<Friend>();
+        public ICollection<Friend> SentRequests { get; set; } = new List<Friend>();
+        public ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
+
         public bool IsAdmin { get; set; }
         public UserView ToUserView()
         {
@@ -32,5 +34,17 @@ namespace Domain
             };
             return sv;
         }
+        public ProfileView ToProfileView()
+        {
+            return new ProfileView
+            {
+                Id = this.Id,
+                Name = this.UserName,
+                Bio = this.Bio,
+                ImageUrl = this.ProfileImageUrl,
+                CreationDate = this.CreationDate,
+            };
+        }
     }
+
 }

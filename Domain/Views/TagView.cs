@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class TagResponse
+    public class TagView
     {
-        public TagResponse(){}
+        public TagView(){}
         public Guid TagId { get; set; }
         public string Name { get; set; }
         public int Entries { get; set; }

@@ -86,11 +86,9 @@ export const seedMovies = async (tagJson: any, token: string) => {
     allCast = [...allCast, ...castMembers];
     setTimeout(async () => {
       const newMovie: NewMovieInfo = {
-        movie: {
-          name: result.original_title,
-          coverUrl: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
-          releaseDate: result.release_date,
-        },
+        name: result.original_title,
+        coverUrl: `https://image.tmdb.org/t/p/w500${result.poster_path}`,
+        releaseDate: result.release_date,
         tags: tags,
         castMembers: castMembers,
       };

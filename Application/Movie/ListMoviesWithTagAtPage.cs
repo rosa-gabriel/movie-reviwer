@@ -10,7 +10,7 @@ namespace Application
 {
     public class ListMoviesWithTagAtPage
     {
-        public class Query : IRequest<Result<MoviePageResponse>>
+        public class Query : IRequest<Result<MoviePageView>>
         {
             public Guid Id { get; set; }
             public int Page { get; set; }
@@ -24,7 +24,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
+        public class Handler : IRequestHandler<Query, Result<MoviePageView>>
         {
             public readonly DataContext _context;
 
@@ -33,14 +33,17 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MoviePageView>> Handle(Query request, CancellationToken cancellationToken)
             {
-                List<Movie> response = await _context.TagEntries.Include(m => m.Film).Where(m => m.Tag.Id == request.Id).Select(m => m.Film).OrderByDescending(m => m.ReleaseDate).ToListAsync();
-                return Result<MoviePageResponse>.Success(new MoviePageResponse
-                {
-                    movies = response,
-                    count = (int)Math.Ceiling(((double)this._context.TagEntries.Where(te => te.Tag.Id == request.Id).Count()) / 25),
-                });
+                //List<Movie> movies = (await _context.Tags.Where(t => t.Id == request.Id).FirstOrDefaultAsync()).Movies.OrderByDescending(m => m.ReleaseDate).ToList();
+                Tag tag = await _context.Tags.Include(t => t.Movies).FirstOrDefaultAsync(t => t.Id == request.Id);
+                if (tag == null) return null;
+                List<Movie> movies = tag.Movies.OrderByDescending(m => m.ReleaseDate).ToList();
+
+                return Result<MoviePageView>.Success(new MoviePageView(
+                     movies.Take(25).Skip((request.Page - 1) * 25).ToList(),
+                     (int)Math.Ceiling(((Double)movies.Count() / 25))
+                ));
             }
         }
     }

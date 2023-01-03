@@ -11,10 +11,9 @@ namespace Application
 {
     public class FindMovieInfo
     {
-        public class Query : IRequest<Result<MovieResponse>>
+        public class Query : IRequest<Result<MovieInfoView>>
         {
             public Guid Id { get; set; }
-            public IMediator Mediator { get; set; }
         }
 
         public class QueryValidation : AbstractValidator<Query>
@@ -25,7 +24,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<MovieResponse>>
+        public class Handler : IRequestHandler<Query, Result<MovieInfoView>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -33,18 +32,14 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<MovieResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MovieInfoView>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Movie dataMovie = await _context.Movies.FindAsync(request.Id);
-                if (dataMovie == null) return null;
+                Movie movie = await _context.Movies.Include(m => m.Cast).ThenInclude(c => c.Person).Include(m => m.Tags).Include(m => m.Favorites).FirstOrDefaultAsync(m => m.Id == request.Id);
+                if (movie == null) return null;
 
-                MovieResponse movieResponse = new MovieResponse();
-                movieResponse.movie = dataMovie;
-                movieResponse.favorites = (await request.Mediator.Send(new CountMovieFavites.Query { movie = dataMovie }));
-                movieResponse.tags = (await request.Mediator.Send(new ListMovieTags.Query { movie = dataMovie })).Value;
-                movieResponse.castMembers = (await request.Mediator.Send(new ListMovieCast.Query { movie = dataMovie })).Value;
+                MovieInfoView movieView = movie.ToMovieInfoView();
 
-                return Result<MovieResponse>.Success(movieResponse);
+                return Result<MovieInfoView>.Success(movieView);
             }
         }
     }

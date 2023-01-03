@@ -68,14 +68,9 @@ const Details = (props: any) => {
     (async (id: any) => {
       try {
         const movieData: AllMovieInfoType = await getMovie(id);
+        movieData.releaseDate = new Date(movieData.releaseDate);
 
-        setMovieInfo({
-          ...movieData,
-          movie: {
-            ...movieData.movie,
-            releaseDate: new Date(movieData.movie.releaseDate),
-          },
-        });
+        setMovieInfo(movieData);
 
         if (context.isLogedIn) {
           if (!context.userInfo) return;
@@ -114,14 +109,14 @@ const Details = (props: any) => {
                 <div className="details_container">
                   <div className="details-img-container">
                     <img
-                      src={movieInfo.movie.coverUrl}
+                      src={movieInfo.coverUrl}
                       className="details_cover"
-                      alt={"Cover for " + movieInfo.movie.name}
+                      alt={"Cover for " + movieInfo.name}
                     />
                   </div>
 
                   <div className="details_info">
-                    <h1>{movieInfo.movie.name}</h1>
+                    <h1>{movieInfo.name}</h1>
 
                     <p className="info_container_title">TAGS</p>
                     {movieInfo.tags.length > 0 && (
@@ -170,7 +165,7 @@ const Details = (props: any) => {
                     )}
 
                     <p className="details-releaseDate">
-                      Release date: {movieInfo.movie.releaseDate.toDateString()}
+                      Release date: {movieInfo.releaseDate.toDateString()}
                     </p>
 
                     {context.isLogedIn && (
@@ -204,7 +199,7 @@ const Details = (props: any) => {
             </>
           </ErrorContainer>
           {movieInfo && (
-            <CommentSection movieId={movieInfo.movie.id}></CommentSection>
+            <CommentSection movieId={movieInfo.id}></CommentSection>
           )}
         </>
       </Container>

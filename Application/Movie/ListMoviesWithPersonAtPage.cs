@@ -10,7 +10,7 @@ namespace Application
 {
     public class ListMoviesWithPersonAtPage
     {
-        public class Query : IRequest<Result<MoviePageResponse>>
+        public class Query : IRequest<Result<MoviePageView>>
         {
             public Guid Id { get; set; }
             public int Page { get; set; }
@@ -24,7 +24,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
+        public class Handler : IRequestHandler<Query, Result<MoviePageView>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -32,14 +32,13 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MoviePageView>> Handle(Query request, CancellationToken cancellationToken)
             {
-                List<Movie> response = await _context.CastEntries.Include(ce => ce.Film).Where(ce => ce.Person.Id == request.Id).Select(ce => ce.Film).OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((request.Page - 1) * 25).ToListAsync();
-                return Result<MoviePageResponse>.Success(new MoviePageResponse
-                {
-                    movies = response,
-                    count = (int)Math.Ceiling(((double)this._context.CastEntries.Where(ce => ce.Person.Id == request.Id).Count()) / 25),
-                });
+                List<Movie> response = await _context.CastRoles.Include(ce => ce.Movie).Where(ce => ce.Person.Id == request.Id).Select(ce => ce.Movie).OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((request.Page - 1) * 25).ToListAsync();
+                return Result<MoviePageView>.Success(new MoviePageView(
+                    response.Take(25).Skip((request.Page - 1) * 25).ToList(),
+                    (int)Math.Ceiling(((double)this._context.CastRoles.Where(ce => ce.Person.Id == request.Id).Count()) / 25)
+                ));
             }
         }
     }

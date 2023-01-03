@@ -10,7 +10,7 @@ namespace Application
 {
     public class ListMoviesSearchAtPage
     {
-        public class Query : IRequest<Result<MoviePageResponse>>
+        public class Query : IRequest<Result<MoviePageView>>
         {
             public string Filter { get; set; }
             public int Page { get; set; }
@@ -25,7 +25,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
+        public class Handler : IRequestHandler<Query, Result<MoviePageView>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -33,15 +33,14 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MoviePageView>> Handle(Query request, CancellationToken cancellationToken)
             {
                 IQueryable<Movie> search = _context.Movies.Where(m => m.Name.ToLower().Contains(request.Filter.ToLower()));
                 List<Movie> response = await search.OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((request.Page - 1) * 25).ToListAsync();
-                return Result<MoviePageResponse>.Success(new MoviePageResponse
-                {
-                    movies = response,
-                    count = (int)Math.Ceiling(((double)search.Count()) / 25),
-                });
+                return Result<MoviePageView>.Success(new MoviePageView(
+                    response.Take(25).Skip((request.Page - 1) * 25).ToList(),
+                    (int)Math.Ceiling(((double)search.Count()) / 25)
+                ));
             }
         }
     }

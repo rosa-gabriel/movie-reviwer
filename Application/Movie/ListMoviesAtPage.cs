@@ -10,7 +10,7 @@ namespace Application
 {
     public class ListMoviesAtPage
     {
-        public class Query : IRequest<Result<MoviePageResponse>>
+        public class Query : IRequest<Result<MoviePageView>>
         {
             public int Page { get; set; }
         }
@@ -23,7 +23,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<MoviePageResponse>>
+        public class Handler : IRequestHandler<Query, Result<MoviePageView>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -31,17 +31,12 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<MoviePageResponse>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<MoviePageView>> Handle(Query request, CancellationToken cancellationToken)
             {
                 List<Movie> movies = await this._context.Movies.OrderByDescending(m => m.ReleaseDate).Skip((request.Page - 1) * 25).Take(25).ToListAsync();
-                if (movies.Count == 0) return null;
+                if (movies.Count == 0 && request.Page > 1) return null;
 
-                return Result<MoviePageResponse>.Success(new MoviePageResponse
-                {
-                    movies = movies,
-                    count = (int)Math.Ceiling(((double)this._context.Movies.Count()) / 25),
-                }
-                );
+                return Result<MoviePageView>.Success(new MoviePageView(movies.Take(25).Skip((request.Page - 1) * 25).ToList(), (int)Math.Ceiling(((double)this._context.Movies.Count()) / 25)));
             }
         }
     }

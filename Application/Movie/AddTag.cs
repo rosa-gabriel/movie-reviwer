@@ -9,9 +9,9 @@ namespace Application
 {
     public class AddTag
     {
-        public class Query : IRequest<Result<TagName>>
+        public class Query : IRequest<Result<Tag>>
         {
-            public TagName NewTag { get; set; }
+            public Tag NewTag { get; set; }
         }
 
         public class QueryValidation : AbstractValidator<Query>
@@ -22,7 +22,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<TagName>>
+        public class Handler : IRequestHandler<Query, Result<Tag>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -30,16 +30,19 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<TagName>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Tag>> Handle(Query request, CancellationToken cancellationToken)
             {
-                request.NewTag.Id = new Guid();
+                Tag newTag = new Tag{
+                    Id = new Guid(),
+                    Name = request.NewTag.Name
+                };
 
-                _context.TagNames.Add(request.NewTag);
-                bool success = await _context.SaveChangesAsync() > 0;
+                this._context.Tags.Add(newTag);
+                bool success = await this._context.SaveChangesAsync() > 0;
 
-                if (!success) return Result<TagName>.Failure("Failed to add tag.");
+                if (!success) return Result<Tag>.Failure("Failed to add tag.");
 
-                return Result<TagName>.Success(request.NewTag);
+                return Result<Tag>.Success(request.NewTag);
             }
         }
     }

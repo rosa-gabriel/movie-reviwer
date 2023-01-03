@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class CastEntry
+    public class NewTag
     {
-        [Key]
         public Guid Id { get; set; }
-        public string Role { get; set; }
-        public Person Person { get; set; }
-        public CastType Type { get; set; }
-        public Movie Film { get; set; }
+        public string Name { get; set; }
+
     }
 }

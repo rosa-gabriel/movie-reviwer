@@ -83,6 +83,7 @@ export const getMoviesFromTagAtPage = async (page: number, id: string) => {
   const response: MoviePage = await getRequest(
     `${uri}/Tags/${id}/movies/${page}`
   );
+  return response;
 };
 
 export const getMoviesFromPersonAtPage = async (page: number, id: string) => {

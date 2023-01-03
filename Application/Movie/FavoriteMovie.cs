@@ -43,27 +43,27 @@ namespace Application
 
                 bool addFavorite = request.DesiredBool;
 
-                FavoriteEntry favoriteEntry = await _context.FavoriteEntries.Where(fe => fe.Fan == request.user).Where(fe => fe.Film.Id == request.MovieId).FirstOrDefaultAsync();
+                Favorite favorite = await _context.Favorites.Where(fe => fe.User == request.user).Where(fe => fe.Movie.Id == request.MovieId).FirstOrDefaultAsync();
 
                 if (!addFavorite)
                 {
-                    if (favoriteEntry == null) return Result<Unit>.Success(Unit.Value);
+                    if (favorite == null) return Result<Unit>.Success(Unit.Value);
 
-                    _context.FavoriteEntries.Remove(favoriteEntry);
+                    _context.Favorites.Remove(favorite);
                 }
                 else
                 {
-                    if (favoriteEntry != null) return Result<Unit>.Success(Unit.Value);
+                    if (favorite != null) return Result<Unit>.Success(Unit.Value);
 
-                    FavoriteEntry newFavoriteEntry = new FavoriteEntry
+                    Favorite newFavorite = new Favorite
                     {
                         Id = new Guid(),
-                        Film = movie,
-                        Fan = request.user,
+                        Movie = movie,
+                        User = request.user,
                         FavoriteDate = DateTime.Now,
                     };
 
-                    _context.FavoriteEntries.Add(newFavoriteEntry);
+                    _context.Favorites.Add(newFavorite);
                 }
 
                 bool success = await _context.SaveChangesAsync() > 0;

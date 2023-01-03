@@ -9,9 +9,9 @@ namespace Application
 {
     public class ListTags
     {
-        public class Query : IRequest<Result<List<TagResponse>>> { }
+        public class Query : IRequest<Result<List<TagView>>> { }
 
-        public class Handler : IRequestHandler<Query, Result<List<TagResponse>>>
+        public class Handler : IRequestHandler<Query, Result<List<TagView>>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -19,22 +19,23 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<List<TagResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<TagView>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                List<TagName> tags = await this._context.TagNames.ToListAsync();
-                List<TagResponse> response = new List<TagResponse>();
-                foreach (TagName t in tags)
+                List<Tag> tags = await this._context.Tags.ToListAsync();
+
+                List<TagView> response = new List<TagView>();
+
+                foreach (Tag t in tags)
                 {
-                    TagResponse item = new TagResponse()
+                    TagView item = new TagView()
                     {
                         TagId = t.Id,
                         Name = t.Name,
                     };
-                    List<TagEntry> entries = await this._context.TagEntries.ToListAsync();
-                    item.Entries = entries.Count();
+                    item.Entries = t.Movies.Count();
                     response.Add(item);
                 }
-                return Result<List<TagResponse>>.Success(response);
+                return Result<List<TagView>>.Success(response);
             }
         }
     }

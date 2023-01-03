@@ -32,7 +32,8 @@ namespace Application
             }
             public async Task<Result<Person>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Person person = await this._context.People.Where(c => c.Id == request.Id).FirstOrDefaultAsync();
+                Person teste = await this._context.People.FirstOrDefaultAsync();
+                Person person = await this._context.People.FirstOrDefaultAsync(p => p.Id == request.Id);
                 if (person == null) return null;
 
                 return Result<Person>.Success(person);

@@ -34,7 +34,7 @@ namespace Application
             public async Task<int> Handle(Query request, CancellationToken cancellationToken)
             {
                 if (request.movie == null) throw new Exception();
-                List<FavoriteEntry> count = await _context.FavoriteEntries.Where(fe => fe.Film == request.movie).ToListAsync();
+                List<Favorite> count = await _context.Favorites.Where(fe => fe.Movie == request.movie).ToListAsync();
                 return count.Count();
             }
         }

@@ -46,10 +46,7 @@ const AddMovieForm = () => {
     setDataTags([...inputDataTags]);
     setTags([...inputTags]);
   };
-  const castChangeHandler = (
-    inputCast: CastInfo[],
-    inputDataCast: Cast[]
-  ) => {
+  const castChangeHandler = (inputCast: CastInfo[], inputDataCast: Cast[]) => {
     setDataCast([...inputDataCast]);
     setCast([...inputCast]);
     setRole("");
@@ -75,11 +72,9 @@ const AddMovieForm = () => {
     }
 
     const newMovie: NewMovieInfo = {
-      movie: {
-        name: name,
-        coverUrl: url,
-        releaseDate: date,
-      },
+      name: name,
+      coverUrl: url,
+      releaseDate: date,
       tags: tags,
       castMembers: cast,
     };

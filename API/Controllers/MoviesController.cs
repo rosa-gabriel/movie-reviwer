@@ -18,18 +18,18 @@ namespace API.Controllers
 
         //Gets the a list of Movies at the given page.
         [HttpGet("page/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetMovies(int page)
+        public async Task<ActionResult<MoviePageView>> GetMovies(int page)
         {
-            Result<MoviePageResponse> result = await this._mediator.Send(new ListMoviesAtPage.Query { Page = page });
+            Result<MoviePageView> result = await this._mediator.Send(new ListMoviesAtPage.Query { Page = page });
 
-            return this.ResultHandler<MoviePageResponse>(result);
+            return this.ResultHandler<MoviePageView>(result);
         }
-        //Gets the full info in form of a MovieResponse of the movie with the given id.
+        //Gets the full info in form of a MovieView of the movie with the given id.
         [HttpGet("{id}")]
-        public async Task<ActionResult<MovieResponse>> GetMovie(Guid id)
+        public async Task<ActionResult<MovieInfoView>> GetMovie(Guid id)
         {
             bool isLogged = User.Identity.IsAuthenticated;
-            Result<MovieResponse> result = await this._mediator.Send(new FindMovieInfo.Query { Id = id, Mediator = this._mediator });
+            Result<MovieInfoView> result = await this._mediator.Send(new FindMovieInfo.Query { Id = id });
             return this.ResultHandler(result);
         }
 
@@ -43,7 +43,7 @@ namespace API.Controllers
         //Adds the given movie to the database.
         [Authorize]
         [HttpPost("create")]
-        public async Task<ActionResult> PostMovie(MovieResponse newMovie)
+        public async Task<ActionResult> PostMovie(NewMovieView newMovie)
         {
             Result<Unit> result = await this._mediator.Send(new AddMovie.Query { NewMovie = newMovie });
             return this.ResultHandler(result);
@@ -52,7 +52,7 @@ namespace API.Controllers
         //Changes info from a given movie in the database.
         [Authorize]
         [HttpPut("update")]
-        public async Task<ActionResult> PutMovie(MovieResponse newMovie)
+        public async Task<ActionResult> PutMovie(NewMovieView newMovie)
         {
             Result<Unit> result = await this._mediator.Send(new UpdateMovie.Query { NewMovie = newMovie });
             return this.ResultHandler(result);
@@ -66,9 +66,9 @@ namespace API.Controllers
         }
         //Return a list of Movies with containing the given filter in the name at the given page.
         [HttpGet("search/{filter}/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetMovieSearch(string filter, int page)
+        public async Task<ActionResult<MoviePageView>> GetMovieSearch(string filter, int page)
         {
-            Result<MoviePageResponse> result = await this._mediator.Send(new ListMoviesSearchAtPage.Query { Filter = filter, Page = page });
+            Result<MoviePageView> result = await this._mediator.Send(new ListMoviesSearchAtPage.Query { Filter = filter, Page = page });
             return this.ResultHandler(result);
         }
 

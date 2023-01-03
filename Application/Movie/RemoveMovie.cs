@@ -35,14 +35,12 @@ namespace Application
                 Movie movie = await this._context.Movies.Where(m => m.Id == request.Id).FirstOrDefaultAsync();
                 if (movie == null) return null;
 
-                IQueryable<TagEntry> tags = this._context.TagEntries.Where(te => te.Film == movie);
-                IQueryable<CastEntry> cast = this._context.CastEntries.Where(ce => ce.Film == movie);
-                IQueryable<FavoriteEntry> favorites = this._context.FavoriteEntries.Where(f => f.Film == movie);
+                IQueryable<CastRole> cast = this._context.CastRoles.Where(ce => ce.Movie == movie);
+                IQueryable<Favorite> favorites = this._context.Favorites.Where(f => f.Movie == movie);
                 IQueryable<Comment> comments = this._context.Comments.Where(c => c.Movie == movie);
 
-                this._context.TagEntries.RemoveRange(tags);
-                this._context.CastEntries.RemoveRange(cast);
-                this._context.FavoriteEntries.RemoveRange(favorites);
+                this._context.CastRoles.RemoveRange(cast);
+                this._context.Favorites.RemoveRange(favorites);
                 this._context.Comments.RemoveRange(comments);
                 await _context.SaveChangesAsync();
 

@@ -11,5 +11,6 @@ namespace Domain
         public DateTime Birthday { get; set; }
         public string Biography { get; set; }
         public int Gender { get; set; }
+        public ICollection<CastRole> Roles {get; set;} = new List<CastRole>();
     }
 }

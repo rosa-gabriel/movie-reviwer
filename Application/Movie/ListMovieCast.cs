@@ -10,7 +10,7 @@ namespace Application
 {
     public class ListMovieCast
     {
-        public class Query : IRequest<Result<List<CastResponse>>>
+        public class Query : IRequest<Result<List<CastView>>>
         {
             public Movie movie { get; set; }
         }
@@ -23,7 +23,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<List<CastResponse>>>
+        public class Handler : IRequestHandler<Query, Result<List<CastView>>>
         {
             public readonly DataContext _context;
             public Handler(DataContext context)
@@ -31,20 +31,20 @@ namespace Application
                 this._context = context;
             }
 
-            public async Task<Result<List<CastResponse>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<CastView>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                List<CastEntry> cast = await _context.CastEntries.Include(ce => ce.Person).Where(ce => ce.Film == request.movie).ToListAsync();
-                List<CastResponse> castResponses = new List<CastResponse>();
-                foreach (CastEntry c in cast)
+                List<CastRole> cast = await _context.CastRoles.Include(ce => ce.Person).Where(ce => ce.Movie == request.movie).ToListAsync();
+                List<CastView> castView = new List<CastView>();
+                foreach (CastRole cv in cast)
                 {
-                    castResponses.Add(new CastResponse()
+                    castView.Add(new CastView
                     {
-                        PersonId = c.Person.Id,
-                        Name = c.Person.Name,
-                        Role = c.Role
+                        PersonId = cv.Person.Id,
+                        Name = cv.Person.Name,
+                        Role = cv.Role
                     });
                 }
-                return Result<List<CastResponse>>.Success(castResponses);
+                return Result<List<CastView>>.Success(castView);
             }
         }
     }

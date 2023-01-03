@@ -30,9 +30,9 @@ namespace API.Controllers
         }
         //Gets the movies that the person with the given id at the given page.
         [HttpGet("{id}/movies/{page}")]
-        public async Task<ActionResult<MoviePageResponse>> GetMoviesFromPerson(Guid id, int page)
+        public async Task<ActionResult<MoviePageView>> GetMoviesFromPerson(Guid id, int page)
         {
-            Result<MoviePageResponse> result = await this._mediator.Send(new ListMoviesWithPersonAtPage.Query { Id = id, Page = page });
+            Result<MoviePageView> result = await this._mediator.Send(new ListMoviesWithPersonAtPage.Query { Id = id, Page = page });
             return this.ResultHandler(result);
         }
         //Creates a new Person with the person object given.

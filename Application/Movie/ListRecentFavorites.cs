@@ -32,7 +32,7 @@ namespace Application
 
             public async Task<Result<List<Movie>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                List<Movie> movies = await _context.FavoriteEntries.Include(fe => fe.Film).Where(fe => fe.Fan == request.user).OrderByDescending(fe => fe.FavoriteDate).Select(fe => fe.Film).Take(5).ToListAsync();
+                List<Movie> movies = await _context.Favorites.Include(fe => fe.Movie).Where(fe => fe.User == request.user).OrderByDescending(fe => fe.FavoriteDate).Select(fe => fe.Movie).Take(5).ToListAsync();
                 return Result<List<Movie>>.Success(movies);
             }
         }

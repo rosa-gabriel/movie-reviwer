@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Validators
 {
-    public class TagNameValidator : AbstractValidator<TagName>
+    public class TagNameValidator : AbstractValidator<Tag>
     {
         public TagNameValidator()
         {

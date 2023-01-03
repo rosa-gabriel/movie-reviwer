@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class CastResponse
+    public class NewCastView
     {
-        public Guid PersonId { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
     }

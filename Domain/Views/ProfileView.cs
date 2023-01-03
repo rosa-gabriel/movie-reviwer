@@ -5,16 +5,8 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class ProfileResponse
+    public class ProfileView
     {
-        public ProfileResponse(User user)
-        {
-            this.Id = user.Id;
-            this.Name = user.UserName;
-            this.Bio = user.Bio;
-            this.ImageUrl = user.ProfileImageUrl;
-            this.CreationDate = user.CreationDate;
-        }
         public string Id { get; set; }
         public bool IsLogedIn { get; set; }
         public string ImageUrl { get; set; }
