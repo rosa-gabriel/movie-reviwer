@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Details from "./pages/details/Details";
 import Favorites from "./pages/user/Favorites";
 import Error from "./components/UI/Error";
@@ -19,7 +19,8 @@ import DataBaseSeeding from "./development/DatabaseSeedingO";
 import Settings from "./pages/user/Settings";
 import FriendsList from "./pages/user/FriendsList";
 import EditPersonInfo from "./pages/details/EditPersonInfo";
-import CommentsMenu from "./components/UI/CommentsMenu";
+import ConfirmEmail from "./pages/user/ConfirmEmail";
+import ConfirmEmailRequest from "./pages/user/ConfirmEmailRequest";
 
 export const uri = "http://localhost:5000";
 
@@ -43,6 +44,16 @@ function App() {
               />
               <Route path="/account/login" element={<LoginForm />} />
               <Route path="/account/register" element={<RegisterForm />} />
+
+              <Route
+                path="/account/message/confirm"
+                element={<ConfirmEmailRequest />}
+              />
+
+              <Route
+                path="/account/confirm/:token"
+                element={<ConfirmEmail />}
+              />
               <Route path="/account/settings" element={<Settings />} />
 
               <Route path="/account/profile/:id" element={<Profile />} />

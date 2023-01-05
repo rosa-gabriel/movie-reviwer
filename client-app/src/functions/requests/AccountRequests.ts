@@ -1,6 +1,12 @@
 import { uri } from "../../App";
-import { UserSettings, UserLogin, UserRegister } from "../../types/Types";
 import {
+  UserSettings,
+  UserLogin,
+  UserRegister,
+  UserInfoContext,
+} from "../../types/Types";
+import {
+  connectionFailString,
   deleteRequest,
   getRequest,
   postRequest,
@@ -23,22 +29,17 @@ export const register = async (userInfo: UserRegister) => {
   return response;
 };
 
-export const checkUser = async (token: string): Promise<boolean> => {
+export const checkUser = async (token: string) => {
   try {
-    const response = await fetch(`${uri}/Account/check`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json",
-      },
-    });
-    return response.ok;
+    const response: UserInfoContext = await getRequest(
+      `${uri}/Account/check`,
+      token
+    );
+    return response;
   } catch (ex: any) {
-    const responseException = checkResponseException(ex);
-    if (responseException) {
-      throw new Error(responseException);
-    }
-    throw ex;
+    if (ex.message == connectionFailString) {
+      throw new Error("Connection");
+    } else throw ex;
   }
 };
 
@@ -85,6 +86,14 @@ export const confirmFriendRequest = async (userId: string, token: string) => {
   return response;
 };
 
+export const newConfirmRequest = async (token: string) => {
+  const response: UserSettings = await getRequest(
+    `${uri}/Account/confirm/email/new`,
+    token
+  );
+  return response;
+};
+
 export const getUserFriends = async (token: string) => {
   const response = await getRequest(`${uri}/Account/friends`, token);
   return response;
@@ -107,4 +116,12 @@ const checkResponseException = (ex: Error): string | null => {
     return "Connection";
   }
   return null;
+};
+
+export const requestEmailConfirmation = async (token: string) => {
+  const response = await putRequest(
+    `${uri}/Account/confirm/email/${encodeURIComponent(token)}`,
+    undefined
+  );
+  return response;
 };

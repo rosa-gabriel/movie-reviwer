@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { createContext } from "react";
+import { useLocation } from "react-router";
 import { useNavigate } from "react-router";
-import { checkUser, logOut } from "../functions/requests/AccouontRequests";
+import IsConfirmedCheck from "../components/account/IsConfirmedCheck";
+import { checkUser, logOut } from "../functions/requests/AccountRequests";
 import { UserInfoContext } from "../types/Types";
 
 type UserContextType = {
@@ -24,34 +26,24 @@ type UserContextProviderProps = {
 
 export const UserContextProvider = (props: UserContextProviderProps) => {
   //States
-  const [userInfo, setUserInfo] = useState<UserInfoContext | null>(() => {
-    const localUserInfoString = localStorage.getItem("token");
-    if (localUserInfoString) {
-      let parsedInfo: UserInfoContext | null = JSON.parse(localUserInfoString);
-      return parsedInfo;
-    }
-    return null;
-  });
+  const [userInfo, setUserInfo] = useState<UserInfoContext | null>(null);
   const [isLoged, setIsLoged] = useState<boolean>(true);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   //Effect
   useEffect(() => {
     (async () => {
       const localUserInfoString: string | null = localStorage.getItem("token");
       if (localUserInfoString) {
-        let parsedInfo: UserInfoContext | null =
-          JSON.parse(localUserInfoString);
+        let parsedInfo: string = JSON.parse(localUserInfoString);
         try {
-          const response: boolean = await checkUser(String(parsedInfo?.token));
-          if (response) {
-            setUserInfo(parsedInfo);
-            setIsLoged(true);
-          } else setIsLoged(false);
+          const response: UserInfoContext = await checkUser(String(parsedInfo));
+          setUserInfo(response);
+          setIsLoged(true);
         } catch (ex: any) {
           if (ex.message === "Connection") {
-            setUserInfo(parsedInfo);
             setIsLoged(true);
           } else {
             setIsLoged(false);
@@ -69,7 +61,7 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
         userInfo: userInfo,
         logIn: (newUser: UserInfoContext) => {
           if (!!newUser) {
-            localStorage.setItem("token", JSON.stringify(newUser));
+            localStorage.setItem("token", JSON.stringify(newUser.token));
             setUserInfo(newUser);
             setIsLoged(true);
           }
@@ -82,7 +74,12 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
         },
       }}
     >
-      {props.children}
+      <>
+        {location.pathname != "/account/message/confirm" && (
+          <IsConfirmedCheck />
+        )}
+        {props.children}
+      </>
     </UserContext.Provider>
   );
 };

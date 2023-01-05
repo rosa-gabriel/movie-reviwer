@@ -96,7 +96,7 @@ const Details = (props: any) => {
         <>
           <ErrorContainer error={error}>
             <>
-              {context.isLogedIn && (
+              {context.isLogedIn && context.userInfo?.isAdmin && (
                 <button
                   className="button edit-button"
                   type="button"

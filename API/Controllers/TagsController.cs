@@ -28,6 +28,10 @@ namespace API.Controllers
             Result<Tag> result = await this._mediator.Send(new FindTag.Query { Id = id });
             return this.ResultHandler(result);
         }
+        [HttpPut("confirm/{token}")]
+        //public async Task<ActionResult<Tag>> ConfirmEmail(string token)
+        //{
+        //}
         //Gets the movies with the given id at the given page.
         [HttpGet("{id}/movies/{page}")]
         public async Task<ActionResult<MoviePageView>> GetMoviesFromTag(Guid id, int page)

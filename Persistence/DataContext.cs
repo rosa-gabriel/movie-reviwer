@@ -18,6 +18,7 @@ namespace Persistence
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<ConfirmationEmailToken> ConfirmationTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

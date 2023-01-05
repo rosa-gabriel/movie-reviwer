@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Interfaces;
 using Application.Validators;
 using Domain;
 using Domain.Responses;
@@ -25,13 +26,17 @@ namespace Application
         public class Handler : IRequestHandler<Query, Result<Unit>>
         {
             public readonly DataContext _context;
-            public Handler(DataContext context)
+            public readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 this._context = context;
+                this._userAccessor = userAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
+                if (!await this._userAccessor.CheckIfCurrentUserIsAdmin()) return Result<Unit>.Unauthorize();
+
                 Movie movie = this._context.Movies.Include(m => m.Tags).Include(m => m.Cast).FirstOrDefault(m => m.Id == request.NewMovie.Id);
 
                 if (movie == null) return null;

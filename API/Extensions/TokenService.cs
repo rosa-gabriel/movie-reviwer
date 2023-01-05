@@ -7,7 +7,7 @@ using Application.Interfaces;
 
 namespace API.Extensions
 {
-    public class TokenService : ITokenService 
+    public class TokenService : ITokenService
     {
         public string CreateToken(User user)
         {
@@ -34,5 +34,6 @@ namespace API.Extensions
 
             return tokenHandler.WriteToken(token);
         }
+
     }
 }

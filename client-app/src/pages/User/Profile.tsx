@@ -12,7 +12,8 @@ import { NotificationContext } from "../../contexts/NotificationContext";
 import {
   deleteFriend,
   postFriendRequest,
-} from "../../functions/requests/AccouontRequests";
+} from "../../functions/requests/AccountRequests";
+import IsConfirmedCheck from "../../components/account/IsConfirmedCheck";
 
 const Profile = () => {
   //States
@@ -93,6 +94,7 @@ const Profile = () => {
     <Container>
       <ErrorContainer error={error}>
         <>
+          <IsConfirmedCheck />
           {context.isLogedIn && (
             <>
               {user !== null &&
@@ -135,7 +137,11 @@ const Profile = () => {
                     <p className="profile-info">
                       <>Creation date: {user.creationDate.toDateString()}</>
                     </p>
-                    <ProfileButtons isFriend={user.isFriend} userId={user.id} username={user.name} />
+                    <ProfileButtons
+                      isFriend={user.isFriend}
+                      userId={user.id}
+                      username={user.name}
+                    />
                   </div>
                 </div>
               </div>

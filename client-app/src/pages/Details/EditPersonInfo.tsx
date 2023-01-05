@@ -1,33 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import {
-  deleteMovie,
   deletePerson,
-  getCast,
-  getMovie,
   getPerson,
-  getTags,
-  updateMovie,
   updatePerson,
 } from "../../functions/requests/MovieRequests";
 import LoadingCircle from "../../components/UI/LoadingCircle";
-import {
-  AllMovieInfoType,
-  CastInfo,
-  Cast,
-  NewMovieInfo,
-  Tag,
-  PersonResponse,
-} from "../../types/Types";
+import { PersonResponse } from "../../types/Types";
 import Container from "../../components/UI/Container";
 import { UserContext } from "../../contexts/UserContext";
-import ItemInput from "../../components/UI/inputs/ItemInput";
 import AccountCheck from "../../components/account/AccountCheck";
 import { ModalContext } from "../../contexts/ModalContext";
 import { NotificationContext } from "../../contexts/NotificationContext";
-import { TagInfoToTag } from "../../functions/Conversion/Convertions";
-import FormPair from "../../components/UI/FormPair";
 import ErrorContainer from "../../components/UI/ErrorContainer";
+import IsAdminCheck from "../../components/account/IsAdminCheck";
 
 const EditPersonInfo = () => {
   //States
@@ -149,15 +135,14 @@ const EditPersonInfo = () => {
       <ErrorContainer error={error}>
         <>
           <AccountCheck />
-          {context.isLogedIn && (
-            <button
-              className="button edit-button"
-              type="button"
-              onClick={deleteClickHandler}
-            >
-              <i className="fa-solid fa-trash"></i>
-            </button>
-          )}
+          <IsAdminCheck />
+          <button
+            className="button edit-button"
+            type="button"
+            onClick={deleteClickHandler}
+          >
+            <i className="fa-solid fa-trash"></i>
+          </button>
           {!isLoading && (
             <>
               <div className="details_container">

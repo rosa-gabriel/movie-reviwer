@@ -46,7 +46,7 @@ const TagList = () => {
         <>
           {person !== null && (
             <>
-              {context.isLogedIn && (
+              {context.isLogedIn && context.userInfo?.isAdmin && (
                 <button
                   className="button edit-button"
                   type="button"

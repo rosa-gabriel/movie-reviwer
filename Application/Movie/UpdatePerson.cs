@@ -1,8 +1,6 @@
 using Application.Core;
-using Application.temp;
 using Application.Interfaces;
 using Domain;
-using Domain.Views;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -29,19 +27,18 @@ namespace Application
         public class Handler : IRequestHandler<Query, Result<Unit>>
         {
             public readonly DataContext _context;
-            public readonly IUserAccessor _useAccessor;
-            public readonly UserManager<User> _userManager;
-            public readonly ITokenService _tokenService;
-            public Handler(DataContext context, IUserAccessor userAccessor, UserManager<User> userManager, ITokenService tokenService)
+            public readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 this._context = context;
-                this._useAccessor = userAccessor;
-                this._userManager = userManager;
-                this._tokenService = tokenService;
+                this._userAccessor = userAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
+
+                if (!await this._userAccessor.CheckIfCurrentUserIsAdmin()) return Result<Unit>.Unauthorize();
+
                 Person person = await this._context.People.FirstOrDefaultAsync(p => p.Id == request.NewPerson.Id);
                 if (person == null) return null;
 

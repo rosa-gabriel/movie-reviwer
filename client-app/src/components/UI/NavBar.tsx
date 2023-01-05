@@ -62,7 +62,7 @@ const NavBar = () => {
             <i className="fa-solid fa-magnifying-glass" />
           </button>
         </form>
-        {context.isLogedIn && (
+        {context.isLogedIn && context.userInfo?.isAdmin && (
           <NavLink to={"/add/movie"} className={active}>
             Add
           </NavLink>

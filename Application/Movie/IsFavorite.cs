@@ -1,7 +1,6 @@
 using Application.Core;
-using Application.Validators;
+using Application.Interfaces;
 using Domain;
-using Domain.Responses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +13,6 @@ namespace Application
         public class Query : IRequest<Result<bool>>
         {
             public Guid MovieId { get; set; }
-            public User user { get; set; }
         }
 
         public class QueryValidation : AbstractValidator<Query>
@@ -22,21 +20,25 @@ namespace Application
             public QueryValidation()
             {
                 RuleFor(x => x.MovieId).NotEmpty();
-                RuleFor(x => x.user).SetValidator(new UserValidator());
             }
         }
 
         public class Handler : IRequestHandler<Query, Result<bool>>
         {
             public readonly DataContext _context;
-            public Handler(DataContext context)
+            public readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 this._context = context;
+                this._userAccessor = userAccessor;
             }
 
             public async Task<Result<bool>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Favorite favorite = await _context.Favorites.FirstOrDefaultAsync(fe => fe.Movie.Id == request.MovieId && fe.User == request.user);
+                User user = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == this._userAccessor.GetUsername());
+                if (user == null) return Result<bool>.Unauthorize();
+
+                Favorite favorite = await _context.Favorites.FirstOrDefaultAsync(fe => fe.Movie.Id == request.MovieId && fe.User == user);
                 return Result<bool>.Success(favorite != null);
             }
         }

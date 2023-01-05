@@ -10,7 +10,7 @@ import { UserContext } from "../../contexts/UserContext";
 import {
   changeSettings,
   getSettings,
-} from "../../functions/requests/AccouontRequests";
+} from "../../functions/requests/AccountRequests";
 import {} from "../../functions/requests/MovieRequests";
 import { UserSettings } from "../../types/Types";
 

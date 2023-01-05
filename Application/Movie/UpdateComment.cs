@@ -1,8 +1,6 @@
 using Application.Core;
-using Application.temp;
 using Application.Interfaces;
 using Domain;
-using Domain.Views;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

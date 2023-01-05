@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
-import { register } from "../../functions/requests/AccouontRequests";
+import { register } from "../../functions/requests/AccountRequests";
 import { UserRegister } from "../../types/Types";
 import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
@@ -81,7 +81,7 @@ const RegisterForm = () => {
         text: "Your user was successfully registered! You are now logged in.",
         error: false,
       });
-      navigate("/");
+      navigate("/account/message/confirm");
     } catch (ex: any) {
       setError(ex.message);
       setIsLoading(false);

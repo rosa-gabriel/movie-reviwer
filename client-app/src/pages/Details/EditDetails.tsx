@@ -22,6 +22,7 @@ import AccountCheck from "../../components/account/AccountCheck";
 import { ModalContext } from "../../contexts/ModalContext";
 import { NotificationContext } from "../../contexts/NotificationContext";
 import { TagInfoToTag } from "../../functions/Conversion/Convertions";
+import IsAdminCheck from "../../components/account/IsAdminCheck";
 
 const EditDetails = () => {
   //States
@@ -188,15 +189,14 @@ const EditDetails = () => {
     <Container>
       <>
         <AccountCheck />
-        {context.isLogedIn && (
-          <button
-            className="button edit-button"
-            type="button"
-            onClick={deleteClickHandler}
-          >
-            <i className="fa-solid fa-trash"></i>
-          </button>
-        )}
+        <IsAdminCheck />
+        <button
+          className="button edit-button"
+          type="button"
+          onClick={deleteClickHandler}
+        >
+          <i className="fa-solid fa-trash"></i>
+        </button>
         {!isLoading && (
           <>
             <div className="details_container">

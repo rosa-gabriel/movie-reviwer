@@ -14,7 +14,7 @@ namespace Application
 {
     public class UpdateUserInfo
     {
-        public class Query : IRequest<Result<UserDto>>
+        public class Query : IRequest<Result<UserTokenView>>
         {
             public SettingsView NewSettings { get; set; }
         }
@@ -26,7 +26,7 @@ namespace Application
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<UserDto>>
+        public class Handler : IRequestHandler<Query, Result<UserTokenView>>
         {
             public readonly DataContext _context;
             public readonly IUserAccessor _useAccessor;
@@ -40,15 +40,15 @@ namespace Application
                 this._tokenService = tokenService;
             }
 
-            public async Task<Result<UserDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<UserTokenView>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User user = await this._userManager.FindByNameAsync(this._useAccessor.GetUsername());
-                if (user == null) return Result<UserDto>.Unauthorize();
+                if (user == null) return Result<UserTokenView>.Unauthorize();
 
                 bool hasChanged = false;
 
-                if ((await this._context.Users.FirstOrDefaultAsync(u => u.UserName == request.NewSettings.Username)) != null && request.NewSettings.Username != user.UserName) return Result<UserDto>.Failure("Username already taken! Try another one.");
-                if ((await this._context.Users.FirstOrDefaultAsync(u => u.Email == request.NewSettings.Email)) != null && request.NewSettings.Email != user.Email) return Result<UserDto>.Failure("Email already taken! Try another one.");
+                if ((await this._context.Users.FirstOrDefaultAsync(u => u.UserName == request.NewSettings.Username)) != null && request.NewSettings.Username != user.UserName) return Result<UserTokenView>.Failure("Username already taken! Try another one.");
+                if ((await this._context.Users.FirstOrDefaultAsync(u => u.Email == request.NewSettings.Email)) != null && request.NewSettings.Email != user.Email) return Result<UserTokenView>.Failure("Email already taken! Try another one.");
 
                 if (user.Bio != request.NewSettings.Bio)
                 {
@@ -65,7 +65,7 @@ namespace Application
 
                 bool success = true;
                 if (hasChanged) success = await this._context.SaveChangesAsync() > 0;
-                if (!success) return Result<UserDto>.Failure("Failed to update user info!");
+                if (!success) return Result<UserTokenView>.Failure("Failed to update user info!");
 
                 if (user.Email != request.NewSettings.Email)
                 {
@@ -75,7 +75,7 @@ namespace Application
 
                 if (!String.IsNullOrWhiteSpace(request.NewSettings.NewPassword) && !String.IsNullOrWhiteSpace(request.NewSettings.OldPassword))
                 {
-                    if (!(await this._userManager.CheckPasswordAsync(user, request.NewSettings.OldPassword))) return Result<UserDto>.Failure("Password does't match! Try again.");
+                    if (!(await this._userManager.CheckPasswordAsync(user, request.NewSettings.OldPassword))) return Result<UserTokenView>.Failure("Password does't match! Try again.");
 
                     var passwordToken = await this._userManager.GeneratePasswordResetTokenAsync(user);
                     await this._userManager.ResetPasswordAsync(user, passwordToken, request.NewSettings.NewPassword);
@@ -84,14 +84,15 @@ namespace Application
                 await this._userManager.UpdateAsync(user);
 
 
-                return Result<UserDto>.Success(new UserDto
+                return Result<UserTokenView>.Success(new UserTokenView
                 {
                     Email = user.Email,
                     Username = user.UserName,
                     ProfileImageUrl = user.ProfileImageUrl,
-                    //erro provavel aqui
                     Token = _tokenService.CreateToken(user),
                     Id = user.Id,
+                    IsAdmin = user.IsAdmin,
+                    Confirmed = user.EmailConfirmed,
                 }
                 );
             }

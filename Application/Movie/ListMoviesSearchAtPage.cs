@@ -35,8 +35,10 @@ namespace Application
 
             public async Task<Result<MoviePageView>> Handle(Query request, CancellationToken cancellationToken)
             {
-                IQueryable<Movie> search = _context.Movies.Where(m => m.Name.ToLower().Contains(request.Filter.ToLower()));
+                IQueryable<Movie> search = _context.Movies.Where(m => m.Name.ToLower().Contains(request.Filter.ToLower()) || m.Tags.Any(t => t.Name.ToLower().Contains(request.Filter.ToLower())) || m.Cast.Any(c => c.Person.Name.ToLower().Contains(request.Filter)));
+
                 List<Movie> response = await search.OrderByDescending(ce => ce.ReleaseDate).Take(25).Skip((request.Page - 1) * 25).ToListAsync();
+
                 return Result<MoviePageView>.Success(new MoviePageView(
                     response.Take(25).Skip((request.Page - 1) * 25).ToList(),
                     (int)Math.Ceiling(((double)search.Count()) / 25)

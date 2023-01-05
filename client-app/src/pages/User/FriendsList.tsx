@@ -3,7 +3,7 @@ import AccountCheck from "../../components/account/AccountCheck";
 import Container from "../../components/UI/Container";
 import FriendContainer from "../../components/UI/FriendContainer";
 import { UserContext } from "../../contexts/UserContext";
-import { getUserFriends } from "../../functions/requests/AccouontRequests";
+import { getUserFriends } from "../../functions/requests/AccountRequests";
 import { Friend } from "../../types/Types";
 
 const FriendsList = () => {

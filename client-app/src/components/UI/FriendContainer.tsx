@@ -5,7 +5,7 @@ import { UserContext } from "../../contexts/UserContext";
 import {
   deleteFriend,
   putFriendRequest,
-} from "../../functions/requests/AccouontRequests";
+} from "../../functions/requests/AccountRequests";
 import { Friend } from "../../types/Types";
 
 type FriendContainerProps = {

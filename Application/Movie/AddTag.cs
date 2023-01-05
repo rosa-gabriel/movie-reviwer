@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Interfaces;
 using Application.Validators;
 using Domain;
 using FluentValidation;
@@ -25,14 +26,19 @@ namespace Application
         public class Handler : IRequestHandler<Query, Result<Tag>>
         {
             public readonly DataContext _context;
-            public Handler(DataContext context)
+            public readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 this._context = context;
+                this._userAccessor = userAccessor;
             }
 
             public async Task<Result<Tag>> Handle(Query request, CancellationToken cancellationToken)
             {
-                Tag newTag = new Tag{
+                if (!await this._userAccessor.CheckIfCurrentUserIsAdmin()) return Result<Tag>.Unauthorize();
+
+                Tag newTag = new Tag
+                {
                     Id = new Guid(),
                     Name = request.NewTag.Name
                 };

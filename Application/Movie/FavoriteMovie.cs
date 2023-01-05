@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Interfaces;
 using Application.Validators;
 using Domain;
 using FluentValidation;
@@ -31,13 +32,18 @@ namespace Application
         public class Handler : IRequestHandler<Query, Result<Unit>>
         {
             public readonly DataContext _context;
-            public Handler(DataContext context)
+            public readonly IUserAccessor _userAccessor;
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 this._context = context;
+                this._userAccessor = userAccessor;
             }
 
             public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
             {
+                User user = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == this._userAccessor.GetUsername());
+                if (user == null) return Result<Unit>.Unauthorize();
+
                 Movie movie = await _context.Movies.FindAsync(request.MovieId);
                 if (movie == null) return null;
 

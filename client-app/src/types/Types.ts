@@ -81,6 +81,8 @@ export type UserInfoContext = {
   token: string;
   username: string;
   profileImageUrl: string;
+  isAdmin: boolean;
+  confirmed: boolean;
 };
 
 export type UserRegister = {

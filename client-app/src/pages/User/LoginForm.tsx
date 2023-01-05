@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
-import { login } from "../../functions/requests/AccouontRequests";
-import { UserLogin} from "../../types/Types";
+import { login } from "../../functions/requests/AccountRequests";
+import { UserLogin } from "../../types/Types";
 import { UserContext } from "../../contexts/UserContext";
 import SubmitButton from "../../components/UI/SubmitButton";
 import Container from "../../components/UI/Container";
@@ -46,7 +46,7 @@ const LoginForm = () => {
 
     try {
       setIsLoading(true);
-      const userInfo: UserLogin= {
+      const userInfo: UserLogin = {
         login: username,
         password: password,
       };

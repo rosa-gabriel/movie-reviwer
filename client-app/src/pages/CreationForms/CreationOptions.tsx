@@ -5,6 +5,7 @@ import AddMovieForm from "./AddMovieForm";
 import AddTagForm from "./AddTagForm";
 import Container from "../../components/UI/Container";
 import AccountCheck from "../../components/account/AccountCheck";
+import IsAdminCheck from "../../components/account/IsAdminCheck";
 
 export const active = ({ isActive }: any) => {
   return "nav-link " + (isActive ? "nav-link-selected" : "");
@@ -14,6 +15,7 @@ const CreationOptions = () => {
   return (
     <Container>
       <>
+        <IsAdminCheck />
         <AccountCheck />
         <nav className="creation_nav">
           <NavLink className={active} to={"movie"}>
