@@ -3,6 +3,7 @@ import { createContext } from "react";
 import { useLocation } from "react-router";
 import { useNavigate } from "react-router";
 import IsConfirmedCheck from "../components/account/IsConfirmedCheck";
+import LoadingUserInfo from "../components/UI/LoadingUserInfo";
 import { checkUser, logOut } from "../functions/requests/AccountRequests";
 import { UserInfoContext } from "../types/Types";
 
@@ -14,7 +15,7 @@ type UserContextType = {
 };
 
 export const UserContext = createContext<UserContextType>({
-  isLogedIn: true,
+  isLogedIn: false,
   userInfo: null,
   logIn: () => {},
   logOut: () => {},
@@ -27,25 +28,29 @@ type UserContextProviderProps = {
 export const UserContextProvider = (props: UserContextProviderProps) => {
   //States
   const [userInfo, setUserInfo] = useState<UserInfoContext | null>(null);
-  const [isLoged, setIsLoged] = useState<boolean>(true);
+  const [isLoged, setIsLoged] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [error, setError] = useState<boolean>(false);
 
   //Effect
   useEffect(() => {
     (async () => {
       const localUserInfoString: string | null = localStorage.getItem("token");
       if (localUserInfoString) {
+        setIsLoged(true);
         let parsedInfo: string = JSON.parse(localUserInfoString);
         try {
           const response: UserInfoContext = await checkUser(String(parsedInfo));
           setUserInfo(response);
-          setIsLoged(true);
+          setError(false);
         } catch (ex: any) {
           if (ex.message === "Connection") {
-            setIsLoged(true);
+            setError(true);
           } else {
+            setError(false);
             setIsLoged(false);
             localStorage.removeItem("token");
           }
@@ -53,6 +58,8 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
       } else setIsLoged(false);
     })();
   }, []);
+
+  console.log(userInfo);
 
   return (
     <UserContext.Provider
@@ -75,10 +82,15 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
       }}
     >
       <>
-        {location.pathname != "/account/message/confirm" && (
-          <IsConfirmedCheck />
+        {(!isLoged || (isLoged && userInfo)) && (
+          <>
+            {location.pathname != "/account/message/confirm" && (
+              <IsConfirmedCheck />
+            )}
+            {props.children}
+          </>
         )}
-        {props.children}
+        {isLoged && !userInfo && <LoadingUserInfo error={error} />}
       </>
     </UserContext.Provider>
   );

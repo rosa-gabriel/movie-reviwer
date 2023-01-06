@@ -138,7 +138,7 @@ const RegisterForm = () => {
         <p className="account-form-option">
           Already have an account?{" "}
           <Link className="link" to={"/Account/login"}>
-            sign up
+            sign in
           </Link>
           .
         </p>

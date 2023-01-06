@@ -56,6 +56,12 @@ namespace Application
                     user.Bio = request.NewSettings.Bio;
                 }
 
+                if (user.ProfileImageUrl != request.NewSettings.ProfileImageUrl)
+                {
+                    hasChanged = true;
+                    user.ProfileImageUrl = request.NewSettings.ProfileImageUrl;
+                }
+
                 if (user.UserName != request.NewSettings.Username)
                 {
                     hasChanged = true;

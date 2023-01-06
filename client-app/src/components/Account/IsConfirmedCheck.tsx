@@ -10,7 +10,6 @@ const IsConfirmedCheck = () => {
     if (context.userInfo == null) return;
 
     if (context.isLogedIn) {
-      console.log("chamada");
       if (!context.userInfo?.confirmed) {
         navigate("/account/message/confirm", { replace: true });
       }

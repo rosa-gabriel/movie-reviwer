@@ -1,6 +1,8 @@
+import loadingIcon from '../../Images/loadingIcon.svg';
+
 const LoadingCircle = () => {
     return (
-        <img style={{margin: 'auto', height: '30px'}} src={'../loadingIcon.svg'} alt='loading icon'/>
+        <img style={{margin: 'auto', height: '30px'}} src={loadingIcon} alt='loading icon'/>
     );
 };
 

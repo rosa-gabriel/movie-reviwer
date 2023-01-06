@@ -40,18 +40,23 @@ namespace Application
             public async Task<Result<ProfileView>> Handle(Query request, CancellationToken cancellationToken)
             {
                 User self = await this._context.Users.FirstOrDefaultAsync(u => u.UserName == _userAccessor.GetUsername());
-                if (self == null) return Result<ProfileView>.Unauthorize();
 
-                ProfileView profile;
                 User user = await _userManager.FindByIdAsync(request.Id);
                 if (user == null) return null;
 
-                profile = user.ToProfileView();
+                ProfileView profile = user.ToProfileView();
 
                 profile.RecentFavorites = (await this._mediator.Send(new ListRecentFavorites.Query { user = user })).Value;
 
-                profile.IsLogedIn = user.Id.Equals(self.Id);
-                Friend friend = _context.Friends.Where(f => (f.Receiver == self && f.Sender == user && f.Accepted) || (f.Receiver == user && f.Sender == self)).FirstOrDefault();
+
+                Friend friend = null;
+                profile.IsLogedIn = false;
+
+                if (self != null)
+                {
+                    profile.IsLogedIn = user.Id.Equals(self.Id);
+                    friend = _context.Friends.Where(f => (f.Receiver == self && f.Sender == user && f.Accepted) || (f.Receiver == user && f.Sender == self)).FirstOrDefault();
+                }
 
                 if (friend == null)
                 {

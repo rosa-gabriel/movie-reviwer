@@ -23,10 +23,12 @@ import { ModalContext } from "../../contexts/ModalContext";
 import { NotificationContext } from "../../contexts/NotificationContext";
 import { TagInfoToTag } from "../../functions/Conversion/Convertions";
 import IsAdminCheck from "../../components/account/IsAdminCheck";
+import SendButton from "../../components/UI/SendButton";
 
 const EditDetails = () => {
   //States
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [dataTags, setDataTags] = useState<Tag[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [url, setUrl] = useState<string>("");
@@ -98,6 +100,7 @@ const EditDetails = () => {
 
   //Submit
   const editConfirmHandler = async () => {
+    setIsConfirmLoading(true);
     const movie: NewMovieInfo = {
       id: String(params.movieId),
       name: name,
@@ -120,6 +123,8 @@ const EditDetails = () => {
         text: "Failed to update the movie! Try again later.",
         error: true,
       });
+    } finally {
+      setIsConfirmLoading(false);
     }
   };
 
@@ -129,6 +134,7 @@ const EditDetails = () => {
 
   //Effect
   useEffect(() => {
+    setIsLoading(true);
     (async (id: any) => {
       try {
         const movieData: AllMovieInfoType = await getMovie(id);
@@ -266,13 +272,13 @@ const EditDetails = () => {
               <button className="button" type="button" onClick={cancelHandler}>
                 Cancel
               </button>
-              <button
-                className="button"
-                type={"button"}
+              <SendButton
+                className={""}
+                text={"Confirm"}
                 onClick={editConfirmHandler}
-              >
-                Confirm
-              </button>
+                isLoading={isConfirmLoading}
+                type={"button"}
+              />
             </div>
           </>
         )}

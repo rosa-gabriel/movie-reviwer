@@ -20,7 +20,7 @@ namespace API.Extensions
 
         public static async Task SeedAdminUser(UserManager<User> userManager, DataContext context, IConfiguration config)
         {
-            if (!await userManager.Users.AnyAsync(u => u.UserName == "Admin"))
+            if (!await userManager.Users.AnyAsync(u => (u.UserName == "Admin") || (u.Email == config.GetSection("EmailAddress").Value)))
             {
                 User admin = new User
                 {
@@ -31,7 +31,7 @@ namespace API.Extensions
                     CreationDate = DateTime.Now,
                     IsAdmin = true,
                 };
-                await userManager.CreateAsync(admin, "4dm1nP4$$L0rd");
+                await userManager.CreateAsync(admin, "4dm1nP4$$W0rd");
 
                 string token = await userManager.GenerateEmailConfirmationTokenAsync(admin);
                 await userManager.ConfirmEmailAsync(admin, token);

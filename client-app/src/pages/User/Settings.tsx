@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { flattenDiagnosticMessageText } from "typescript";
 import AccountCheck from "../../components/account/AccountCheck";
 import Container from "../../components/UI/Container";
 import ErrorContainer from "../../components/UI/ErrorContainer";
 import FormPair from "../../components/UI/FormPair";
 import LoadingCircle from "../../components/UI/LoadingCircle";
+import SendButton from "../../components/UI/SendButton";
 import { NotificationContext } from "../../contexts/NotificationContext";
 import { UserContext } from "../../contexts/UserContext";
 import {
@@ -26,6 +28,8 @@ const Settings = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasChanged, setHasChanged] = useState<boolean>(false);
+
+  const [confirmIsLoading, setConfirmIsLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -69,6 +73,7 @@ const Settings = () => {
           return;
         }
 
+        setConfirmIsLoading(true);
         const newSettings: UserSettings = {
           username: username,
           email: email,
@@ -93,6 +98,8 @@ const Settings = () => {
       navigate("/");
     } catch (ex: any) {
       setError(ex.message);
+    } finally {
+      setConfirmIsLoading(false);
     }
   };
 
@@ -204,13 +211,13 @@ const Settings = () => {
                   >
                     Cancel
                   </button>
-                  <button
-                    type="submit"
+                  <SendButton
+                    className={""}
+                    text={"Save"}
+                    isLoading={confirmIsLoading}
+                    type={"submit"}
                     onClick={submitHandler}
-                    className="button"
-                  >
-                    Save
-                  </button>
+                  />
                 </div>
               </>
             )}

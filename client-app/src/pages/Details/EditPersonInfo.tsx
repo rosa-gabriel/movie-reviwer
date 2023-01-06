@@ -14,10 +14,12 @@ import { ModalContext } from "../../contexts/ModalContext";
 import { NotificationContext } from "../../contexts/NotificationContext";
 import ErrorContainer from "../../components/UI/ErrorContainer";
 import IsAdminCheck from "../../components/account/IsAdminCheck";
+import SendButton from "../../components/UI/SendButton";
 
 const EditPersonInfo = () => {
   //States
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [url, setUrl] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -82,6 +84,7 @@ const EditPersonInfo = () => {
 
   //Submit
   const editConfirmHandler = async () => {
+    setIsConfirmLoading(true);
     const person: PersonResponse = {
       id: String(params.personId),
       name: name,
@@ -104,6 +107,8 @@ const EditPersonInfo = () => {
         text: "Failed to update the person! Try again later.",
         error: true,
       });
+    } finally {
+      setIsConfirmLoading(false);
     }
   };
 
@@ -113,6 +118,7 @@ const EditPersonInfo = () => {
 
   //Effect
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       if (params.personId === undefined) return;
 
@@ -126,6 +132,8 @@ const EditPersonInfo = () => {
         setError(null);
       } catch (ex: any) {
         setError(ex.message);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [params.movieId]);
@@ -171,11 +179,10 @@ const EditPersonInfo = () => {
                   ></input>
 
                   <p className="info_container_title">BIO</p>
-                  <input
-                    type={"text"}
+                  <textarea
                     value={bio}
                     onChange={bioChangeHandler}
-                    className={"input-dark input-add"}
+                    className={"input-dark input-add person-bio-edit"}
                   />
 
                   <p className="info_container_title">GENDER</p>
@@ -209,13 +216,13 @@ const EditPersonInfo = () => {
                 >
                   Cancel
                 </button>
-                <button
-                  className="button"
-                  type={"button"}
+                <SendButton
+                  className={""}
+                  text={"Confirm"}
+                  isLoading={isConfirmLoading}
                   onClick={editConfirmHandler}
-                >
-                  Confirm
-                </button>
+                  type={"button"}
+                />
               </div>
             </>
           )}

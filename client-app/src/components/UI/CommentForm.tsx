@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { NotificationContext } from "../../contexts/NotificationContext";
 import { UserContext } from "../../contexts/UserContext";
 import { addComment } from "../../functions/requests/MovieRequests";
+import SendButton from "./SendButton";
 
 type CommentFormProps = {
   movieId: string;
@@ -11,6 +12,8 @@ type CommentFormProps = {
 
 const CommentForm = (props: CommentFormProps) => {
   const [messge, setMessage] = useState<string>("");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const context = useContext(UserContext);
   const notification = useContext(NotificationContext);
@@ -21,6 +24,7 @@ const CommentForm = (props: CommentFormProps) => {
 
   const submitHandler = async (e: any) => {
     try {
+      setIsLoading(true);
       await addComment(messge, props.movieId, String(context.userInfo?.token));
       setMessage("");
       notification.addNotification({
@@ -36,6 +40,9 @@ const CommentForm = (props: CommentFormProps) => {
         error: true,
       });
     }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,9 +56,7 @@ const CommentForm = (props: CommentFormProps) => {
             onChange={commentChangeHandler}
             placeholder={"Enter the comment text here."}
           ></input>
-          <button onClick={submitHandler} className="button">
-            Comment
-          </button>
+          <SendButton onClick={submitHandler} className="button" text={"Comment"} isLoading={isLoading} type={"button"} />
         </div>
       )}
       {!context.isLogedIn && (
