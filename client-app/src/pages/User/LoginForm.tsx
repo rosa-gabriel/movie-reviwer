@@ -59,7 +59,7 @@ const LoginForm = () => {
         text: "You are now successfully logged in!",
         error: false,
       });
-      navigate("/MovieApp");
+      navigate("/");
 
     } catch (ex: any) {
       setError(ex.message);

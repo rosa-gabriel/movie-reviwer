@@ -63,13 +63,13 @@ const FriendContainer = (props: FriendContainerProps) => {
   };
   return (
     <div className="friend">
-      <Link to={`/MovieApp/account/profile/${props.friendRequest.friend.id}`}>
+      <Link to={`/account/profile/${props.friendRequest.friend.id}`}>
         <div className="nav-profile-container">
           <img src={props.friendRequest.friend.profileImageUrl} alt="comment" />
         </div>
       </Link>
       <div className="friend-name">
-        <Link to={`/MovieApp/account/profile/${props.friendRequest.friend.id}`}>
+        <Link to={`/account/profile/${props.friendRequest.friend.id}`}>
           <h4>{props.friendRequest.friend.name}</h4>
         </Link>
       </div>

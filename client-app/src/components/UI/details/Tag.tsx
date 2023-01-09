@@ -8,7 +8,7 @@ type TagProps = {
 const Tag = (props: TagProps) => {
   return (
     <div className="tag">
-      <Link to={`/MovieApp/tag/${String(props.tagItem.tagId)}`}>
+      <Link to={`/tag/${String(props.tagItem.tagId)}`}>
         <span>{props.tagItem.name}</span>
         <span>{props.tagItem.entries}</span>
       </Link>

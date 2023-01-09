@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const LogOut = () => {
   const context = useContext(UserContext);
   const navigate = useNavigate();
-  navigate("/MovieApp");
+  navigate("/");
   return <></>;
 };
 

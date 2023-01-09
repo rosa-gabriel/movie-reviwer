@@ -41,7 +41,7 @@ const AddTagForm = () => {
         text: "Tag was successfully added.",
         error: false,
       });
-      navigate("/MovieApp/add/movie");
+      navigate("/add/movie");
     } catch (ex: any) {
       setError(ex.message);
     } finally {

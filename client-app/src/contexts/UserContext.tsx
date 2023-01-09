@@ -84,7 +84,7 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
           logOut();
           setUserInfoResponse(null);
           setIsLoged(false);
-          navigate("/MovieApp");
+          navigate("/");
         },
       }}
     >
