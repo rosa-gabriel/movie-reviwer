@@ -16,7 +16,7 @@ const SideMenu = (props: SideMenuProps) => {
         {context.isLogedIn && (
           <h1>
             Welcome{" "}
-            <NavLink className={"link"} to={"/favorites"}>
+            <NavLink className={"link"} to={"/MovieApp/favorites"}>
               {context.userInfo?.username}
             </NavLink>
             .
@@ -24,7 +24,7 @@ const SideMenu = (props: SideMenuProps) => {
         )}
         {!context.isLogedIn && (
           <h1>
-            <NavLink className={"link"} to={"/Account/login"}>
+            <NavLink className={"link"} to={"/MovieApp/Account/login"}>
               Sign in
             </NavLink>
             , for more options.
@@ -32,12 +32,12 @@ const SideMenu = (props: SideMenuProps) => {
         )}
         <ul>
           {context.isLogedIn && (
-            <NavLink to={"/add/movie"}>
+            <NavLink to={"/MovieApp/add/movie"}>
               <li>Add</li>
             </NavLink>
           )}
           {context.isLogedIn && (
-            <NavLink to={"/favorites"}>
+            <NavLink to={"/MovieApp/favorites"}>
               <li>Favorites</li>
             </NavLink>
           )}
@@ -45,7 +45,7 @@ const SideMenu = (props: SideMenuProps) => {
 
         {context.isLogedIn && (
           <div className="account-side">
-            <NavLink to={`/account/profile/${context.userInfo?.id}`}>
+            <NavLink to={`/MovieApp/account/profile/${context.userInfo?.id}`}>
               <div className="nav-profile-container">
                 <img
                   src={context.userInfo?.profileImageUrl}

@@ -8,7 +8,7 @@ type CastSquareProps = {
 const CastSquare = (props: CastSquareProps) => {
   return (
     <div className="tag">
-      <Link to={`/person/${String(props.person.personId)}`}>
+      <Link to={`/MovieApp/person/${String(props.person.personId)}`}>
         <span>
           {props.person.name} ({props.person.role})
         </span>

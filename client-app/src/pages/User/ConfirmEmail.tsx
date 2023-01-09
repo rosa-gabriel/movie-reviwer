@@ -37,7 +37,7 @@ const ConfirmEmail = () => {
         {!isLoading && !error && !context.isLogedIn && (
           <p className="centered-message">
             Email Confirmed, proceed to{" "}
-            <Link className="link" to={"/account/login"}>
+            <Link className="link" to={"/MovieApp/account/login"}>
               login
             </Link>
           </p>

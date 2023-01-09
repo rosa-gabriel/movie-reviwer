@@ -30,7 +30,7 @@ const NavBar = () => {
   //Submit Handler
   const submitHandler = (e: any) => {
     e.preventDefault();
-    navigate(`/search/${search}`);
+    navigate(`/MovieApp/search/${search}`);
   };
 
   //Log out Handler
@@ -48,7 +48,7 @@ const NavBar = () => {
         <SideMenu onLogOut={logOutHandler} onClick={hamburgerClickHandler} />
       )}
       <nav>
-        <NavLink to={"/"} className={"nav-link home-link"}>
+        <NavLink to={"/MovieApp"} className={"nav-link home-link"}>
           Home
         </NavLink>
         <form className="search-bar" onSubmit={submitHandler}>
@@ -63,7 +63,7 @@ const NavBar = () => {
           </button>
         </form>
         {context.isLogedIn && context.userInfo?.isAdmin && (
-          <NavLink to={"/add/movie"} className={active}>
+          <NavLink to={"/MovieApp/add/movie"} className={active}>
             Add
           </NavLink>
         )}
@@ -75,20 +75,20 @@ const NavBar = () => {
         <div className="login-links">
           {!context.isLogedIn && (
             <>
-              <NavLink to={"/account/login"} className={active}>
+              <NavLink to={"/MovieApp/account/login"} className={active}>
                 Sign in
               </NavLink>
-              <NavLink to={"/account/register"} className={active}>
+              <NavLink to={"/MovieApp/account/register"} className={active}>
                 Register
               </NavLink>
             </>
           )}
           {context.isLogedIn && (
             <>
-              <NavLink to={"/favorites"} className={active}>
+              <NavLink to={"/MovieApp/favorites"} className={active}>
                 Favorites
               </NavLink>
-              <NavLink to={`/account/profile/${context.userInfo?.id}`}>
+              <NavLink to={`/MovieApp/account/profile/${context.userInfo?.id}`}>
                 <div className="nav-profile-container">
                   <img
                     src={context.userInfo?.profileImageUrl}

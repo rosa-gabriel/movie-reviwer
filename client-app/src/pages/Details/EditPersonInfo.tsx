@@ -70,7 +70,7 @@ const EditPersonInfo = () => {
             text: "The person was deleted successfully.",
             error: false,
           });
-          navigate("/");
+          navigate("/MovieApp");
         } catch (ex: any) {
           notification.addNotification({
             code: "FAILED",
@@ -100,7 +100,7 @@ const EditPersonInfo = () => {
         text: "The person was successfully updated.",
         error: false,
       });
-      navigate(`/person/${String(params.personId)}`);
+      navigate(`/MovieApp/person/${String(params.personId)}`);
     } catch (ex: any) {
       notification.addNotification({
         code: "FAIL",
@@ -113,7 +113,7 @@ const EditPersonInfo = () => {
   };
 
   const cancelHandler = () => {
-    navigate(`/person/${String(params.personId)}`);
+    navigate(`/MovieApp/person/${String(params.personId)}`);
   };
 
   //Effect

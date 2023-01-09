@@ -94,7 +94,7 @@ const Settings = () => {
         text: "User Settings have changed",
         error: false,
       });
-      navigate("/");
+      navigate("/MovieApp");
     } catch (ex: any) {
       setError(ex.message);
     } finally {
@@ -103,7 +103,7 @@ const Settings = () => {
   };
 
   const cancelHandler = () => {
-    navigate(`/account/profile/${context.userInfo?.id}`);
+    navigate(`/MovieApp/account/profile/${context.userInfo?.id}`);
   };
 
   const usernameChangeHandler = (e: any) => {
