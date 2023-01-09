@@ -28,20 +28,15 @@ namespace API.Extensions
 
             services.AddDbContext<DataContext>(options =>
             {
-                try{
-                options.UseMySql(config.GetConnectionString("DefaultConnection"), version);
-                }
-                catch(Exception ex){
-                    string teste = config.GetSection("TokenKey").Value;
-                    throw new Exception(teste);
-                }
+                // options.UseMySql(config.GetConnectionString("DefaultConnection"), version);
+                options.UseMySql("Server=containers-us-west-193.railway.app;Port=5763;Database=railway;Uid=root;Pwd=2kDEdg58b6EYR5WLTgpf", version);
             });
 
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("https://gabrielwaif.github.io/");
                 });
             });
 
