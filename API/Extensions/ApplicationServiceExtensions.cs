@@ -24,7 +24,7 @@ namespace API.Extensions
         {
             services.AddEndpointsApiExplorer();
 
-            var version = new MySqlServerVersion(new Version(8, 0, 30));
+            var version = new MySqlServerVersion(new Version(8, 0, 31));
 
             services.AddDbContext<DataContext>(options =>
             {
