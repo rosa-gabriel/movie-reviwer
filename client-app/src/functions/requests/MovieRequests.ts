@@ -3,7 +3,7 @@ import {
   AllMovieInfoType,
   Cast,
   CommentType,
-  MoviePage,
+  MoviesAtPage,
   NewMovieInfo,
   NewPerson,
   PersonResponse,
@@ -19,7 +19,7 @@ import {
 } from "./CreateRequest";
 
 export const getMoviesAtPage = async (page: number) => {
-  const response: MoviePage = await getRequest(`${uri}/Movies/page/${page}`);
+  const response: MoviesAtPage = await getRequest(`${uri}/Movies/page/${page}`);
   return response;
 };
 
@@ -80,14 +80,14 @@ export const getMovie = async (id: string) => {
 };
 
 export const getMoviesFromTagAtPage = async (page: number, id: string) => {
-  const response: MoviePage = await getRequest(
+  const response: MoviesAtPage = await getRequest(
     `${uri}/Tags/${id}/movies/${page}`
   );
   return response;
 };
 
 export const getMoviesFromPersonAtPage = async (page: number, id: string) => {
-  const response: MoviePage = await getRequest(
+  const response: MoviesAtPage = await getRequest(
     `${uri}/Cast/${id}/movies/${page}`
   );
   return response;
@@ -97,7 +97,7 @@ export const getMoviesFromSearchAtPage = async (
   page: number,
   search: string
 ) => {
-  const response: MoviePage = await getRequest(
+  const response: MoviesAtPage = await getRequest(
     `${uri}/Movies/search/${search}/${page}`
   );
   return response;

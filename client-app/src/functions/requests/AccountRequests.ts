@@ -3,7 +3,7 @@ import {
   UserSettings,
   UserLogin,
   UserRegister,
-  UserInfoContext,
+  UserInfoResponse,
 } from "../../types/Types";
 import {
   connectionFailString,
@@ -31,13 +31,13 @@ export const register = async (userInfo: UserRegister) => {
 
 export const checkUser = async (token: string) => {
   try {
-    const response: UserInfoContext = await getRequest(
+    const response: UserInfoResponse = await getRequest(
       `${uri}/Account/check`,
       token
     );
     return response;
   } catch (ex: any) {
-    if (ex.message == connectionFailString) {
+    if (ex.message === connectionFailString) {
       throw new Error("Connection");
     } else throw ex;
   }
@@ -109,13 +109,6 @@ export const changeSettings = async (
     token
   );
   return response;
-};
-
-const checkResponseException = (ex: Error): string | null => {
-  if ("Failed to fetch") {
-    return "Connection";
-  }
-  return null;
 };
 
 export const requestEmailConfirmation = async (token: string) => {

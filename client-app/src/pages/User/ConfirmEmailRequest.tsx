@@ -39,10 +39,7 @@ const ConfirmEmailRequest = () => {
             {!isLoading && (
               <p className="centered-message faded">
                 If you have not received the email.{" "}
-                <a href="#" onClick={resendConfirm}>
-                  {" "}
-                  confirm
-                </a>
+                <p onClick={resendConfirm}> confirm</p>
               </p>
             )}
             {isLoading && <LoadingCircle />}

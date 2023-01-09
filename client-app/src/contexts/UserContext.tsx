@@ -5,12 +5,12 @@ import { useNavigate } from "react-router";
 import IsConfirmedCheck from "../components/account/IsConfirmedCheck";
 import LoadingUserInfo from "../components/UI/LoadingUserInfo";
 import { checkUser, logOut } from "../functions/requests/AccountRequests";
-import { UserInfoContext } from "../types/Types";
+import { UserInfoResponse } from "../types/Types";
 
 type UserContextType = {
   isLogedIn: boolean;
-  userInfo: null | UserInfoContext;
-  logIn(newUser: UserInfoContext): any;
+  userInfo: null | UserInfoResponse;
+  logIn(newUser: UserInfoResponse): any;
   logOut(): any;
 };
 
@@ -27,8 +27,14 @@ type UserContextProviderProps = {
 
 export const UserContextProvider = (props: UserContextProviderProps) => {
   //States
-  const [userInfo, setUserInfo] = useState<UserInfoContext | null>(null);
-  const [isLoged, setIsLoged] = useState<boolean>(false);
+  const [userInfo, setUserInfoResponse] = useState<UserInfoResponse | null>(
+    null
+  );
+  const [isLoged, setIsLoged] = useState<boolean>(() => {
+    const localUserInfoResponseString: string | null =
+      localStorage.getItem("token");
+    return !!localUserInfoResponseString;
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,13 +44,16 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
   //Effect
   useEffect(() => {
     (async () => {
-      const localUserInfoString: string | null = localStorage.getItem("token");
-      if (localUserInfoString) {
+      const localUserInfoResponseString: string | null =
+        localStorage.getItem("token");
+      if (localUserInfoResponseString) {
         setIsLoged(true);
-        let parsedInfo: string = JSON.parse(localUserInfoString);
+        let parsedInfo: string = JSON.parse(localUserInfoResponseString);
         try {
-          const response: UserInfoContext = await checkUser(String(parsedInfo));
-          setUserInfo(response);
+          const response: UserInfoResponse = await checkUser(
+            String(parsedInfo)
+          );
+          setUserInfoResponse(response);
           setError(false);
         } catch (ex: any) {
           if (ex.message === "Connection") {
@@ -66,16 +75,16 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
       value={{
         isLogedIn: isLoged,
         userInfo: userInfo,
-        logIn: (newUser: UserInfoContext) => {
+        logIn: (newUser: UserInfoResponse) => {
           if (!!newUser) {
             localStorage.setItem("token", JSON.stringify(newUser.token));
-            setUserInfo(newUser);
+            setUserInfoResponse(newUser);
             setIsLoged(true);
           }
         },
         logOut: () => {
           logOut();
-          setUserInfo(null);
+          setUserInfoResponse(null);
           setIsLoged(false);
           navigate("/");
         },
@@ -84,7 +93,7 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
       <>
         {(!isLoged || (isLoged && userInfo)) && (
           <>
-            {location.pathname != "/account/message/confirm" && (
+            {location.pathname !== "/account/message/confirm" && (
               <IsConfirmedCheck />
             )}
             {props.children}

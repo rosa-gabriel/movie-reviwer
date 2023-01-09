@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { getUserFavorites } from "../../functions/requests/MovieRequests";
 import AccountCheck from "../../components/account/AccountCheck";
 import { UserContext } from "../../contexts/UserContext";
@@ -6,7 +6,6 @@ import ErrorContainer from "../../components/UI/ErrorContainer";
 import Container from "../../components/UI/Container";
 import GenericMovielist from "../../components/UI/GenericMovieList";
 import { useParams } from "react-router";
-import { useFetcher } from "react-router-dom";
 
 const Favorites = () => {
   //Contexts

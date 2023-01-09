@@ -1,10 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import AccountCheck from "../../components/account/AccountCheck";
 import Container from "../../components/UI/Container";
-import FormPair from "../../components/UI/FormPair";
 import FriendContainer from "../../components/UI/FriendContainer";
 import SendButton from "../../components/UI/SendButton";
-import SubmitButton from "../../components/UI/SubmitButton";
 import { NotificationContext } from "../../contexts/NotificationContext";
 import { UserContext } from "../../contexts/UserContext";
 import {
@@ -63,7 +61,7 @@ const FriendsList = () => {
 
   const idChangeHandler = (e: any) => {
     setId(e.target.value);
-  }
+  };
 
   return (
     <Container>

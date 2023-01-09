@@ -75,7 +75,7 @@ export type UserLogin = {
   password: string;
 };
 
-export type UserInfoContext = {
+export type UserInfoResponse = {
   id: string;
   email: string;
   token: string;
@@ -102,7 +102,7 @@ export type ProfileInfo = {
   hasRequested: boolean;
 };
 
-export type MoviePage = {
+export type MoviesAtPage = {
   movies: MovieResponse[];
   count: number;
 };
@@ -115,13 +115,13 @@ export type NotificationMessage = {
 
 export type CommentType = {
   id: string;
-  creator: CreatorType;
+  creator: CommentCreatorType;
   message: string;
   postDate: Date;
   wasEdited: boolean;
 };
 
-export type CreatorType = {
+export type CommentCreatorType = {
   id: string;
   name: string;
   profileImageUrl: string;
@@ -143,6 +143,6 @@ export type NewFriend = {
 
 export type Friend = {
   id: string;
-  friend: CreatorType;
+  friend: CommentCreatorType;
   sent: boolean;
 };

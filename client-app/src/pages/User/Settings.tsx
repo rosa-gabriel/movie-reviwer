@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { flattenDiagnosticMessageText } from "typescript";
 import AccountCheck from "../../components/account/AccountCheck";
 import Container from "../../components/UI/Container";
 import ErrorContainer from "../../components/UI/ErrorContainer";
