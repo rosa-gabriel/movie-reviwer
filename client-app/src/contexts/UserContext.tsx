@@ -68,8 +68,6 @@ export const UserContextProvider = (props: UserContextProviderProps) => {
     })();
   }, []);
 
-  console.log(userInfo);
-
   return (
     <UserContext.Provider
       value={{

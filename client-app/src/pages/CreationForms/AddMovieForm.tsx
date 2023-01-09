@@ -54,7 +54,7 @@ const AddMovieForm = () => {
 
   //Delete Handler
   const dateChangeHandler = (event: any) => {
-    setDate(event.target.value);
+    setDate(new Date(event.target.value));
   };
 
   //Submit Handler
@@ -142,6 +142,7 @@ const AddMovieForm = () => {
         <input
           onChange={dateChangeHandler}
           className="input-dark input-add"
+          value={date.toISOString().slice(0, 10)}
           type={"date"}
         />
       </div>

@@ -116,7 +116,7 @@ const AddPersonForm = () => {
 
       <FormPair
         title={"BIRTHDAY"}
-        value={date.toISOString()}
+        value={date.toISOString().slice(0, 10)}
         type={"date"}
         onChange={dateChangeHandler}
       ></FormPair>
