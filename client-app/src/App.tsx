@@ -22,7 +22,7 @@ import EditPersonInfo from "./pages/details/EditPersonInfo";
 import ConfirmEmail from "./pages/user/ConfirmEmail";
 import ConfirmEmailRequest from "./pages/user/ConfirmEmailRequest";
 
-export const uri = "https://movieapp-production-8f6a.up.railway.app";
+export const uri = "https://movieapp-railway-production.up.railway.app/";
 
 function App() {
   return (
@@ -34,10 +34,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HomeList />} />
               <Route path="/details/:movieId" element={<Details />} />
-              <Route
-                path="/details/:movieId/edit"
-                element={<EditDetails />}
-              />
+              <Route path="/details/:movieId/edit" element={<EditDetails />} />
               <Route path="/tag/:id" element={<TagList />} />
               <Route path="/search/:search" element={<SearchList />} />
               <Route path="/person/:id" element={<PersonInfo />} />
