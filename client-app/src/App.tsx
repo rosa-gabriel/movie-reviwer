@@ -22,7 +22,7 @@ import EditPersonInfo from "./pages/details/EditPersonInfo";
 import ConfirmEmail from "./pages/user/ConfirmEmail";
 import ConfirmEmailRequest from "./pages/user/ConfirmEmailRequest";
 
-export const uri = "https://movieapp-railway-production.up.railway.app/";
+export const uri = "https://movieapp-railway-production-ac50.up.railway.app";
 
 function App() {
   return (
