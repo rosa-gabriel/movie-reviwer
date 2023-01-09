@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Details from "./pages/details/Details";
 import Favorites from "./pages/user/Favorites";
 import Error from "./components/UI/Error";
@@ -32,38 +32,53 @@ function App() {
           <>
             <NavBar />
             <Routes>
-              <Route path="/" element={<HomeList />} />
-              <Route path="/details/:movieId" element={<Details />} />
-              <Route path="/details/:movieId/edit" element={<EditDetails />} />
-              <Route path="/tag/:id" element={<TagList />} />
-              <Route path="/search/:search" element={<SearchList />} />
-              <Route path="/person/:id" element={<PersonInfo />} />
+              <Route path="/MovieApp" element={<HomeList />} />
+              <Route path="/MovieApp/details/:movieId" element={<Details />} />
               <Route
-                path="/person/:personId/edit"
+                path="/MovieApp/details/:movieId/edit"
+                element={<EditDetails />}
+              />
+              <Route path="/MovieApp/tag/:id" element={<TagList />} />
+              <Route path="/MovieApp/search/:search" element={<SearchList />} />
+              <Route path="/MovieApp/person/:id" element={<PersonInfo />} />
+              <Route
+                path="/MovieAppperson/:personId/edit"
                 element={<EditPersonInfo />}
               />
-              <Route path="/account/login" element={<LoginForm />} />
-              <Route path="/account/register" element={<RegisterForm />} />
+              <Route path="/MovieApp/account/login" element={<LoginForm />} />
+              <Route
+                path="/MovieApp/account/register"
+                element={<RegisterForm />}
+              />
 
               <Route
-                path="/account/message/confirm"
+                path="/MovieApp/account/message/confirm"
                 element={<ConfirmEmailRequest />}
               />
 
               <Route
-                path="/account/confirm/:token"
+                path="/MovieApp/account/confirm/:token"
                 element={<ConfirmEmail />}
               />
-              <Route path="/account/settings" element={<Settings />} />
+              <Route path="/MovieApp/account/settings" element={<Settings />} />
 
-              <Route path="/account/profile/:id" element={<Profile />} />
-              <Route path="/account/friends/" element={<FriendsList />} />
-              <Route path="/favorites/" element={<Favorites />} />
-              <Route path="/favorites/:Username" element={<Favorites />} />
-              <Route path="/add/*" element={<CreationOptions />} />
+              <Route
+                path="/MovieApp/account/profile/:id"
+                element={<Profile />}
+              />
+              <Route
+                path="/MovieApp/account/friends/"
+                element={<FriendsList />}
+              />
+              <Route path="/MovieApp/favorites/" element={<Favorites />} />
+              <Route
+                path="/MovieApp/favorites/:Username"
+                element={<Favorites />}
+              />
+              <Route path="/MovieApp/add/*" element={<CreationOptions />} />
 
-              <Route path="/error" element={<Error />} />
-              <Route path="/*" element={<Error />} />
+              <Route path="/MovieApp/error" element={<Error />} />
+              <Route path="/MovieApp/*" element={<Error />} />
             </Routes>
           </>
         </NotificationContextProvider>

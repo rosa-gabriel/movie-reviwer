@@ -15,7 +15,7 @@ const ConfirmEmailRequest = () => {
   const navigate = useNavigate();
 
   if (!context.isLogedIn || context.userInfo?.confirmed) {
-    navigate("/");
+    navigate("/MovieApp");
   }
 
   const resendConfirm = async () => {

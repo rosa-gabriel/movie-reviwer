@@ -11,7 +11,7 @@ const IsConfirmedCheck = () => {
 
     if (context.isLogedIn) {
       if (!context.userInfo?.confirmed) {
-        navigate("/account/message/confirm", { replace: true });
+        navigate("/MovieApp/account/message/confirm", { replace: true });
       }
     }
   });

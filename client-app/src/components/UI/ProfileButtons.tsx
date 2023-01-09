@@ -12,19 +12,19 @@ const ProfileButtons = (props: ProfileButtonsProps) => {
   const context = useContext(UserContext);
 
   const friendsClickHandler = () => {
-    navigate("/account/friends");
+    navigate("/MovieApp/account/friends");
   };
 
   const otherFavoritesClickHandler = () => {
-    navigate(`/favorites/${props.username}`);
+    navigate(`/MovieApp/favorites/${props.username}`);
   };
 
   const favoritesClickHandler = () => {
-    navigate(`/favorites/`);
+    navigate(`/MovieApp/favorites/`);
   };
 
   const settingsClickHandler = () => {
-    navigate("/account/settings/");
+    navigate("/MovieApp/account/settings/");
   };
   return (
     <div className="profile-buttons">

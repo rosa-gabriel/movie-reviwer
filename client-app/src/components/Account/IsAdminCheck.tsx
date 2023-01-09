@@ -8,7 +8,7 @@ const IsAdminCheck = () => {
 
   useEffect(() => {
     if (!context.userInfo?.isAdmin) {
-      navigate("/", { replace: true });
+      navigate("/MovieApp", { replace: true });
     }
   });
 

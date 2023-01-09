@@ -98,14 +98,14 @@ const Commentar = (props: CommentarProps) => {
       {showMenu && (
         <CommentsMenu onDelete={deleteHandler} onEdit={editHandler} />
       )}
-      <Link to={`/account/profile/${props.comment.creator.id}`}>
+      <Link to={`/MovieApp/account/profile/${props.comment.creator.id}`}>
         <div className="nav-profile-container">
           <img src={props.comment.creator.profileImageUrl} alt="comment" />
         </div>
       </Link>
       <div className="comment-text">
         <div className="comment-header">
-          <Link to={`/account/profile/${props.comment.creator.id}`}>
+          <Link to={`/MovieApp/account/profile/${props.comment.creator.id}`}>
             <h4>{props.comment.creator.name}</h4>
           </Link>
           <p>{props.comment.postDate.toDateString()}</p>

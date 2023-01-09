@@ -75,7 +75,7 @@ const AddPersonForm = () => {
         text: "Person was successfully added.",
         error: false,
       });
-      navigate("/add/movie");
+      navigate("/MovieApp/add/movie");
     } catch (ex: any) {
       setError(ex.message);
     } finally {
