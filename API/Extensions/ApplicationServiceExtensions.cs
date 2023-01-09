@@ -28,15 +28,14 @@ namespace API.Extensions
 
             services.AddDbContext<DataContext>(options =>
             {
-                // options.UseMySql(config.GetConnectionString("DefaultConnection"), version);
-                options.UseMySql("Server=containers-us-west-193.railway.app;Port=5763;Database=railway;Uid=root;Pwd=2kDEdg58b6EYR5WLTgpf", version);
+                options.UseMySql(config.GetConnectionString("DefaultConnection"), version);
             });
 
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("https://gabrielwaif.github.io/");
+                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
                 });
             });
 
@@ -61,7 +60,7 @@ namespace API.Extensions
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("TokenKey").Value)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
