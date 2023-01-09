@@ -28,7 +28,13 @@ namespace API.Extensions
 
             services.AddDbContext<DataContext>(options =>
             {
+                try{
                 options.UseMySql(config.GetConnectionString("DefaultConnection"), version);
+                }
+                catch(Exception ex){
+                    string teste = config.GetSection("TokenKey").Value;
+                    throw new Exception(teste);
+                }
             });
 
             services.AddCors(options =>
