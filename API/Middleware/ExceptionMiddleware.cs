@@ -24,6 +24,7 @@ namespace API.Middleware
             }
             catch (Exception ex)
             {
+                _logger.LogInformation(this._enviroment.ApplicationName);
                 _logger.LogError(ex, ex.Message);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
