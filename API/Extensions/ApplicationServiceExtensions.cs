@@ -35,7 +35,7 @@ namespace API.Extensions
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("https://gabrielwaif.github.io/");
+                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("https://gabrielwaif.github.io");
                 });
             });
 
