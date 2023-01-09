@@ -86,7 +86,7 @@ const EditDetails = () => {
             text: "The movie was deleted successfully.",
             error: false,
           });
-          navigate("/MovieApp");
+          navigate("/");
         } catch (ex: any) {
           notification.addNotification({
             code: "FAILED",
@@ -116,7 +116,7 @@ const EditDetails = () => {
         text: "The movie was successfully updated.",
         error: false,
       });
-      navigate(`/MovieApp/details/${String(params.movieId)}`);
+      navigate(`/details/${String(params.movieId)}`);
     } catch (ex: any) {
       notification.addNotification({
         code: "FAIL",
@@ -129,7 +129,7 @@ const EditDetails = () => {
   };
 
   const cancelHandler = () => {
-    navigate(`/MovieApp/details/${String(params.movieId)}`);
+    navigate(`/details/${String(params.movieId)}`);
   };
 
   //Effect

@@ -61,11 +61,11 @@ const CommentForm = (props: CommentFormProps) => {
       )}
       {!context.isLogedIn && (
         <p className="centered-message">
-          <Link to={"/MovieApp/account/login"} className="link">
+          <Link to={"/account/login"} className="link">
             Log in{" "}
           </Link>{" "}
           or{" "}
-          <Link className="link" to={"/MovieApp/account/register"}>
+          <Link className="link" to={"/account/register"}>
             Register
           </Link>{" "}
           to make a comment.

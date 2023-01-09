@@ -8,7 +8,7 @@ const AccountCheck = () => {
 
   useEffect(() => {
     if (!context.isLogedIn) {
-      navigate("/MovieApp/account/login", { replace: true });
+      navigate("/account/login", { replace: true });
     }
   });
 

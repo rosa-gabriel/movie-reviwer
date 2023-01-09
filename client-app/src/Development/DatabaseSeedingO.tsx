@@ -1,4 +1,3 @@
-import React from "react";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { seedMovies, seedTags } from "./DataBaseSeeding";

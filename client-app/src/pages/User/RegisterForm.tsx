@@ -81,7 +81,7 @@ const RegisterForm = () => {
         text: "Your user was successfully registered! You are now logged in.",
         error: false,
       });
-      navigate("/MovieApp/account/message/confirm");
+      navigate("/account/message/confirm");
     } catch (ex: any) {
       setError(ex.message);
       setIsLoading(false);

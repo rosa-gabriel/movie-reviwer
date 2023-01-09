@@ -6,7 +6,7 @@ const Details = () => {
     <Container>
       <>
         <h1 className="title">Url not found! Return to the main menu.</h1>
-        <Link className="error centered-message" to={"/MovieApp"}>
+        <Link className="error centered-message" to={"/"}>
           Home
         </Link>
       </>

@@ -88,7 +88,7 @@ const AddMovieForm = () => {
         text: "Movies was successfully added.",
         error: false,
       });
-      navigate("/MovieApp/");
+      navigate("/");
     } catch (ex: any) {
       setLoading(false);
       setError(ex.message);
