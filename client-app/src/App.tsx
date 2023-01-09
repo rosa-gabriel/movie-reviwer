@@ -22,7 +22,7 @@ import EditPersonInfo from "./pages/details/EditPersonInfo";
 import ConfirmEmail from "./pages/user/ConfirmEmail";
 import ConfirmEmailRequest from "./pages/user/ConfirmEmailRequest";
 
-export const uri = "http://localhost:5000";
+export const uri = "https://movieapp-production-8f6a.up.railway.app";
 
 function App() {
   return (
