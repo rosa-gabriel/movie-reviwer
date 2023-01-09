@@ -83,7 +83,7 @@ namespace Application
 
                     string encodedToken = Uri.EscapeDataString(token);
 
-                    this._emailService.Send(new Email { To = user.Email, Subjetct = "Confirm email - MovieApp", Body = "Confirm your email at: http://localhost:3000/account/confirm/" + encodedToken });
+                    this._emailService.Send(new Email { To = user.Email, Subjetct = "Confirm email - MovieApp", Body = "Confirm your email at: https://gabrielwaif.github.io/MovieApp/#/account/confirm/" + encodedToken });
 
                     return Result<UserTokenView>.Success(utv);
                 }
