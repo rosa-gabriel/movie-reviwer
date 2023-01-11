@@ -53,7 +53,7 @@ const AddPersonForm = () => {
       setError("Url field is required.");
       return;
     }
-    if (gender == 0) {
+    if (gender === 0) {
       setError("You need to choose a gender!");
       return;
     }

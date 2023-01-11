@@ -28,6 +28,8 @@ const Details = (props: any) => {
   const context = useContext(UserContext);
   const notification = useContext(NotificationContext);
 
+  console.log(movieInfo);
+
   //Hooks
   const params = useParams();
   const navigate = useNavigate();

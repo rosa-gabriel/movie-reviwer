@@ -20,7 +20,7 @@ namespace API.Extensions
 {
     public static class ApplicationServiceExtensions
     {
-        public static IServiceCollection AddAplicationServices(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddAplicationServices(this IServiceCollection services, IConfiguration config, IHostEnvironment environment)
         {
             services.AddEndpointsApiExplorer();
 
@@ -35,7 +35,7 @@ namespace API.Extensions
             {
                 options.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("https://gabrielwaif.github.io");
+                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(config.GetSection("FrontEndUrl").Value);
                 });
             });
 
@@ -66,6 +66,10 @@ namespace API.Extensions
                 };
             });
 
+            return services;
+        }
+        public static IServiceCollection teste(this IServiceCollection services)
+        {
             return services;
         }
     }

@@ -15,14 +15,16 @@ import SearchList from "./pages/movieLists/SearchList";
 import EditDetails from "./pages/details/EditDetails";
 import { ModalContextProvider } from "./contexts/ModalContext";
 import { NotificationContextProvider } from "./contexts/NotificationContext";
-import DataBaseSeeding from "./development/DatabaseSeedingO";
 import Settings from "./pages/user/Settings";
 import FriendsList from "./pages/user/FriendsList";
 import EditPersonInfo from "./pages/details/EditPersonInfo";
 import ConfirmEmail from "./pages/user/ConfirmEmail";
 import ConfirmEmailRequest from "./pages/user/ConfirmEmailRequest";
 
-export const uri = "https://movieapp-railway-production-ac50.up.railway.app";
+const isDev = true;
+export const uri = isDev
+  ? "http://localhost:5000"
+  : "https://movieapp-railway-production-ac50.up.railway.app";
 
 function App() {
   return (
