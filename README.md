@@ -1,75 +1,26 @@
 # MovieApp
 
-Still in Development... May not work properly
-
 A movie website created using REACT and ASP.NET, this project was inspired by sites like MyAnimeList, IMDb, and Rotten Tomates, this was a very good opportunity to concepts like requests, full-stack, CRUD, UML, and database design in a medium-sized website.
 
-# Prerequisites
+# Dependencies
 
 ## Softwares:
 
-1. SDK version 6.0.403
-2. MySQL version 8.0.30 (if using a local database)
-3. NPM version 8.19.2
-4. React and React.dom package version 18.2.0
-5. TypeScript package version 4.9.4
+1. SDK version 6.0.403;
+2. MySQL version 8.0.30;
+3. NPM version 8.19.2;
+4. React and React.dom package version 18.2.0;
+5. TypeScript package version 4.9.4;
+6. Railway - Hosting Back-End;
+7. Github pages - Hosting Front-End.
 
 These are the versions used in the site development. Older versions may not work properly.
 
-# Future updates
+# How to test
 
-1. Let the user be able to change profile information.
-2. Comment Section to movies.
-3. Friend other profiles.
-4. Bether Search functionality, search from the movie tags also.
-5. Add better response messages so the user understands why errors occurred.
-6. Fix timezone issues when changing dates.
+you can access and test the current version of the website at this GitHub repo's page:
 
-# Instalation
-
-### 1. Clone the repository in a new folder.
-
-```sh
-https://github.com/GabrielWaif/MovieApp.git
-```
-
-## If on windows:
-
-### 2. Open the cloned folder and open the "StartMoviesApp.bat" file, this file will open 2 terminals each one part of the application.
-
-## If on another OS:
-
-### 2. Inside the cloned folder there is a filter names 'client-app' run:
-
-```sh
-npm start
-```
-
-This will start the local front-end server.
-
-### 3. Keep this terminal open and open a new one.
-
-### 4. Go back to the main folder and find the API folder, there run the command:
-
-```sh
-dotnet run --launch-profile GitHub
-```
-
-This will start the local backend API server.
-
-# Possible bugs
-
-## Port already in use:
-
-If you see this terminal response:
-
-<center>
-<img src="https://i.imgur.com/yy1ifgX.png" width="70%"/>
-</center>
-
-This means that some other process is already running on port 3000 (which is the front-end REACT application port), running the application on another port will cause the back-end CORS policy to reject any request made by the new port. The recommended step is to kill the current process running on port 3000.
-
-<a href="https://medium.com/@javatechie/how-to-kill-the-process-currently-using-a-port-on-localhost-in-windows-31ccdea2a3ea">For more information in how to do that.</a>
+https://gabrielwaif.github.io/MovieApp/#/
 
 # Pages
 
