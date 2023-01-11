@@ -42,7 +42,7 @@ const Commentar = (props: CommentarProps) => {
   };
 
   const confirmEditHandler = async () => {
-    if (newMessage.trim() == "") {
+    if (newMessage.trim() === "") {
       notification.addNotification({
         code: "EMPTY",
         text: "Comment text cannot be empty.",
@@ -111,7 +111,7 @@ const Commentar = (props: CommentarProps) => {
           <p>{props.comment.postDate.toDateString()}</p>
           {props.comment.wasEdited && <p>(edited)</p>}
 
-          {props.comment.creator.id == String(context.userInfo?.id) && (
+          {props.comment.creator.id === String(context.userInfo?.id) && (
             <i
               onClick={ellipsisClickHandler}
               className="fa-solid fa-ellipsis"

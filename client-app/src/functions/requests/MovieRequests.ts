@@ -122,7 +122,7 @@ export const getTags = async () => {
 export const deleteMovie = async (movieId: string, token: string) => {
   const response: Response = await deleteRequest(
     `${uri}/Movies/${movieId}`,
-    undefined
+    token
   );
   return response;
 };

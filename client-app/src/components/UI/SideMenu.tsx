@@ -16,7 +16,10 @@ const SideMenu = (props: SideMenuProps) => {
         {context.isLogedIn && (
           <h1>
             Welcome{" "}
-            <NavLink className={"link"} to={"/favorites"}>
+            <NavLink
+              className={"link"}
+              to={`/account/profile/${context.userInfo?.id}`}
+            >
               {context.userInfo?.username}
             </NavLink>
             .
