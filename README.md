@@ -22,6 +22,11 @@ you can access and test the current version of the website at this GitHub repo's
 
 https://gabrielwaif.github.io/MovieApp/#/
 
+To access admin functions use this default login info:
+| Username | Password |
+|----------|---------------|
+| Admin | 4dm1nP4$$W0rd |
+
 # Pages
 
 ### 1. Home
