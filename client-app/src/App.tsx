@@ -21,7 +21,7 @@ import EditPersonInfo from "./pages/details/EditPersonInfo";
 import ConfirmEmail from "./pages/user/ConfirmEmail";
 import ConfirmEmailRequest from "./pages/user/ConfirmEmailRequest";
 
-const isDev = true;
+const isDev = false;
 export const uri = isDev
   ? "http://localhost:5000"
   : "https://movieapp-railway-production-ac50.up.railway.app";
