@@ -66,7 +66,3 @@ On this page the user can log in with preexisting accounts, passwords have prere
 ### 10. Register
 
 Here new accounts are created, and new accounts need to have a unique username and email, and a valid password.
-
-<center>
-<img src="https://i.imgur.com/BbmaRhS.png" width="70%"/>
-</center>
